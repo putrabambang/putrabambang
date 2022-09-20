@@ -143,7 +143,7 @@
 
 <li>
   <a href="{{route('laporan.index')}}">
-    <i class="fa fa-book" aria-hidden="true"></i> <span>LAPORAN</span>
+    <i class="fa fa-book" aria-hidden="true"></i> <span>Laporan pendapatan toko</span>
   </a>
 </li>
 @endif

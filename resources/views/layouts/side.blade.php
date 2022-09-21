@@ -7,7 +7,7 @@
           <img src="{{ url(auth()->user()->foto ?? '') }}" class="img-circle img-profil" alt="User Image">
       </div>
       <div class="pull-left info">
-      <span>selamat datang</span>
+      <span>Selamat Datang</span>
           <p>{{ auth()->user()->name }}</p>
           <a href="#"><i class="fa fa-circle text-success"></i> Online</a>
       </div>

@@ -4,7 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\kategori;
-
+use App\Models\barang;
+use Illuminate\Support\Facades\DB;
 class KategoriController extends Controller
 {
     /**
@@ -19,18 +20,33 @@ class KategoriController extends Controller
 public function data()
 {
    $kategori = kategori::orderBy('id_kategori','desc') ->get();
+  // $jumlah = barang::where('id_kategori', 'LIKE', "%$tanggal_a%")->sum('stok');
+ //  $kategori = kategori::orderBy('id_kategori','desc') ->get();
+  // $barang1 = barang::where('id_kategori', 'LIKE', "%$tanggal_a%")->sum('stok');
+   $barang= barang::with('kategori')
+   ->select('id_kategori',
+   DB::raw('SUM(stok) as jumlahstok'))
+   ->ORDERBY ('jumlahstok', 'desc')
+   ->GROUPBY('id_kategori')
+   ->get();
    return datatables()
-       ->of ($kategori)
+       ->of ($barang)
        ->addindexColumn()
-       ->addColumn('aksi',function($kategori){
+       ->addColumn('nama_kategori', function ($barang) {
+        return '<span class="label label-success">'.$barang->kategori->nama_kategori.'</span>';
+    })
+       ->addColumn('jumlah', function ($barang) {
+        return format_uang($barang->jumlahstok);
+    })
+       ->addColumn('aksi',function($barang){
            return'
            <div class="btn-group">
-           <button onclick="editForm(`'.route('kategori.update',$kategori->id_kategori).'`)"  class="btn btn-xs btn-info btn-flat"><i class="fa fa-pencil"></i></button>
-           <button onclick="deleteData(`'.route('kategori.destroy',$kategori->id_kategori).'`)" class="btn btn-xs btn-danger btn-flat"><i class="fa fa-trash"></i></button>
+           <button onclick="editForm(`'.route('kategori.update',$barang->id_kategori).'`)"  class="btn btn-xs btn-info btn-flat"><i class="fa fa-pencil"></i></button>
+           <button onclick="deleteData(`'.route('kategori.destroy',$barang->id_kategori).'`)" class="btn btn-xs btn-danger btn-flat"><i class="fa fa-trash"></i></button>
            </div>
            ';
        })
-       ->rawColumns(['aksi'])
+       ->rawColumns(['aksi','jumlah','nama_kategori'])
        ->make(true);
 
 }

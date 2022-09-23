@@ -11,4 +11,8 @@ class barang extends Model
     protected $table = 'barang';
     protected $primaryKey ='id_barang';
     protected $guarded = [];
+    public function kategori()
+    {
+        return $this->hasOne(kategori::class, 'id_kategori', 'id_kategori');
+    }
 }

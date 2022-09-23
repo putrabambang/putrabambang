@@ -37,8 +37,11 @@ public function data()
         return '<span class="label label-success">'.$barang->kode_barang.'</span>';
     })
        ->addColumn('harga_jual',function ($barang){
-           return format_uang($barang->harga_jual);
+           return ($barang->harga_jual);
        })
+       ->addColumn('subtotal',function ($barang){
+        return ($barang->harga_jual*$barang->stok);
+    })
        ->addindexColumn()
        ->addColumn('aksi',function($barang){
            return'

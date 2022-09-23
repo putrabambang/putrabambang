@@ -34,9 +34,21 @@ Daftar Barang
                               <th>Nama Barang</th>        
                               <th>Harga Jual</th>
                               <th>Stok</th>
+                              <th>Subtotal</th>
+                              <th>Stok toko</th>
                             <th width="15%"><i class="fa fa-cog"></i></th>
                         </thead>
+                        <tfoot>
+                        <tr>
+                            <th colspan="6" style="text-align:center">Total</th>
+                            <th ></th>
+                            <th ></th>
+                            <th ></th>
+                            <th ></th>
+                        </tr>
+                    </tfoot>
                     </table>
+
                 </form>
               </div>
             </div>
@@ -69,9 +81,68 @@ Daftar Barang
                 {data: 'nama_barang'},
                 {data: 'harga_jual'},
                 {data: 'stok'},
+                {data: 'subtotal'},
+                {data: 'stok'},
                 {data: 'aksi', searchable: false, sortable: false},
-            ]
-
+            ],      
+            columnDefs:
+[
+    
+    {
+        targets: 7,
+        render: $.fn.dataTable.render.number( '.', '.',0, 'Rp. ' )
+    },
+], 
+            "footerCallback": function ( row, data, start, end, display ) {
+                var api = this.api(), data;
+    
+                // Remove the formatting to get integer data for summation
+                var intVal = function ( i ) {
+                    return typeof i === 'string' ?
+                        i.replace(/[Rp,]/g, '')*1 :
+                        typeof i === 'number' ?
+                            i : 0;
+                };
+    
+                // Total over all pages
+                total = api
+                    .column(6)
+                    .data()
+                    .reduce( function (a, b) {
+                        return intVal(a) + intVal(b);
+                    }, 0 );
+                 // Total item
+                    item = api
+                    .column(8)
+                    .data()
+                    .reduce( function (a, b) {
+                        return intVal(a) + intVal(b);
+                    }, 0 );
+    
+    
+                // Total over this page
+                pageTotal = api
+                    .column( 7, { page: 'current'} )
+                    .data()
+                    .reduce( function (a, b) {
+                        return intVal(a) + intVal(b);
+                    }, 0 );
+    
+                // Update footer
+                var numFormat = $.fn.dataTable.render.number( '.', '.',0, 'Rp. ' ).display;
+                $( api.column( 7 ).footer() ).html(
+                    ''+ numFormat(pageTotal)
+                    
+                    
+                );
+                $( api.column( 6 ).footer() ).html(
+                    ''+total+''
+                );
+                $( api.column( 8).footer() ).html(
+                    ''+item+''
+                );
+            }
+        
 
         });
         $('#modal-form').validator().on('submit', function (e) {

@@ -20,8 +20,16 @@ Kategori
                       <thead>
                           <th width="5%">No</th>
                           <th>Kategori</th>
+                          <th>Jumlah barang</th>
                           <th width="15%"><i class="fa fa-cog"></i></th>
                       </thead>
+                      <tfoot>
+                        <tr>
+                            <th colspan="2" style="text-align:center">Total</th>
+                            <th ></th>
+                            <th ></th>
+                        </tr>
+                    </tfoot>
                   </table>
               </div>
             </div>
@@ -48,8 +56,47 @@ Kategori
             columns: [
                 {data: 'DT_RowIndex', searchable: false, sortable: false},
                 {data: 'nama_kategori'},
+                {data: 'jumlahstok'},
                 {data: 'aksi', searchable: false, sortable: false},
-            ]
+            ],
+          
+
+         "footerCallback": function ( row, data, start, end, display ) {
+                var api = this.api(), data;
+    
+                // Remove the formatting to get integer data for summation
+                var intVal = function ( i ) {
+                    return typeof i === 'string' ?
+                        i.replace(/[Rp,]/g, '')*1 :
+                        typeof i === 'number' ?
+                            i : 0;
+                };
+    
+                // Total over all pages
+                total = api
+                    .column(2 )
+                    .data()
+                    .reduce( function (a, b) {
+                        return intVal(a) + intVal(b);
+                    }, 0 );
+    
+                // Total over this page
+                pageTotal = api
+                    .column( 2, { page: 'current'} )
+                    .data()
+                    .reduce( function (a, b) {
+                        return intVal(a) + intVal(b);
+                    }, 0 );
+    
+                // Update footer
+                //var numFormat = $.fn.dataTable.render.number( '.', '.',0, 'Rp. ' ).display;
+                $( api.column(2 ).footer() ).html(
+                    ''+pageTotal+''
+                );
+                $( api.column(2 ).footer() ).html(
+                    ''+total+''
+                );
+            }
     });
 ////////////////////////////////////////////////////////////////////////////////32:44 
         $('#modal-form').validator().on('submit', function (e) {

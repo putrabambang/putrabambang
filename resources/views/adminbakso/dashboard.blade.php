@@ -14,14 +14,28 @@
 <div class="row">
     <div class="col-lg-3 col-xs-6">
         <!-- small box -->
-        <div class="small-box bg-teal">
+        <div class="small-box bg-green">
             <div class="inner">
                 <h3>{{ $penggilingan }}</h3>
 
                 <p>Total Order Penggilingan</p>
             </div>
             <div class="icon">
-                <i class="fa fa-th" aria-hidden="true"></i>
+            <i class="fa fa-cart-arrow-down"></i>
+            </div>
+            <a href="{{ route('penggilingan.index') }}" class="small-box-footer">Lihat <i class="fa fa-arrow-circle-right"></i></a>
+        </div>
+    </div>
+    <div class="col-lg-3 col-xs-6">
+        <!-- small box -->
+        <div class="small-box bg-red">
+            <div class="inner">
+                <h3>{{ $orderan }}</h3>
+
+                <p>Orderan yang belum di ambil</p>
+            </div>
+            <div class="icon">
+            <i class="fa fa-list-alt" aria-hidden="true"></i>
             </div>
             <a href="{{ route('penggilingan.index') }}" class="small-box-footer">Lihat <i class="fa fa-arrow-circle-right"></i></a>
         </div>

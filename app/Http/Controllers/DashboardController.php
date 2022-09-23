@@ -26,7 +26,7 @@ class DashboardController extends Controller
         $penggilingan = penggilingan::count();
         $member = Member::count();
         $barangterjual = PenjualanDetail::where('created_at', 'LIKE', "%$tanggal_a%")->sum('jumlah');
-        
+        $orderan = penggilingan::where('status', 'LIKE', 1)->count();
         $data_tanggal = array();
         $data_pendapatan = array();
         $data_penggilingan = array();
@@ -50,12 +50,12 @@ class DashboardController extends Controller
         $tanggal_awal = date('Y-m-01');
 
         if (auth()->user()->level == 1) {
-              return view('admin.dashboard', compact('kategori', 'barang', 'penjualan','penggilingan','barangterjual', 'member', 'tanggal_awal', 'tanggal_akhir', 'data_tanggal', 'data_penggilingan','data_pendapatan'));
+              return view('admin.dashboard', compact('orderan', 'kategori', 'barang', 'penjualan','penggilingan','barangterjual', 'member', 'tanggal_awal', 'tanggal_akhir', 'data_tanggal', 'data_penggilingan','data_pendapatan'));
        } else  if (auth()->user()->level == 2) {
-            return view('kasir.dashboard',compact('kategori', 'barang', 'penjualan','penggilingan','barangterjual', 'member', 'tanggal_awal', 'tanggal_akhir', 'data_tanggal', 'data_penggilingan','data_pendapatan'));
+            return view('kasir.dashboard',compact('orderan', 'kategori', 'barang', 'penjualan','penggilingan','barangterjual', 'member', 'tanggal_awal', 'tanggal_akhir', 'data_tanggal', 'data_penggilingan','data_pendapatan'));
         }
         else {
-            return view('adminbakso.dashboard',compact('kategori', 'barang', 'penjualan','penggilingan','barangterjual', 'member', 'tanggal_awal', 'tanggal_akhir', 'data_tanggal', 'data_penggilingan','data_pendapatan'));
+            return view('adminbakso.dashboard',compact('orderan', 'kategori', 'barang', 'penjualan','penggilingan','barangterjual', 'member', 'tanggal_awal', 'tanggal_akhir', 'data_tanggal', 'data_penggilingan','data_pendapatan'));
         }
     }
 }

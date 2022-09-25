@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class TambahDiskon2ToSettingTable extends Migration
+class TambahColoumBaruToBarangTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,10 +13,9 @@ class TambahDiskon2ToSettingTable extends Migration
      */
     public function up()
     {
-        Schema::table('setting', function (Blueprint $table) {
-            $table->smallInteger('diskon')
-                  ->default(0)
-                  ->after('tipe_nota');
+        Schema::table('barang', function (Blueprint $table) {
+            $table->integer('stok_gudang')
+                ->after('stok');
         });
     }
 
@@ -27,8 +26,8 @@ class TambahDiskon2ToSettingTable extends Migration
      */
     public function down()
     {
-        Schema::table('setting', function (Blueprint $table) {
-            $table->dropColumn('diskon');
+        Schema::table('barang', function (Blueprint $table) {
+            //
         });
     }
 }

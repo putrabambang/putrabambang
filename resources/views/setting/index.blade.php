@@ -78,6 +78,14 @@
                             <span class="help-block with-errors"></span>
                         </div>
                     </div>
+                    <div class="form-group row">
+                        <label for="kode_barang" class="col-lg-2 control-label">Kode Barang</label>
+                        <div class="col-lg-6">
+                            <input type="text" name="kode_barang" class="form-control" id="kode_barang" required autofocus>
+                            <span class="help-block with-errors"></span>
+                        </div>
+                    </div>
+                    </div>
                 </div>
                 <div class="box-footer text-right">
                     <button class="btn btn-sm btn-flat btn-primary"><i class="fa fa-save"></i> Simpan Perubahan</button>
@@ -127,6 +135,7 @@
                 $('[name=alamat]').val(response.alamat);
                 $('[name=diskon]').val(response.diskon);
                 $('[name=tipe_nota]').val(response.tipe_nota);
+                $('[name=kode_barang]').val(response.kode_barang);
                 $('title').text(response.nama_perusahaan + ' | Pengaturan');
                 
                 let words = response.nama_perusahaan.split(' ');

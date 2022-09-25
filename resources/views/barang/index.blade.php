@@ -11,20 +11,24 @@ Daftar Barang
           <div class="row">
             <div class="col-md-12">
               <div class="box">
-                <div class="box-header with-border">
+            
+                   <div class="box-header with-border">
                     <div class="btn-group">
                         <button onclick="addForm('{{route('barang.store')}}')"class="btn btn-success btn-xs btn-flat"><i class="fa fa-plus-circle"></i>Tambah</button>
                         <button onclick="deleteSelected('{{ route('barang.delete_selected') }}')" class="btn btn-danger btn-xs btn-flat"><i class="fa fa-trash"></i> Hapus</button>
                         <button onclick="cetakBarcode('{{ route('barang.cetak_barcode') }}')" class="btn btn-info btn-xs btn-flat"><i class="fa fa-barcode"></i> Cetak Barcode</button>
                     </div>
-                 
                 </div>
-                <!-- /.box-header -->
-                <div class="box-body table-responsive">
-                <form action="" method="post"class="form-barang">
-                    @csrf
+               <form action="" method="post"class="form-barang">
+                   @csrf    <!-- /.box-header -->
+                <div class="box-body table-responsive">   
+                <div class="alert alert-info alert-dismissible" style="display: none;">
+                        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                        <i class="icon fa fa-check"></i> Perubahan berhasil disimpan
+                    </div>
                     <table class="table table-stiped table-bordered">
                         <thead>
+                        
                             <th>
                                 <input type="checkbox" name="select_all" id="select_all">
                             </th>
@@ -33,9 +37,9 @@ Daftar Barang
                               <th>Kategori</th>
                               <th>Nama Barang</th>        
                               <th>Harga Jual</th>
-                              <th>Stok</th>
+                              <th>Stok Toko</th>
                               <th>Subtotal</th>
-                              <th>Stok toko</th>
+                              <th>Stok Gudang</th>
                             <th width="15%"><i class="fa fa-cog"></i></th>
                         </thead>
                         <tfoot>
@@ -82,7 +86,7 @@ Daftar Barang
                 {data: 'harga_jual'},
                 {data: 'stok'},
                 {data: 'subtotal'},
-                {data: 'stok'},
+                {data: 'stok_gudang'},
                 {data: 'aksi', searchable: false, sortable: false},
             ],      
             columnDefs:
@@ -141,6 +145,9 @@ Daftar Barang
                 $( api.column( 8).footer() ).html(
                     ''+item+''
                 );
+                $( api.column( 9).footer() ).html(
+                    ''+(item + total)+''
+                );
             }
         
 
@@ -152,6 +159,14 @@ Daftar Barang
                         $('#modal-form').modal('hide');
                         table.ajax.reload();
                     })
+                    .done(response => {
+              
+                    $('.alert').fadeIn();
+
+                    setTimeout(() => {
+                        $('.alert').fadeOut();
+                    }, 3000);
+                })
                     .fail((errors) => {
                         alert('Tidak dapat menyimpan data');
                         return;
@@ -185,10 +200,12 @@ Daftar Barang
 
         $.get(url)
             .done((response) => {
+                $('#modal-form [name=kode_barang]').val(response.kode_barang);   
                 $('#modal-form [name=nama_barang]').val(response.nama_barang);   
                 $('#modal-form [name=id_kategori]').val(response.id_kategori);
                 $('#modal-form [name=harga_jual]').val(response.harga_jual);
                 $('#modal-form [name=stok]').val(response.stok);
+                $('#modal-form [name=stok_gudang]').val(response.stok_gudang);
             })
             .fail((errors) => {
                 alert('Tidak dapat menampilkan data');

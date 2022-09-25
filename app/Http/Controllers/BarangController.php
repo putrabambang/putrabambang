@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
-
+use App\Models\Setting;
 use Illuminate\Http\Request;
 use App\Models\barang;
 use App\Models\kategori;
@@ -40,7 +40,7 @@ public function data()
            return ($barang->harga_jual);
        })
        ->addColumn('subtotal',function ($barang){
-        return ($barang->harga_jual*$barang->stok);
+        return (($barang->stok + $barang->stok_gudang) * $barang->harga_jual);
     })
        ->addindexColumn()
        ->addColumn('aksi',function($barang){
@@ -73,18 +73,18 @@ public function data()
      */
     public function store(Request $request)
     {
-       
+       $setting=Setting::first();
 
        $cek = barang::count();
        if($cek == 0){
-           $urut=00001;
-           $kodebarang = 'ABI'. $urut;
-
+        
+           //$kodebarang = 'ABI00001';
+        $kodebarang =$setting->kode_barang.'00001';
        }else{
 
-           $ambil = barang::all()->last();
-           $urut = (int)substr($ambil->kode_barang, -5) +1;
-           $kodebarang = 'ABI'. tambah_nol_didepan($urut,5);
+           $ambil = barang::latest()->first() ?? new Member();
+           $nourut = (int)substr($ambil->kode_barang, -5) +1;
+           $kodebarang = $setting->kode_barang. tambah_nol_didepan($nourut,5);
           // dd($kodebarang);
        }
         $barang = new barang();
@@ -93,6 +93,7 @@ public function data()
         $barang->id_kategori = $request->id_kategori;
         $barang->harga_jual = $request->harga_jual;
         $barang->stok = $request->stok;
+        $barang->stok_gudang = $request->stok_gudang;
         $barang->save();
   
      
@@ -131,10 +132,12 @@ public function data()
     public function update(Request $request, $id)
     {
         $barang = barang::find($id);
+        $barang->kode_barang = $request->kode_barang;
         $barang->nama_barang = $request->nama_barang;
         $barang->id_kategori = $request->id_kategori;
         $barang->harga_jual = $request->harga_jual;
         $barang->stok = $request->stok;
+        $barang->stok_gudang = $request->stok_gudang;
         $barang->stok  +=  $request->tambahstok;
         $barang->update();
 

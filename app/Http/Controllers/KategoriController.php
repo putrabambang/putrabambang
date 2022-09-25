@@ -25,8 +25,9 @@ public function data()
   // $barang1 = barang::where('id_kategori', 'LIKE', "%$tanggal_a%")->sum('stok');
    $barang= barang::with('kategori')
    ->select('id_kategori',
-   DB::raw('SUM(stok) as jumlahstok'))
-   ->ORDERBY ('jumlahstok', 'desc')
+   DB::raw('SUM(stok) as jumlahstok1'), 
+   DB::raw('SUM(stok_gudang) as jumlahstok2'))
+   ->ORDERBY ('jumlahstok1', 'desc')
    ->GROUPBY('id_kategori')
    ->get();
    return datatables()
@@ -36,7 +37,7 @@ public function data()
         return '<span class="label label-success">'.$barang->kategori->nama_kategori.'</span>';
     })
        ->addColumn('jumlah', function ($barang) {
-        return format_uang($barang->jumlahstok);
+        return format_uang($barang->jumlahstok1 + $barang->jumlahstok2);
     })
        ->addColumn('aksi',function($barang){
            return'

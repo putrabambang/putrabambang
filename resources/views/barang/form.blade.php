@@ -11,6 +11,13 @@
                     <h4 class="modal-title"></h4>
                 </div>
                 <div class="modal-body">
+                <div class="form-group row">
+                        <label for="kode_barang" class="col-lg-2 col-lg-offset-1 control-label">kode barang</label>
+                        <div class="col-lg-6">
+                            <input type="text" name="kode_barang" id="kode_barang" class="form-control" >
+                            <span class="help-block with-errors"></span>
+                        </div>
+                    </div>
                     <div class="form-group row">
                         <label for="nama_barang" class="col-lg-2 col-lg-offset-1 control-label">Nama Barang</label>
                         <div class="col-lg-6">
@@ -38,9 +45,16 @@
                         </div>
                     </div>  
                     <div class="form-group row">
-                        <label for="stok" class="col-lg-2 col-lg-offset-1 control-label">Stok</label>
+                        <label for="stok" class="col-lg-2 col-lg-offset-1 control-label">Stok Toko</label>
                         <div class="col-lg-6">
                             <input type="number" name="stok" id="stok" class="form-control" required value="0">
+                            <span class="help-block with-errors"></span>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label for="stok_gudang" class="col-lg-2 col-lg-offset-1 control-label">Stok Gudang</label>
+                        <div class="col-lg-6">
+                            <input type="number" name="stok_gudang" id="stok_gudang" class="form-control" required value="0">
                             <span class="help-block with-errors"></span>
                         </div>
                     </div>

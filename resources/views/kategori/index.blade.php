@@ -56,7 +56,7 @@ Kategori
             columns: [
                 {data: 'DT_RowIndex', searchable: false, sortable: false},
                 {data: 'nama_kategori'},
-                {data: 'jumlahstok'},
+                {data: 'jumlah'},
                 {data: 'aksi', searchable: false, sortable: false},
             ],
           

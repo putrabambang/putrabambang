@@ -21,7 +21,7 @@ class BuatPenjualanDetailTable extends Migration
             $table->string('id_barang');
             $table->integer('harga_jual');
             $table->integer('jumlah');
-            $table->tinyinteger('diskon')->default(0);
+            $table->tinyinteger('diskon');///kalau mau tambah diskon kasih->default(0)
             $table->integer('subtotal');
             $table->timestamps();
           });

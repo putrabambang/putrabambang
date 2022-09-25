@@ -97,7 +97,7 @@ class PenjualanDetailController extends Controller
         $detail->id_barang = $barang->id_barang;
         $detail->harga_jual = $barang->harga_jual;
         $detail->jumlah = 1;
-        $detail->diskon = $barang->diskon;
+        $detail->diskon =$barang->diskon;///diskon perbarang
         $detail->subtotal = $barang->harga_jual - ($barang->diskon / 100 * $barang->harga_jual);;
         $detail->save();
 

@@ -90,11 +90,9 @@ Kategori
     
                 // Update footer
                 //var numFormat = $.fn.dataTable.render.number( '.', '.',0, 'Rp. ' ).display;
+                var number_format=$.fn.dataTable.render.number( '.', '.',0).display;
                 $( api.column(2 ).footer() ).html(
-                    ''+pageTotal+''
-                );
-                $( api.column(2 ).footer() ).html(
-                    ''+total+''
+                    ''+ number_format(pageTotal)
                 );
             }
     });

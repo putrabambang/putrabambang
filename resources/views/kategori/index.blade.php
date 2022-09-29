@@ -99,24 +99,34 @@ Kategori
 ////////////////////////////////////////////////////////////////////////////////32:44 
         $('#modal-form').validator().on('submit', function (e) {
             if (! e.preventDefault()) {
-                $.ajax({
-                    url:$('#modal-form form').attr('action'),
-                    type:'post',
-                    data:$('#modal-form form').serialize()
-
+                $.post($('#modal-form form').attr('action'), $('#modal-form form').serialize())
+                    .done((response) => {
+                        $('#modal-form').modal('hide');
+                        table.ajax.reload();
+                    })
+                    .done(response => {
+                        Swal.fire({
+                         icon: 'success',
+                         title: 'Success',
+                         text: 'data berhasil disimpan',
+                         showConfirmButton: false,
+                        timer: 1500
+                        })
                 })
-                .done((response)=>{
-                    $('#modal-form').modal('hide');
-                    table.ajax.reload();
-                })
-                    .fail((errors) => { 
-                        alert('Tidak dapat menyimpan data');
-                        return;
+                    .fail((errors) => {
+                        Swal.fire({
+                         icon: 'error',
+                        title: 'Oops...',
+                        text: 'data gagal disimpan!',
+                        showConfirmButton: false,
+                        timer: 1500
+                        //footer: '<a href="">Why do I have this issue?</a>'
+                        })
                     });
-            }
-        })
-    });
 
+                }
+    });
+});
     function addForm(url) {
         $('#modal-form').modal('show');
         $('#modal-form .modal-title').text('Tambah Kategori');
@@ -141,25 +151,55 @@ Kategori
                 $('#modal-form [name=nama_kategori]').val(response.nama_kategori);
             })
             .fail((errors) => {
-                alert('Tidak dapat menampilkan data');
+                Swal.fire({
+                         icon: 'error',
+                        title: 'Oops...',
+                        text: 'Tidak dapat menampilkan data!',
+                        showConfirmButton: false,
+                        timer: 1500
+                        //footer: '<a href="">Why do I have this issue?</a>'
+                        });
                 return;
             });
     }
 
     function deleteData(url) {
-        if (confirm('Yakin ingin menghapus data terpilih?')) {
-            $.post(url, {
+        Swal.fire({
+        title: 'kamu yakin menghapus data ini?',
+        text: "kamu tidak dapat mengembalikan data ini!",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Yes, delete it!'
+            }).then((result) => {
+                if (result.isConfirmed) {
+             $.post(url, {
                     '_token': $('[name=csrf-token]').attr('content'),
                     '_method': 'delete'
                 })
-                .done((response) => {
+            .done((response) => {
                     table.ajax.reload();
+                    Swal.fire({title: 'Deleted!',
+                        text:  'Data telah dihapus.',
+                        icon:     'success',
+                        showConfirmButton: false,
+                        timer: 1500}
+                                 )
                 })
-                .fail((errors) => {
-                    alert('Tidak dapat menghapus data');
-                    return;
-                });
-        }
+            .fail((errors) => {
+                        Swal.fire({
+                         icon: 'error',
+                        title: 'Oops...',
+                        text: 'data gagal dihapus!',
+                        showConfirmButton: false,
+                        timer: 1500
+                        //footer: '<a href="">Why do I have this issue?</a>'
+                        })
+                    });
+   
+                 }
+                })
     }
 </script>
 @endpush

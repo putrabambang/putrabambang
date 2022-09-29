@@ -1,4 +1,6 @@
+
 @extends('layouts.master')
+
 @section('title')
 Daftar Barang
 @endsection
@@ -28,7 +30,7 @@ Daftar Barang
                     </div>
                     <table class="table table-stiped table-bordered">
                         <thead>
-                        
+                  
                             <th>
                                 <input type="checkbox" name="select_all" id="select_all">
                             </th>
@@ -57,11 +59,14 @@ Daftar Barang
               </div>
             </div>
               </div>
-            </div>
-         
+</div>
+
           </div>
 
 @includeIf('barang.form')
+   
+        
+
 @endsection
 
 @push('scripts')
@@ -160,16 +165,23 @@ Daftar Barang
                         table.ajax.reload();
                     })
                     .done(response => {
-              
-                    $('.alert').fadeIn();
-
-                    setTimeout(() => {
-                        $('.alert').fadeOut();
-                    }, 3000);
+                        Swal.fire({
+                         icon: 'success',
+                         title: 'Success',
+                         text: 'data berhasil disimpan',
+                         showConfirmButton: false,
+                        timer: 1500
+                        })
                 })
                     .fail((errors) => {
-                        alert('Tidak dapat menyimpan data');
-                        return;
+                        Swal.fire({
+                         icon: 'error',
+                        title: 'Oops...',
+                        text: 'data gagal disimpan!',
+                        showConfirmButton: false,
+                        timer: 1500
+                        //footer: '<a href="">Why do I have this issue?</a>'
+                        })
                     });
 
                 }
@@ -208,47 +220,114 @@ Daftar Barang
                 $('#modal-form [name=stok_gudang]').val(response.stok_gudang);
             })
             .fail((errors) => {
-                alert('Tidak dapat menampilkan data');
+                Swal.fire({
+                         icon: 'error',
+                        title: 'Oops...',
+                        text: 'Tidak dapat menampilkan data!',
+                        showConfirmButton: false,
+                        timer: 1500
+                        //footer: '<a href="">Why do I have this issue?</a>'
+                        });
                 return;
             });
     }
 
     function deleteData(url) {
-        if (confirm('Yakin ingin menghapus data terpilih?')) {
-            $.post(url, {
+        Swal.fire({
+        title: 'kamu yakin menghapus data ini?',
+        text: "kamu tidak dapat mengembalikan data ini!",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Yes, delete it!'
+            }).then((result) => {
+                if (result.isConfirmed) {
+             $.post(url, {
                     '_token': $('[name=csrf-token]').attr('content'),
                     '_method': 'delete'
                 })
-                .done((response) => {
+            .done((response) => {
                     table.ajax.reload();
+                    Swal.fire({title: 'Deleted!',
+                        text:  'Data telah dihapus.',
+                        icon:     'success',
+                        showConfirmButton: false,
+                        timer: 1500}
+                        
+
+                                 )
                 })
-                .fail((errors) => {
-                    alert('Tidak dapat menghapus data');
-                    return;
-                });
-        }
+            .fail((errors) => {
+                        Swal.fire({
+                         icon: 'error',
+                        title: 'Oops...',
+                        text: 'data gagal dihapus!',
+                        showConfirmButton: false,
+                        timer: 1500
+                        //footer: '<a href="">Why do I have this issue?</a>'
+                        })
+                    });
+   
+                 }
+                })
     }
     function deleteSelected(url) {
-        if ($('input:checked').length > 1) {
-            if (confirm('Yakin ingin menghapus data terpilih?')) {
-                $.post(url, $('.form-barang').serialize())
+
+        if ($('input:checked').length > 0) {
+            Swal.fire({
+            title: 'kamu yakin menghapus barang ini?',
+            text: "kamu tidak dapat mengembalikan barang ini!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes, delete it!'
+        }).then((result) => {
+                if (result.isConfirmed) {
+                    $.post(url, $('.form-barang').serialize())
+
                     .done((response) => {
                         table.ajax.reload();
-                    })
-                    .fail((errors) => {
-                        alert('Tidak dapat menghapus data');
-                        return;
-                    });
-            }
-        } else {
-            alert('Pilih data yang akan dihapus');
-            return;
-        }
-    }
 
+                        Swal.fire({title: 'Deleted!',
+                        text:  'barang telah dihapus.',
+                        icon:     'success',
+                        showConfirmButton: false,
+                        timer: 1500}
+                             );
+                })
+                .fail((errors) => {
+                        Swal.fire({
+                         icon: 'error',
+                        title: 'Oops...',
+                        text: 'data gagal dihapus!',
+                        showConfirmButton: false,
+                        timer: 1500
+                        //footer: '<a href="">Why do I have this issue?</a>'
+                        })
+                    });
+                 } 
+                })
+             }else {
+        Swal.fire({//title: 'Deleted!',
+                        text:  'pilih barang minimal 1 barang ',
+                        icon:     'warning',
+                        showConfirmButton: false,
+                        timer: 1500} );
+                        return;
+                    }
+                }
     function cetakBarcode(url) {
         if ($('input:checked').length < 1) {
-            alert('Pilih data yang akan dicetak');
+            Swal.fire({//title: 'Deleted!',
+                        text:  'pilih barang yang akan dicetak ',
+                        icon:     'warning',
+                        showConfirmButton: false,
+                        timer: 1500}
+                        
+
+                                 );
             return;
         } else {
             $('.form-barang')

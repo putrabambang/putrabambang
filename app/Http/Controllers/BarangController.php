@@ -5,6 +5,7 @@ use App\Models\Setting;
 use Illuminate\Http\Request;
 use App\Models\barang;
 use App\Models\kategori;
+use Alert;
 use PDF;
 
 class barangcontroller extends Controller
@@ -96,8 +97,8 @@ public function data()
         $barang->stok_gudang = $request->stok_gudang;
         $barang->save();
   
-     
-        return response()->json('Data berhasil disimpan', 200);
+       // Alert::success('Success Title', 'Success Message');
+       return response()->json('Data berhasil disimpan', 200);
     }
 
     /**

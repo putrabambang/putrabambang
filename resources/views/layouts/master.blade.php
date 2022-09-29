@@ -36,6 +36,7 @@
     @stack('css')
 </head>
 <body class="hold-transition skin-blue-light sidebar-mini">
+@include('sweetalert::alert')
     <div class="wrapper">
 
         @includeIf('layouts.header')
@@ -84,7 +85,7 @@
     <script src="{{ asset('AdminLTE-2/dist/js/adminlte.min.js') }}"></script>
     <!-- Validator -->
     <script src="{{ asset('js/validator.min.js') }}"></script>
-
+    <script src="{{ $cdn ?? asset('vendor/sweetalert/sweetalert.all.js')  }}"></script>
     <script>
         function preview(selector, temporaryFile, width = 200)  {
             $(selector).empty();

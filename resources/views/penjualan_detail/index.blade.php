@@ -199,17 +199,38 @@
             let stok = $(this).attr("data-stok");
             if (jumlah > stok) {
                 $(this).val(0);
-                alert('Jumlah tidak boleh lebih dari stok');
+                        Swal.fire({
+                        icon: 'error',
+                        title: 'Oops...',
+                        text: 'Jumlah Tidak boleh Melebihi Stok!',
+                        showConfirmButton: false,
+                        timer: 1500
+                        //footer: '<a href="">Why do I have this issue?</a>'
+                        })
                 return;
             }
             if (jumlah < 1) {
                 $(this).val(1);
-                alert('Jumlah tidak boleh kurang dari 1');
+                        Swal.fire({
+                        icon: 'error',
+                        title: 'Oops...',
+                        text: 'Jumlah Tidak boleh Kurang dari Stok!',
+                        showConfirmButton: false,
+                        timer: 1500
+                        //footer: '<a href="">Why do I have this issue?</a>'
+                        })
                 return;
             }
             if (jumlah > 10000) {
                 $(this).val(10000);
-                alert('Jumlah tidak boleh lebih dari 10000');
+                Swal.fire({
+                        icon: 'error',
+                        title: 'Oops...',
+                        text: 'Jumlah Tidak boleh Melebihi 10000!',
+                        showConfirmButton: false,
+                        timer: 1500
+                        //footer: '<a href="">Why do I have this issue?</a>'
+                        })
                 return;
             }
 
@@ -221,10 +242,26 @@
                 .done(response => {
                     $(this).on('mouseout', function () {
                         table.ajax.reload(() => loadForm($('#diskon').val()));
+                        Swal.fire({
+                        position: 'top-right',
+                        icon: 'success',
+                        title: 'Success',
+                        text: 'Berhasil Mengubah Jumlah!',
+                        showConfirmButton: false,
+                        timer: 1500
+                        //footer: '<a href="">Why do I have this issue?</a>'
+                        })
                     });
                 })
                 .fail(errors => {
-                    alert('Tidak dapat menyimpan data');
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Oops...',
+                        text: 'Tidak Dapat Mengubah Jumlah!',
+                        showConfirmButton: false,
+                        timer: 1500
+                        //footer: '<a href="">Why do I have this issue?</a>'
+                        })
                     return;
                 });
         });
@@ -270,12 +307,30 @@
     function tambahbarang() {
         $.post('{{ route('transaksi.store') }}', $('.form-barang').serialize())
             .done(response => {
+                Swal.fire({toast: true,
+                        icon: 'success',
+                        title: 'Success',
+                        text: 'Berhasil Menambah Barang!',
+                        showConfirmButton: false,
+                        position: 'top-right',
+                        timer: 1500
+                        //footer: '<a href="">Why do I have this issue?</a>'
+                        })
                 //$('#kode_barang').focus();
                 $('#kode_barang').val("").focus().select();
                 table.ajax.reload(() => loadForm($('#diskon').val()));
             })
             .fail(errors => {
-                alert('kode barang salah atau tidak ada');
+                Swal.fire({ 
+                        toast: true,
+                        icon: 'error',
+                        title: 'Oops...',
+                        text: 'Tidak dapat menambah data!',
+                        showConfirmButton: false,
+                        position: 'top-right',
+                        timer: 1500
+                        //footer: '<a href="">Why do I have this issue?</a>'
+                        })
                 return;
             });
     }
@@ -298,19 +353,49 @@
     }
 
     function deleteData(url) {
-        if (confirm('Yakin ingin menghapus data terpilih?')) {
-            $.post(url, {
+        Swal.fire({
+        title: 'kamu yakin menghapus data ini?',
+        text: "kamu tidak dapat mengembalikan data ini!",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Yes, delete it!'
+            }).then((result) => {
+                if (result.isConfirmed) {
+             $.post(url, {
                     '_token': $('[name=csrf-token]').attr('content'),
                     '_method': 'delete'
                 })
-                .done((response) => {
-                    table.ajax.reload(() => loadForm($('#diskon').val()));
+            .done((response) => {
+                    table.ajax.reload();
+                    Swal.fire({
+                        position: 'top-right',
+                        title: 'Deleted!',
+                        text:  'Data telah dihapus.',
+                        icon:     'success', 
+                        toast: true,
+                        showConfirmButton: false,
+                        timer: 1500}
+                        
+
+                                 )
                 })
-                .fail((errors) => {
-                    alert('Tidak dapat menghapus data');
-                    return;
-                });
-        }
+            .fail((errors) => {
+                        Swal.fire({
+                        position: 'top-right',
+                        icon: 'error',
+                        title: 'Oops...',
+                        text: 'data gagal dihapus!',
+                        toast: true,
+                        showConfirmButton: false,
+                        timer: 1500
+                        //footer: '<a href="">Why do I have this issue?</a>'
+                        })
+                    });
+   
+                 }
+                })
     }
 
     function loadForm(diskon = 0, diterima = 0) {
@@ -332,7 +417,16 @@
                 }
             })
             .fail(errors => {
-                alert('Tidak dapat menampilkan data');
+                Swal.fire({
+                    position: 'top-right',
+                        toast: true,
+                        icon: 'error',
+                        title: 'Oops...',
+                        text: 'Tidak dapat menampilkan data!',
+                        showConfirmButton: false,
+                        timer: 1500
+                        //footer: '<a href="">Why do I have this issue?</a>'
+                        })
                 return;
             })
     }

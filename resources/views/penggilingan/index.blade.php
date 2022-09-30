@@ -71,15 +71,30 @@
             ]
    });
             $('#modal-form').validator().on('submit', function (e) {
-            if (! e.preventDefault()) {
+                if (! e.preventDefault()) {
                 $.post($('#modal-form form').attr('action'), $('#modal-form form').serialize())
                     .done((response) => {
                         $('#modal-form').modal('hide');
                         table.ajax.reload();
                     })
+                    .done(response => {
+                        Swal.fire({
+                         icon: 'success',
+                         title: 'Success',
+                         text: 'data berhasil disimpan',
+                         showConfirmButton: false,
+                        timer: 1500
+                        })
+                })
                     .fail((errors) => {
-                        alert('Tidak dapat menyimpan data');
-                        return;
+                        Swal.fire({
+                         icon: 'error',
+                        title: 'Oops...',
+                        text: 'data gagal disimpan!',
+                        showConfirmButton: false,
+                        timer: 1500
+                        //footer: '<a href="">Why do I have this issue?</a>'
+                        })
                     });
 
                 }
@@ -105,34 +120,87 @@
     });
     
     function konfirmasi(url) {
-        if (confirm('konfirmasipengambilan?')) {
-            $.post(url, {
+    
+            Swal.fire({
+        title: 'Konfirmasi pengambilan?',
+        text: "Pastikan Nomor Pesanan Sudah sesuai!",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Yes!'
+            }).then((result) => {
+                if (result.isConfirmed) {
+             $.post(url, {
                     '_token': $('[name=csrf-token]').attr('content'),
                     '_method': 'post'
                 })
-                .done((response) => {
+            .done((response) => {
                     table.ajax.reload();
+                    Swal.fire({title: 'Success!',
+                        text:  'Status Berhasil Diubah.',
+                        icon:     'success',
+                        showConfirmButton: false,
+                        timer: 1500}
+                        
+
+                                 )
                 })
-                .fail((errors) => {
-                    alert('Tidak dapat merubah setatus');
-                    return;
-                });
-        }
+            .fail((errors) => {
+                        Swal.fire({
+                         icon: 'error',
+                        title: 'Oops...',
+                        text: 'Status Gagal Diubah!',
+                        showConfirmButton: false,
+                        timer: 1500
+                        //footer: '<a href="">Why do I have this issue?</a>'
+                        })
+                    });
+   
+                 }
+                })
+          
     }
     function batalkonfir(url) {
-        if (confirm('batal konfir?')) {
-            $.post(url, {
+        Swal.fire({
+        title: 'Ingin Batalkan Konfirmasi pengambilan?',
+        text: "Pastikan Nomor Pesanan Sudah sesuai!",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Yes!'
+            }).then((result) => {
+                if (result.isConfirmed) {
+             $.post(url, {
                     '_token': $('[name=csrf-token]').attr('content'),
                     '_method': 'post'
                 })
-                .done((response) => {
+            .done((response) => {
                     table.ajax.reload();
+                    Swal.fire({title: 'Success!',
+                        text:  'Status Berhasil Diubah.',
+                        icon:     'success',
+                        showConfirmButton: false,
+                        timer: 1500}
+                        
+
+                                 )
                 })
-                .fail((errors) => {
-                    alert('Tidak dapat merubah setatus');
-                    return;
-                });
-        }
+            .fail((errors) => {
+                        Swal.fire({
+                         icon: 'error',
+                        title: 'Oops...',
+                        text: 'Status Gagal Diubah!',
+                        showConfirmButton: false,
+                        timer: 1500
+                        //footer: '<a href="">Why do I have this issue?</a>'
+                        })
+                    });
+   
+                 }
+                })
+          
     }
     function editForm(url) {
         $('#modal-form').modal('show');
@@ -150,7 +218,14 @@
                 $('#modal-form [name=status]').val(response.status);
             })
             .fail((errors) => {
-                alert('Tidak dapat menampilkan data');
+                Swal.fire({
+                         icon: 'error',
+                        title: 'Oops...',
+                        text: 'Tidak dapat menampilkan data!',
+                        showConfirmButton: false,
+                        timer: 1500
+                        //footer: '<a href="">Why do I have this issue?</a>'
+                        });
                 return;
             });
     }
@@ -164,19 +239,44 @@
 
     function deleteData(url) {
         
-        if (confirm('Yakin ingin menghapus data terpilih?')) {
-            $.post(url, {
+        Swal.fire({
+        title: 'kamu yakin menghapus data ini?',
+        text: "kamu tidak dapat mengembalikan data ini!",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Yes, delete it!'
+            }).then((result) => {
+                if (result.isConfirmed) {
+             $.post(url, {
                     '_token': $('[name=csrf-token]').attr('content'),
                     '_method': 'delete'
                 })
-                .done((response) => {
+            .done((response) => {
                     table.ajax.reload();
+                    Swal.fire({title: 'Deleted!',
+                        text:  'Data telah dihapus.',
+                        icon:     'success',
+                        showConfirmButton: false,
+                        timer: 1500}
+                        
+
+                                 )
                 })
-                .fail((errors) => {
-                    alert('Tidak dapat menghapus data');
-                    return;
-                });
-        }
+            .fail((errors) => {
+                        Swal.fire({
+                         icon: 'error',
+                        title: 'Oops...',
+                        text: 'data gagal dihapus!',
+                        showConfirmButton: false,
+                        timer: 1500
+                        //footer: '<a href="">Why do I have this issue?</a>'
+                        })
+                    });
+   
+                 }
+                })
     }
 
    

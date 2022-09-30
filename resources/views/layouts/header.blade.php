@@ -19,7 +19,7 @@
       <a href="#" class="sidebar-toggle" data-toggle="push-menu" role="button">
           <span class="sr-only">Toggle navigation</span>
       </a>
-
+      <div id="custom-target"></div>
       <div class="navbar-custom-menu">
           <ul class="nav navbar-nav">
               <!-- User Account: style can be found in dropdown.less -->
@@ -55,7 +55,19 @@
       </div>
   </nav>
 </header>
+<script> 
+#custom-target {
+  position: relative;
+  width: 600px;
+  height: 300px;
+  border-style: solid;
+}
 
+.position-absolute {
+  position: absolute;
+}
+
+        </script>   
 <form action="{{ route('logout') }}" method="post" id="logout-form" style="display: none;">
   @csrf
 </form>

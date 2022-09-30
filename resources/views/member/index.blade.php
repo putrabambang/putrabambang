@@ -117,24 +117,56 @@
     }
 
     function deleteData(url) {
-        if (confirm('Yakin ingin menghapus data terpilih?')) {
-            $.post(url, {
+        Swal.fire({
+        title: 'kamu yakin menghapus data ini?',
+        text: "kamu tidak dapat mengembalikan data ini!",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Yes, delete it!'
+            }).then((result) => {
+                if (result.isConfirmed) {
+             $.post(url, {
                     '_token': $('[name=csrf-token]').attr('content'),
                     '_method': 'delete'
                 })
-                .done((response) => {
+            .done((response) => {
                     table.ajax.reload();
+                    Swal.fire({title: 'Deleted!',
+                        text:  'Data telah dihapus.',
+                        icon:     'success',
+                        showConfirmButton: false,
+                        timer: 1500}
+                        
+
+                                 )
                 })
-                .fail((errors) => {
-                    alert('Tidak dapat menghapus data');
-                    return;
-                });
-        }
+            .fail((errors) => {
+                        Swal.fire({
+                         icon: 'error',
+                        title: 'Oops...',
+                        text: 'data gagal dihapus!',
+                        showConfirmButton: false,
+                        timer: 1500
+                        //footer: '<a href="">Why do I have this issue?</a>'
+                        })
+                    });
+   
+                 }
+                })
     }
 
     function cetakMember(url) {
         if ($('input:checked').length < 1) {
-            alert('Pilih data yang akan dicetak');
+            Swal.fire({//title: 'Deleted!',
+                        text:  'Pilih data yang akan dicetak',
+                        icon:     'warning',
+                        showConfirmButton: false,
+                        timer: 1500}
+                        
+
+                                 );
             return;
         } else {
             $('.form-member')

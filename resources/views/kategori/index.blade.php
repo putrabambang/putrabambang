@@ -92,7 +92,7 @@ Kategori
                 //var numFormat = $.fn.dataTable.render.number( '.', '.',0, 'Rp. ' ).display;
                 var number_format=$.fn.dataTable.render.number( '.', '.',0).display;
                 $( api.column(2 ).footer() ).html(
-                    ''+ number_format(total)
+                    ''+ number_format(pageTotal)
                 );
             }
     });

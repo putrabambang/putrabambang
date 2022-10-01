@@ -54,20 +54,7 @@
           </ul>
       </div>
   </nav>
-</header>
-<script> 
-#custom-target {
-  position: relative;
-  width: 600px;
-  height: 300px;
-  border-style: solid;
-}
-
-.position-absolute {
-  position: absolute;
-}
-
-        </script>   
+</header>  
 <form action="{{ route('logout') }}" method="post" id="logout-form" style="display: none;">
   @csrf
 </form>

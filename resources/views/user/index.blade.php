@@ -58,11 +58,25 @@
             if (! e.preventDefault()) {
                 $.post($('#modal-form form').attr('action'), $('#modal-form form').serialize())
                     .done((response) => {
+                        Swal.fire({
+                         icon: 'success',
+                         title: 'Success',
+                         text: 'data berhasil disimpan',
+                         showConfirmButton: false,
+                        timer: 1500
+                        })
                         $('#modal-form').modal('hide');
                         table.ajax.reload();
                     })
                     .fail((errors) => {
-                        alert('Tidak dapat menyimpan data');
+                        Swal.fire({
+                         icon: 'error',
+                        title: 'Oops...',
+                        text: 'data gagal disimpan!',
+                        showConfirmButton: false,
+                        timer: 1500
+                        //footer: '<a href="">Why do I have this issue?</a>'
+                        })
                         return;
                     });
             }
@@ -98,7 +112,14 @@
                 $('#modal-form [name=email]').val(response.email);
             })
             .fail((errors) => {
-                alert('Tidak dapat menampilkan data');
+                Swal.fire({
+                         icon: 'error',
+                        title: 'Oops...',
+                        text: 'data gagal disimpan!',
+                        showConfirmButton: false,
+                        timer: 1500
+                        //footer: '<a href="">Why do I have this issue?</a>'
+                        })
                 return;
             });
     }
@@ -110,10 +131,24 @@
                     '_method': 'delete'
                 })
                 .done((response) => {
+                    Swal.fire({
+                         icon: 'success',
+                         title: 'Success',
+                         text: 'data berhasil dihapus',
+                         showConfirmButton: false,
+                        timer: 1500
+                        })
                     table.ajax.reload();
                 })
                 .fail((errors) => {
-                    alert('Tidak dapat menghapus data');
+                    Swal.fire({
+                         icon: 'error',
+                        title: 'Oops...',
+                        text: 'data gagal dihapus!',
+                        showConfirmButton: false,
+                        timer: 1500
+                        //footer: '<a href="">Why do I have this issue?</a>'
+                        })
                     return;
                 });
         }

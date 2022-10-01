@@ -113,14 +113,23 @@
                 })
                 .done(response => {
                     showData();
-                    $('.alert').fadeIn();
-
-                    setTimeout(() => {
-                        $('.alert').fadeOut();
-                    }, 3000);
+                    Swal.fire({
+                         icon: 'success',
+                         title: 'Success',
+                         text: 'data berhasil disimpan',
+                         showConfirmButton: false,
+                        timer: 1500
+                        })
                 })
                 .fail(errors => {
-                    alert('Tidak dapat menyimpan data');
+                    Swal.fire({
+                         icon: 'error',
+                        title: 'Oops...',
+                        text: 'data gagal disimpan!',
+                        showConfirmButton: false,
+                        timer: 1500
+                        //footer: '<a href="">Why do I have this issue?</a>'
+                        })
                     return;
                 });
             }
@@ -151,7 +160,14 @@
                 $('[rel=icon]').attr('href', `{{ url('/') }}/${response.path_logo}`);
             })
             .fail(errors => {
-                alert('Tidak dapat menampilkan data');
+                Swal.fire({
+                         icon: 'error',
+                        title: 'Oops...',
+                        text: 'data gagal disimpan!',
+                        showConfirmButton: false,
+                        timer: 1500
+                        //footer: '<a href="">Why do I have this issue?</a>'
+                        })
                 return;
             });
     }

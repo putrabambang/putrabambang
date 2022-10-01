@@ -39,6 +39,7 @@ Daftar Barang
                               <th>Kategori</th>
                               <th>Nama Barang</th>        
                               <th>Harga Jual</th>
+                              <th>Modal</th>
                               <th>Stok Toko</th>
                               <th>Subtotal</th>
                               <th>Stok Gudang</th>
@@ -89,6 +90,7 @@ Daftar Barang
                 {data: 'nama_kategori'},
                 {data: 'nama_barang'},
                 {data: 'harga_jual'},
+                {data: 'modal'},
                 {data: 'stok'},
                 {data: 'subtotal'},
                 {data: 'stok_gudang'},
@@ -98,7 +100,8 @@ Daftar Barang
 [
     
     {
-        targets: 7,
+
+        targets: 8,
         render: $.fn.dataTable.render.number( '.', '.',0, 'Rp. ' )
     },
 ], 
@@ -115,14 +118,14 @@ Daftar Barang
     
                 // Total over all pages
                 total = api
-                    .column(6)
+                    .column(7)
                     .data()
                     .reduce( function (a, b) {
                         return intVal(a) + intVal(b);
                     }, 0 );
                  // Total item
                     item = api
-                    .column(8)
+                    .column(9)
                     .data()
                     .reduce( function (a, b) {
                         return intVal(a) + intVal(b);
@@ -131,7 +134,7 @@ Daftar Barang
     
                 // Total over this page
                 pageTotal = api
-                    .column( 7, { page: 'current'} )
+                    .column( 8, { page: 'current'} )
                     .data()
                     .reduce( function (a, b) {
                         return intVal(a) + intVal(b);
@@ -139,18 +142,18 @@ Daftar Barang
     
                 // Update footer
                 var numFormat = $.fn.dataTable.render.number( '.', '.',0, 'Rp. ' ).display;
-                $( api.column( 7 ).footer() ).html(
+                $( api.column( 8 ).footer() ).html(
                     ''+ numFormat(pageTotal)
                     
                     
                 );
-                $( api.column( 6 ).footer() ).html(
+                $( api.column( 7 ).footer() ).html(
                     ''+total+''
                 );
-                $( api.column( 8).footer() ).html(
+                $( api.column( 9).footer() ).html(
                     ''+item+''
                 );
-                $( api.column( 9).footer() ).html(
+                $( api.column( 10).footer() ).html(
                     ''+(item + total)+''
                 );
             }

@@ -38,8 +38,11 @@ public function data()
         return '<span class="label label-success">'.$barang->kode_barang.'</span>';
     })
        ->addColumn('harga_jual',function ($barang){
-           return ($barang->harga_jual);
+           return  'Rp. '.format_uang ($barang->harga_jual);
        })
+       ->addColumn('modal',function ($barang){
+        return'Rp. '.format_uang($barang->modal);
+    })
        ->addColumn('subtotal',function ($barang){
         return (($barang->stok + $barang->stok_gudang) * $barang->harga_jual);
     })
@@ -93,6 +96,7 @@ public function data()
         $barang->nama_barang = $request->nama_barang;
         $barang->id_kategori = $request->id_kategori;
         $barang->harga_jual = $request->harga_jual;
+        $barang->modal= $request->modal;
         $barang->stok = $request->stok;
         $barang->stok_gudang = $request->stok_gudang;
         $barang->save();
@@ -138,6 +142,7 @@ public function data()
         $barang->id_kategori = $request->id_kategori;
         $barang->harga_jual = $request->harga_jual;
         $barang->stok = $request->stok;
+        $barang->modal= $request->modal;
         $barang->stok_gudang = $request->stok_gudang;
         $barang->stok  +=  $request->tambahstok;
         $barang->update();

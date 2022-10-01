@@ -14,7 +14,7 @@ class TambahColumnModalToBarang extends Migration
     public function up()
     {
         Schema::table('barang', function (Blueprint $table) {
-            $table->string('modal')
+            $table->integer('modal')
             ->after('harga_jual');
         });
     }

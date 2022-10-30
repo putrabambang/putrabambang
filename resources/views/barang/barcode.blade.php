@@ -60,7 +60,7 @@
     @for ($i = 0; $i < $jumlahcetak; $i++)
         <tr>
             @foreach ($databarang as $barang)
-                <td class="text-left" >
+                <td class="text-center" >
                    <p>{{ $barang->kode_barang }}</p> 
                     <img src="data:image/png;base64,{{ DNS1D::getBarcodePNG($barang->kode_barang, 'C39') }}" 
                         alt="{{ $barang->kode_barang }}"

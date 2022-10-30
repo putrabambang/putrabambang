@@ -21,6 +21,7 @@
                     <thead>
                         <th width="5%">No</th>
                         <th>Nama</th>
+                        <th>Level</th>
                         <th>Email</th>
                         <th width="15%"><i class="fa fa-cog"></i></th>
                     </thead>
@@ -49,6 +50,7 @@
             columns: [
                 {data: 'DT_RowIndex', searchable: false, sortable: false},
                 {data: 'name'},
+                {data: 'level'},
                 {data: 'email'},
                 {data: 'aksi', searchable: false, sortable: false},
             ]

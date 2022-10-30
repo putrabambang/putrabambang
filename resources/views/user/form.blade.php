@@ -11,6 +11,17 @@
                     <h4 class="modal-title"></h4>
                 </div>
                 <div class="modal-body">
+                <div class="form-group row">
+                    <label for="level" class="col-lg-2 control-label">level </label>
+                    <div class="col-lg-8">
+                        <select name="level" class="form-control" id="level" value="{{ $penggilingan->level ?? 1 }}"required>
+                            <option value="1">Administrator</option>
+                            <option value="2">kasir Toko </option>
+                            <option value="3">kasir Gilingan </option>
+                        </select>
+                        <span class="help-block with-errors"></span>
+                    </div>
+                </div>
                     <div class="form-group row">
                         <label for="name" class="col-lg-3 col-lg-offset-1 control-label">Nama</label>
                         <div class="col-lg-6">

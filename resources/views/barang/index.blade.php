@@ -21,6 +21,7 @@ Daftar Barang
                         <button onclick="jumlahcetak()" class="btn btn-info btn-xs btn-flat"><i class="fa fa-barcode"></i> Cetak Barcode</button>
                 </div>
             </div>
+            
             <form action="" method="post" class="form-barang">
                 @csrf
                 <!-- /.box-header -->
@@ -61,10 +62,9 @@ Daftar Barang
                 </form>
               </div>
             </div>
-              </div>
-</div>
-
-          </div>
+        </div>
+        </div>
+    </div>
 
 @includeIf('barang.form')
 

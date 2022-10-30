@@ -15,11 +15,27 @@ class UserController extends Controller
 
     public function data()
     {
-        $user = User::isNotAdmin()->orderBy('id', 'desc')->get();
+        $user = User::orderBy('level', 'asc')->get();
 
         return datatables()
             ->of($user)
             ->addIndexColumn()
+            ->addColumn('level', function ($penggilingan) {
+                $level= $penggilingan->level ;
+       if($level == 1){
+           $cek = '<span  class="label label-danger "><i class="">Administrator</i></span>';
+
+       }else if ($level == 2){
+
+           $cek = '<span class="label label-success "><i class="">Kasir Toko</i></span>' ;
+    
+       }else if ($level == 3){
+
+        $cek = '<span class="label label-success "><i class="">Kasir Gilingan</i></span>' ;
+ 
+    }
+                return $cek ;
+            })
             ->addColumn('aksi', function ($user) {
                 return '
                 <div class="btn-group">
@@ -28,7 +44,7 @@ class UserController extends Controller
                 </div>
                 ';
             })
-            ->rawColumns(['aksi'])
+            ->rawColumns(['aksi','level'])
             ->make(true);
     }
 
@@ -54,7 +70,7 @@ class UserController extends Controller
         $user->name = $request->name;
         $user->email = $request->email;
         $user->password = bcrypt($request->password);
-        $user->level = 2;
+        $user->level = $request->level;
         $user->foto = '/img/user.jpg';
         $user->save();
 

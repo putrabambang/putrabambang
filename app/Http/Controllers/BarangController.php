@@ -182,9 +182,7 @@ public function data()
         }
 
         $no  = 1;
-        $pdf = PDF::loadView('barang.barcode', compact('databarang', 'no','jumlahcetak'));
-        $pdf->setPaper('a4', 'potrait');
-        return $pdf->stream('barang.pdf');
+        return view ('barang.barcode', compact('databarang', 'no','jumlahcetak'));
     }
 }
 

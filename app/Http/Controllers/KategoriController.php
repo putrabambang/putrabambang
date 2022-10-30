@@ -37,7 +37,7 @@ public function data()
         return '<span class="label label-success">'.$barang->kategori->nama_kategori.'</span>';
     })
        ->addColumn('jumlah', function ($barang) {
-        return format_uang($barang->jumlahstok1 + $barang->jumlahstok2);
+        return ($barang->jumlahstok1 + $barang->jumlahstok2);
     })
        ->addColumn('aksi',function($barang){
            return'

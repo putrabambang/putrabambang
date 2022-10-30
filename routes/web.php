@@ -61,7 +61,10 @@ Route::middleware([
     Route::group(['middleware' => 'level:1,2'], function (){
     Route::get('/pengeluaran/data', [PengeluaranController::class, 'data'])->name('pengeluaran.data');
     Route::resource('/pengeluaran', PengeluaranController::class);
-   
+    
+    Route::get('/barang/data',[barangController::class,'data'])->name('barang.data');
+    Route::post('/barang/cetak-barcode',[barangController::class,'cetakBarcode'])->name('barang.cetak_barcode');
+    Route::resource('/barang', barangController::class )->except('destroy', 'update', 'store');
     Route::get('/penjualan//data/{awal}/{akhir}', [PenjualanController::class, 'data'])->name('penjualan.data');
     Route::get('/penjualan', [PenjualanController::class, 'index'])->name('penjualan.index');
     Route::get('/penjualan/{id}', [PenjualanController::class, 'show'])->name('penjualan.show');

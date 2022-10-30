@@ -14,6 +14,7 @@
 </head>
 <body>
     <table width="100%">
+    @for ($i = 0; $i < $jumlahcetak; $i++)
         <tr>
             @foreach ($databarang as $barang)
                 <td class="text-left" >
@@ -31,6 +32,7 @@
                 @endif
             @endforeach
         </tr>
+    @endfor
     </table>
 </body>
 </html>

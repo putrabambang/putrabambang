@@ -5,39 +5,41 @@
 Daftar Barang
 @endsection
 @section('breadcrumb')
-@parent 
-<li class="active">Daftar Barang</li>    
+@parent
+<li class="active">Daftar Barang</li>
 @endsection
 @section('content')
           <!-- Main row -->
           <div class="row">
             <div class="col-md-12">
               <div class="box">
-            
+
                    <div class="box-header with-border">
                     <div class="btn-group">
                         <button onclick="addForm('{{route('barang.store')}}')"class="btn btn-success btn-xs btn-flat"><i class="fa fa-plus-circle"></i>Tambah</button>
                         <button onclick="deleteSelected('{{ route('barang.delete_selected') }}')" class="btn btn-danger btn-xs btn-flat"><i class="fa fa-trash"></i> Hapus</button>
-                        <button onclick="cetakBarcode('{{ route('barang.cetak_barcode') }}')" class="btn btn-info btn-xs btn-flat"><i class="fa fa-barcode"></i> Cetak Barcode</button>
-                    </div>
+                        <button onclick="jumlahcetak()" class="btn btn-info btn-xs btn-flat"><i class="fa fa-barcode"></i> Cetak Barcode</button>
                 </div>
-               <form action="" method="post"class="form-barang">
-                   @csrf    <!-- /.box-header -->
-                <div class="box-body table-responsive">   
-                <div class="alert alert-info alert-dismissible" style="display: none;">
+            </div>
+            <form action="" method="post" class="form-barang">
+                @csrf
+                <!-- /.box-header -->
+                <div class="box-body table-responsive">
+                    <div class="alert alert-info alert-dismissible" style="display: none;">
                         <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
                         <i class="icon fa fa-check"></i> Perubahan berhasil disimpan
                     </div>
+                    <input type="hidden" name="jumlahcetak" id="jumlahcetak" value=1>
                     <table class="table table-stiped table-bordered">
                         <thead>
-                  
+
                             <th>
                                 <input type="checkbox" name="select_all" id="select_all">
                             </th>
                             <th width="5%">No</th>
                               <th>Kode</th>
                               <th>Kategori</th>
-                              <th>Nama Barang</th>        
+                              <th>Nama Barang</th>
                               <th>Harga Jual</th>
                               <th>Modal</th>
                               <th>Stok Toko</th>
@@ -65,8 +67,8 @@ Daftar Barang
           </div>
 
 @includeIf('barang.form')
-   
-        
+
+
 
 @endsection
 
@@ -95,19 +97,19 @@ Daftar Barang
                 {data: 'subtotal'},
                 {data: 'stok_gudang'},
                 {data: 'aksi', searchable: false, sortable: false},
-            ],      
+            ],
             columnDefs:
 [
-    
+
     {
 
         targets: 8,
         render: $.fn.dataTable.render.number( '.', '.',0, 'Rp. ' )
     },
-], 
+],
             "footerCallback": function ( row, data, start, end, display ) {
                 var api = this.api(), data;
-    
+
                 // Remove the formatting to get integer data for summation
                 var intVal = function ( i ) {
                     return typeof i === 'string' ?
@@ -115,7 +117,7 @@ Daftar Barang
                         typeof i === 'number' ?
                             i : 0;
                 };
-    
+
                 // Total over all pages
                 total = api
                     .column(7)
@@ -130,8 +132,8 @@ Daftar Barang
                     .reduce( function (a, b) {
                         return intVal(a) + intVal(b);
                     }, 0 );
-    
-    
+
+
                 // Total over this page
                 pageTotal = api
                     .column( 8, { page: 'current'} )
@@ -139,13 +141,13 @@ Daftar Barang
                     .reduce( function (a, b) {
                         return intVal(a) + intVal(b);
                     }, 0 );
-    
+
                 // Update footer
                 var numFormat = $.fn.dataTable.render.number( '.', '.',0, 'Rp. ' ).display;
                 $( api.column( 8 ).footer() ).html(
                     ''+ numFormat(pageTotal)
-                    
-                    
+
+
                 );
                 $( api.column( 7 ).footer() ).html(
                     ''+total+''
@@ -157,7 +159,7 @@ Daftar Barang
                     ''+(item + total)+''
                 );
             }
-        
+
 
         });
         $('#modal-form').validator().on('submit', function (e) {
@@ -191,7 +193,7 @@ Daftar Barang
         });
         $('[name=select_all]').on('click', function () {
             $(':checkbox').prop('checked', this.checked);
-        });  
+        });
     });
 
     function addForm(url) {
@@ -203,7 +205,26 @@ Daftar Barang
         $('#modal-form [name=_method]').val('post');
         $('#modal-form [name=nama_barang]').focus();
     }
-
+    function jumlahcetak(url) {
+        Swal.fire({
+            title: 'Masukkan jumlah cetak',
+            input: 'number',
+            inputAttributes: {
+                min: 1,
+                max: 1000
+            },
+            showCancelButton: true,
+         confirmButtonText: 'Cetak',
+         showLoaderOnConfirm: true,
+         preConfirm: (jmlh) => {$('#jumlahcetak').val(jmlh); }
+        }) .then  ((result)=> {
+                if (result.isConfirmed) {
+                cetakBarcode('{{ route('barang.cetak_barcode') }}')
+            return; }
+          else{
+            return;
+          }})
+    }
     function editForm(url) {
         $('#modal-form').modal('show');
         $('#modal-form .modal-title').text('Edit Barang');
@@ -215,8 +236,8 @@ Daftar Barang
 
         $.get(url)
             .done((response) => {
-                $('#modal-form [name=kode_barang]').val(response.kode_barang);   
-                $('#modal-form [name=nama_barang]').val(response.nama_barang);   
+                $('#modal-form [name=kode_barang]').val(response.kode_barang);
+                $('#modal-form [name=nama_barang]').val(response.nama_barang);
                 $('#modal-form [name=id_kategori]').val(response.id_kategori);
                 $('#modal-form [name=harga_jual]').val(response.harga_jual);
                 $('#modal-form [name=stok]').val(response.stok);
@@ -257,7 +278,7 @@ Daftar Barang
                         icon:     'success',
                         showConfirmButton: false,
                         timer: 1500}
-                        
+
 
                                  )
                 })
@@ -271,7 +292,7 @@ Daftar Barang
                         //footer: '<a href="">Why do I have this issue?</a>'
                         })
                     });
-   
+
                  }
                 })
     }
@@ -310,7 +331,7 @@ Daftar Barang
                         //footer: '<a href="">Why do I have this issue?</a>'
                         })
                     });
-                 } 
+                 }
                 })
              }else {
         Swal.fire({//title: 'Deleted!',
@@ -328,7 +349,7 @@ Daftar Barang
                         icon:     'warning',
                         showConfirmButton: false,
                         timer: 1500}
-                        
+
 
                                  );
             return;

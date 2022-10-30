@@ -174,6 +174,7 @@ public function data()
     }
     public function cetakBarcode(Request $request)
     {
+        $jumlahcetak=$request->jumlahcetak;
         $databarang = array();
         foreach ($request->id_barang as $id) {
             $barang = barang::find($id);
@@ -181,7 +182,7 @@ public function data()
         }
 
         $no  = 1;
-        $pdf = PDF::loadView('barang.barcode', compact('databarang', 'no'));
+        $pdf = PDF::loadView('barang.barcode', compact('databarang', 'no','jumlahcetak'));
         $pdf->setPaper('a4', 'potrait');
         return $pdf->stream('barang.pdf');
     }

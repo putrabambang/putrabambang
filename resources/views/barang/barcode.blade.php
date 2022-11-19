@@ -64,8 +64,8 @@
                    <p>{{ $barang->kode_barang }}</p> 
                     <img src="data:image/png;base64,{{ DNS1D::getBarcodePNG($barang->kode_barang, 'C39') }}" 
                         alt="{{ $barang->kode_barang }}"
-                        width="180"
-                        height="60">
+                        width="210"
+                        height="80">
                     <p class="text-center" >{{ $barang->nama_barang }}</p>
                    <p> Rp. {{ format_uang($barang->harga_jual) }}</p>
 

@@ -19,7 +19,7 @@ class SettingTableSeeder extends Seeder
             'alamat' => '-',
             'telepon' => '-',
             'tipe_nota' => 1, // kecil
-            'Kode_barang' => BRG,
+            'Kode_barang' => "ABI",
             'diskon' => 0,
             'path_logo' => '/img/logo.png',
             'path_kartu_member' => '/img/member.png',

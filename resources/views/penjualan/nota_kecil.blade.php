@@ -112,6 +112,8 @@
     </table>
 
     <p class="text-center">===================================</p>
+    <p class="text-center">Pembuatan Aplikasi Toko/pos</p>
+    <p class="text-center">hubungi 085156280416</p>
     <p class="text-center">-- TERIMA KASIH --</p>
 
     <script>

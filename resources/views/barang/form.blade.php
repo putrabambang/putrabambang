@@ -14,8 +14,7 @@
                 <div class="form-group row">
                         <label for="kode_barang" class="col-lg-2 col-lg-offset-1 control-label">kode barang</label>
                         <div class="col-lg-6">
-                            <input type="text" name="kode_barang" id="kode_barang" class="form-control" >
-                            <span class="help-block with-errors"></span>
+                            <label type="text" name="kode_barang" id="kode_barang" class="form-control" >
                         </div>
                     </div>
                     <div class="form-group row">

@@ -85,10 +85,11 @@ public function data()
         $kodebarang =$setting->kode_barang.'00001';
        }else{
 
-           $ambil = barang::latest()->first();
+        $ambil = barang::orderBy('kode_barang', 'desc')->first();
+
            $nourut = (int)substr($ambil->kode_barang, -5) +1;
            $kodebarang = $setting->kode_barang. tambah_nol_didepan($nourut,5);
-          // dd($kodebarang);
+         //dd($ambil);
        }
         $barang = new barang();
         $barang->kode_barang = $kodebarang;

@@ -13,7 +13,10 @@ class PenjualanDetailController extends Controller
 {
     public function index(Request $request)
     {
-        $barang = barang::orderBy('nama_barang')->get();
+       // $barang = barang::orderBy('nama_barang')->get();
+        $barang = barang::where('stok', '>', 0)
+    ->orderBy('nama_barang')
+    ->get();
         $member = Member::orderBy('nama')->get();
         $diskon = Setting::first()->diskon ?? 0;
 

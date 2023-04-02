@@ -439,7 +439,34 @@
     function onScanSuccess(decodedText, decodedResult) {
             $('#kode_barang').val( decodedText);
             let id = decodedText;
-            tambahbarang();
+            $.post('{{ route('transaksi.store') }}', $('.form-barang').serialize())
+            .done(response => {
+                Swal.fire({toast: true,
+                        icon: 'success',
+                        title: 'Success',
+                        text: 'Berhasil Menambah Barang!',
+                        showConfirmButton: false,
+                        position: 'top-right',
+                        timer: 1500
+                        //footer: '<a href="">Why do I have this issue?</a>'
+                        })
+                //$('#kode_barang').focus();
+                $('#kode_barang').val("").focus().select();
+                table.ajax.reload(() => loadForm($('#diskon').val()));
+            })
+            .fail(errors => {
+                Swal.fire({ 
+                        toast: true,
+                        icon: 'error',
+                        title: 'Oops...',
+                        text: 'Tidak dapat menambah data!',
+                        showConfirmButton: false,
+                        position: 'top-right',
+                        timer: 1500
+                        //footer: '<a href="">Why do I have this issue?</a>'
+                        })
+                return;
+            });
             }
 
             function onScanFailure(error) {

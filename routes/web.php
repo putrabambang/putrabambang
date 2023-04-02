@@ -48,7 +48,7 @@ Route::middleware([
     Route::group(['middleware' => 'level:1'], function () {
     Route::get('/kategori/data',[KategoriController::class,'data'])->name('kategori.data');
     Route::resource('/kategori', KategoriController::class );
-     Route::delete('/penjualan/{id}', [PenjualanController::class, 'destroy'])->name('penjualan.destroy');
+    Route::delete('/penjualan/{id}', [PenjualanController::class, 'destroy'])->name('penjualan.destroy');
     Route::get('/barang/data',[barangController::class,'data'])->name('barang.data');
     Route::post('/barang/delete-selected',[barangController::class,'deleteSelected'])->name('barang.delete_selected');
     Route::post('/barang/cetak-barcode',[barangController::class,'cetakBarcode'])->name('barang.cetak_barcode');
@@ -66,6 +66,7 @@ Route::middleware([
     Route::post('/barang/cetak-barcode',[barangController::class,'cetakBarcode'])->name('barang.cetak_barcode');
     Route::resource('/barang', barangController::class )->except('destroy', 'update', 'store');
     Route::get('/penjualan//data/{awal}/{akhir}', [PenjualanController::class, 'data'])->name('penjualan.data');
+    Route::get('/scan', [PenjualanController::class, 'scan'])->name('scan');
     Route::get('/penjualan', [PenjualanController::class, 'index'])->name('penjualan.index');
     Route::get('/penjualan/{id}', [PenjualanController::class, 'show'])->name('penjualan.show');
  

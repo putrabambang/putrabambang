@@ -63,11 +63,16 @@
                                 <input type="hidden" name="id_barang" id="id_barang">
                                 <input  onchange="tambahbarang()"type="text"  class="form-control" name="kode_barang" id="kode_barang">
                                 <span class="input-group-btn">
+                                   
                                     <button onclick="tampilbarang()" class="btn btn-info btn-flat" type="button"><i class="fa fa-arrow-right"></i></button>
                                 </span>
+                                 
                             </div>
+                            <div id="reader" width="50px"></div>
                         </div>
+                        
                     </div>
+                    
                 </form>
 
                 <table class="table table-stiped table-bordered table-penjualan">
@@ -157,7 +162,24 @@
 @endsection
 
 @push('scripts')
+<script src="https://unpkg.com/html5-qrcode" type="text/javascript"></script>
 <script>
+function onScanSuccess(decodedText, decodedResult) {
+  $('#kode_barang').val( decodedText);
+let id = decodedText;
+}
+
+function onScanFailure(error) {
+  // handle scan failure, usually better to ignore and keep scanning.
+  // for example:
+ //s console.warn(`Code scan error = ${error}`);
+}
+
+let html5QrcodeScanner = new Html5QrcodeScanner(
+  "reader",
+  { fps: 10, qrbox: {width: 250, height: 250} },
+  /* verbose= */ false);
+html5QrcodeScanner.render(onScanSuccess, onScanFailure);
     let table, table2;
 
     $(function () {

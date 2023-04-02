@@ -441,12 +441,11 @@
             let id = decodedText;
             $.post('{{ route('transaksi.store') }}', $('.form-barang').serialize())
             .done(response => {
-                Swal.fire({toast: true,
+                Swal.fire({
                         icon: 'success',
                         title: 'Success',
                         text: 'Berhasil Menambah Barang!',
                         showConfirmButton: false,
-                        position: 'top-right',
                         timer: 1500
                         //footer: '<a href="">Why do I have this issue?</a>'
                         })
@@ -456,12 +455,11 @@
             })
             .fail(errors => {
                 Swal.fire({ 
-                        toast: true,
+                     
                         icon: 'error',
                         title: 'Oops...',
-                        text: 'Tidak dapat menambah data!',
-                        showConfirmButton: false,
-                        position: 'top-right',
+                        text: 'Data barang tidak ada! scan ulang!!!',
+                        showConfirmButton: true ,
                         timer: 1500
                         //footer: '<a href="">Why do I have this issue?</a>'
                         })

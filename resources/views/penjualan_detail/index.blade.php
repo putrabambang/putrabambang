@@ -148,10 +148,11 @@
                     </div>
                 </div>
             </div>
-
             <div class="box-footer">
                 <button type="submit" class="btn btn-primary btn-sm btn-flat pull-right btn-simpan"><i class="fa fa-floppy-o"></i> Simpan Transaksi</button>
-            </div>
+                <button type="button" class="btn btn-danger btn-sm btn-flat" onclick="batalPenjualan('{{ route('penjualan.destroy', $id_penjualan) }}')"><i class="fa fa-times-circle"></i> Batal Transaksi</button>
+                               
+        </div>
         </div>
     </div>
 </div>
@@ -309,6 +310,59 @@
         //hidebarang();
         tambahbarang();
     }
+    function batalPenjualan(url) {
+        Swal.fire({
+            title: 'Apakah Anda yakin?',
+            text: 'Anda tidak dapat mengembalikan data transaksi yang sudah dibatalkan!',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Ya, batalkan!',
+            cancelButtonText: 'Tidak, kembali'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                $.ajax({
+                    url: url,
+                    type: 'POST',
+                    data: {
+                        _token: '{{ csrf_token() }}',
+                        _method: 'DELETE'
+                    },
+                    success: function (response) {
+                        Swal.fire({
+                        title: 'Terhapus!',
+                        text: 'Transaksi telah dihapus.',
+                        icon: 'success',
+                        showCancelButton: true,
+                        confirmButtonColor: '#3085d6',
+                        cancelButtonColor: '#d33',
+                        confirmButtonText: 'Transaksi Baru',
+                        cancelButtonText: 'Menu Utama',
+                        timer: 2000
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            // Redirect atau melakukan tindakan untuk transaksi baru
+                            window.location.href = "{{route('transaksi.baru')}}";
+                        } else {
+                            // Redirect atau melakukan tindakan untuk kembali ke menu utama
+                            window.location.href = "{{route('dashboard')}}";
+                        }
+                    });
+                },
+                    error: function (xhr, textStatus, errorThrown) {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Oops...',
+                            text: 'Terjadi kesalahan. Transaksi gagal dibatalkan!',
+                            showConfirmButton: false,
+                            timer: 1500
+                        });
+                    }
+                });
+            }
+        });
+    }
 
     function tambahbarang() {
         $.post('{{ route('transaksi.store') }}', $('.form-barang').serialize())
@@ -358,7 +412,7 @@
         $('#modal-member').modal('hide');
     }
 
-    function deleteData(url) {
+    function deleteData() {
         Swal.fire({
         title: 'kamu yakin menghapus data ini?',
         text: "kamu tidak dapat mengembalikan data ini!",
@@ -392,18 +446,16 @@
                         position: 'top-right',
                         icon: 'error',
                         title: 'Oops...',
-                        text: 'data gagal dihapus!',
+                        text: 'data gagal dihapus bro!',
                         toast: true,
                         showConfirmButton: false,
                         timer: 1500
                         //footer: '<a href="">Why do I have this issue?</a>'
-                        })
                     });
-   
-                 }
-                })
-    }
-
+                    })
+                }});
+            }
+    
     function loadForm(diskon = 0, diterima = 0) {
         $('#total').val($('.total').text());
         $('#total_item').val($('.total_item').text());

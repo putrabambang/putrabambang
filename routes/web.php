@@ -41,7 +41,6 @@ Route::group(['middleware' => 'auth'], function () {
     Route::group(['middleware' => 'level:1'], function () {
         Route::get('/kategori/data', [KategoriController::class, 'data'])->name('kategori.data');
         Route::resource('/kategori', KategoriController::class);
-        Route::delete('/penjualan/{id}', [PenjualanController::class, 'destroy'])->name('penjualan.destroy');
         Route::get('/barang/data', [BarangController::class, 'data'])->name('barang.data');
         Route::post('/barang/delete-selected', [BarangController::class, 'deleteSelected'])->name('barang.delete_selected');
         Route::post('/barang/cetak-barcode', [BarangController::class, 'cetakBarcode'])->name('barang.cetak_barcode');
@@ -66,13 +65,12 @@ Route::group(['middleware' => 'auth'], function () {
         Route::get('/barang/data', [BarangController::class, 'data'])->name('barang.data');
         Route::post('/barang/cetak-barcode', [BarangController::class, 'cetakBarcode'])->name('barang.cetak_barcode');
         Route::resource('/barang', BarangController::class)->except('destroy', 'update', 'store');
-
+        Route::delete('/penjualan/{id}', [PenjualanController::class, 'destroy'])->name('penjualan.destroy');
         Route::get('/penjualan/data/{awal}/{akhir}', [PenjualanController::class, 'data'])->name('penjualan.data');
         Route::get('/scan', [PenjualanController::class, 'scan'])->name('scan');
         Route::get('/penjualan', [PenjualanController::class, 'index'])->name('penjualan.index');
         Route::get('/penjualan/{id}', [PenjualanController::class, 'show'])->name('penjualan.show');
-
-        Route::get('/penjualandetail', [PenjualanDetailController::class, 'index'])->name('penjualan_detail.index');
+        Route::delete('/penjualan/{id}', [PenjualanController::class, 'destroy'])->name('penjualan.destroy'); Route::get('/penjualandetail', [PenjualanDetailController::class, 'index'])->name('penjualan_detail.index');
 
         Route::get('/transaksi/baru', [PenjualanController::class, 'create'])->name('transaksi.baru');
         Route::post('/transaksi/simpan', [PenjualanController::class, 'store'])->name('transaksi.simpan');

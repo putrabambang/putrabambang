@@ -85,25 +85,41 @@ class PenjualanDetailController extends Controller
     }
 
     public function store(Request $request)
-    {
-        $barang = Barang::where('id_barang', $request->id_barang)
-            ->orWhere('kode_barang', $request->kode_barang)
-            ->first();
-        if (!$barang) {
-            return response()->json('Data gagal disimpan', 400);
-        }
+{
+    $barang = Barang::where('id_barang', $request->id_barang)
+        ->orWhere('kode_barang', $request->kode_barang)
+        ->first();
+    
+    if (!$barang) {
+        return response()->json('Data gagal disimpan', 400);
+    }
 
-        $detail = new PenjualanDetail();
-        $detail->id_penjualan = $request->id_penjualan;
-        $detail->id_barang = $barang->id_barang;
-        $detail->harga_jual = $barang->harga_jual;
-        $detail->jumlah = 1;
-        $detail->diskon = $barang->diskon; ///diskon perbarang
-        $detail->subtotal = $barang->harga_jual - ($barang->diskon / 100 * $barang->harga_jual);
-        $detail->save();
+    $penjualan = PenjualanDetail::where('id_penjualan', $request->id_penjualan)
+        ->where('id_barang', $barang->id_barang)
+        ->first();
+
+    if ($penjualan) {
+        // Jika barang sudah ada, tambahkan jumlahnya
+        $penjualan->jumlah += 1;
+        $penjualan->subtotal = $penjualan->harga_jual - ($penjualan->diskon / 100 * $penjualan->harga_jual);
+        $penjualan->save();
 
         return response()->json('Data berhasil disimpan', 200);
     }
+
+    // Jika barang belum ada, buat sebagai baris baru
+    $detail = new PenjualanDetail();
+    $detail->id_penjualan = $request->id_penjualan;
+    $detail->id_barang = $barang->id_barang;
+    $detail->harga_jual = $barang->harga_jual;
+    $detail->jumlah = 1;
+    $detail->diskon = $barang->diskon;
+    $detail->subtotal = $barang->harga_jual - ($barang->diskon / 100 * $barang->harga_jual);
+    $detail->save();
+
+    return response()->json('Data berhasil disimpan', 200);
+}
+
 
     public function update(Request $request, $id)
     {

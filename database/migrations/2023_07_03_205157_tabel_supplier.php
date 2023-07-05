@@ -4,8 +4,9 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class TambahColumnFotoToBarang extends Migration
+class TabelSupplier extends Migration
 {
+ 
     /**
      * Run the migrations.
      *
@@ -13,9 +14,12 @@ class TambahColumnFotoToBarang extends Migration
      */
     public function up()
     {
-        Schema::table('barang', function (Blueprint $table) {
-            $table->string('foto')
-            ->after('stok_gudang');
+        Schema::create('supplier', function (Blueprint $table) {
+            $table->increments('id_supplier');
+            $table->string('nama');
+            $table->text('alamat')->nullable();
+            $table->string('telepon');
+            $table->timestamps();
         });
     }
 
@@ -26,8 +30,6 @@ class TambahColumnFotoToBarang extends Migration
      */
     public function down()
     {
-        Schema::table('barang', function (Blueprint $table) {
-            //
-        });
+        Schema::dropIfExists('supplier');
     }
 }

@@ -40,6 +40,11 @@
           </a>
         </li>
         <li>
+        <a href="{{route('supplier.index')}}">
+            <i class="fa fa-truck"></i> <span>Suplier</span>
+          </a>
+        </li>
+        <li>
           <a href="{{route('item.index')}}">
             <i class="fa fa-cubes"></i> <span>Item Penggilingan</span>
           </a>
@@ -50,6 +55,11 @@
               <i class="fa fa-upload"></i> <span>Data Penjualan</span>
           </a>
       </li>
+      <li>
+                <a href="{{ route('pembelian.index') }}">
+                    <i class="fa fa-download"></i> <span>Pembelian</span>
+                </a>
+            </li>
         <li>
           <a href="{{route('transaksi.baru')}}">
             <i class="fa fa-cart-arrow-down"></i> <span>Transaksi baru</span>

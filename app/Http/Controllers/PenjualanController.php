@@ -3,16 +3,15 @@
 namespace App\Http\Controllers;
 
 use App\Models\Member;
-use App\Models\penjualan;
-use App\Models\penjualandetail;
-use App\Models\barang;
+use App\Models\Penjualan;
+use App\Models\PenjualanDetail;
+use App\Models\Barang;
 use App\Models\Setting;
 use Illuminate\Http\Request;
 use PDF;
 
 class PenjualanController extends Controller
 {
-
     public function index(Request $request)
     {
         $tanggalAwal = date('Y-m-01');
@@ -22,27 +21,26 @@ class PenjualanController extends Controller
             $tanggalAwal = $request->tanggal_awal;
             $tanggalAkhir = $request->tanggal_akhir;
         }
+
         return view('penjualan.index', compact('tanggalAwal', 'tanggalAkhir'));
     }
 
     public function data($awal, $akhir)
     {
-       
         $tanggal = $awal;
-        $tanggalAkhir =$akhir;
+        $tanggalAkhir = $akhir;
         $awal = date('Y-m-d', strtotime("+1 day", strtotime($awal)));
         $penjualan = Penjualan::with('member')
-        ->wherebetween('created_at',["$tanggal","$tanggalAkhir"])
-        ->orwhere('created_at','like',"%$tanggalAkhir%")
-        ->orderBy('id_penjualan', 'desc')
-        ->get();
-
+            ->whereBetween('created_at', ["$tanggal", "$tanggalAkhir"])
+            ->orWhere('created_at', 'LIKE', "%$tanggalAkhir%")
+            ->orderBy('id_penjualan', 'desc')
+            ->get();
 
         return datatables()
             ->of($penjualan)
             ->addIndexColumn()
             ->addColumn('id_penjualan', function ($penjualan) {
-                return '<span class="label label-success">'. $penjualan->id_penjualan .'</span>';
+                return '<span class="label label-success">' . $penjualan->id_penjualan . '</span>';
             })
             ->addColumn('total_item', function ($penjualan) {
                 return format_uang($penjualan->total_item);
@@ -58,7 +56,7 @@ class PenjualanController extends Controller
             })
             ->addColumn('kode_member', function ($penjualan) {
                 $member = $penjualan->member->kode_member ?? '';
-                return '<span class="label label-success">'. $member .'</spa>';
+                return '<span class="label label-success">' . $member . '</spa>';
             })
             ->editColumn('diskon', function ($penjualan) {
                 return $penjualan->diskon . '%';
@@ -69,12 +67,12 @@ class PenjualanController extends Controller
             ->addColumn('aksi', function ($penjualan) {
                 return '
                 <div class="btn-group">
-                    <button onclick="showDetail(`'. route('penjualan.show', $penjualan->id_penjualan) .'`)" class="btn btn-xs btn-info btn-flat"><i class="fa fa-eye"></i></button>
-                    <button onclick="deleteData(`'. route('penjualan.destroy', $penjualan->id_penjualan) .'`)" class="btn btn-xs btn-danger btn-flat"><i class="fa fa-trash"></i></button>
+                    <button onclick="showDetail(`' . route('penjualan.show', $penjualan->id_penjualan) . '`)" class="btn btn-xs btn-info btn-flat"><i class="fa fa-eye"></i></button>
+                    <button onclick="deleteData(`' . route('penjualan.destroy', $penjualan->id_penjualan) . '`)" class="btn btn-xs btn-danger btn-flat"><i class="fa fa-trash"></i></button>
                 </div>
                 ';
             })
-            ->rawColumns(['aksi', 'kode_member','id_penjualan'])
+            ->rawColumns(['aksi', 'kode_member', 'id_penjualan'])
             ->make(true);
     }
 
@@ -110,7 +108,7 @@ class PenjualanController extends Controller
             $item->diskon = $request->diskon;
             $item->update();
 
-            $barang = barang::find($item->id_barang);
+            $barang = Barang::find($item->id_barang);
             $barang->stok -= $item->jumlah;
             $barang->update();
         }
@@ -126,19 +124,19 @@ class PenjualanController extends Controller
             ->of($detail)
             ->addIndexColumn()
             ->addColumn('kode_barang', function ($detail) {
-                return '<span class="label label-success">'. $detail->barang->kode_barang .'</span>';
+                return '<span class="label label-success">' . $detail->barang->kode_barang . '</span>';
             })
             ->addColumn('nama_barang', function ($detail) {
                 return $detail->barang->nama_barang;
             })
             ->addColumn('harga_jual', function ($detail) {
-                return 'Rp. '. format_uang($detail->harga_jual);
+                return 'Rp. ' . format_uang($detail->harga_jual);
             })
             ->addColumn('jumlah', function ($detail) {
                 return format_uang($detail->jumlah);
             })
             ->addColumn('subtotal', function ($detail) {
-                return 'Rp. '. format_uang($detail->subtotal);
+                return 'Rp. ' . format_uang($detail->subtotal);
             })
             ->rawColumns(['kode_barang'])
             ->make(true);
@@ -147,9 +145,9 @@ class PenjualanController extends Controller
     public function destroy($id)
     {
         $penjualan = Penjualan::find($id);
-        $detail    = PenjualanDetail::where('id_penjualan', $penjualan->id_penjualan)->get();
+        $detail = PenjualanDetail::where('id_penjualan', $penjualan->id_penjualan)->get();
         foreach ($detail as $item) {
-            $barang = barang::find($item->id_barang);
+            $barang = Barang::find($item->id_barang);
             if ($barang) {
                 $barang->stok += $item->jumlah;
                 $barang->update();
@@ -174,13 +172,13 @@ class PenjualanController extends Controller
     {
         $setting = Setting::first();
         $penjualan = Penjualan::find(session('id_penjualan'));
-        if (! $penjualan) {
+        if (!$penjualan) {
             abort(404);
         }
         $detail = PenjualanDetail::with('barang')
             ->where('id_penjualan', session('id_penjualan'))
             ->get();
-        
+
         return view('penjualan.nota_kecil', compact('setting', 'penjualan', 'detail'));
     }
 
@@ -188,7 +186,7 @@ class PenjualanController extends Controller
     {
         $setting = Setting::first();
         $penjualan = Penjualan::find(session('id_penjualan'));
-        if (! $penjualan) {
+        if (!$penjualan) {
             abort(404);
         }
         $detail = PenjualanDetail::with('barang')
@@ -196,7 +194,7 @@ class PenjualanController extends Controller
             ->get();
 
         $pdf = PDF::loadView('penjualan.nota_besar', compact('setting', 'penjualan', 'detail'));
-        $pdf->setPaper(0,0,609,440, 'potrait');
-        return $pdf->stream('Transaksi-'. date('Y-m-d-his') .'.pdf');
+        $pdf->setPaper(0, 0, 609, 440, 'potrait');
+        return $pdf->stream('Transaksi-' . date('Y-m-d-his') . '.pdf');
     }
 }

@@ -236,6 +236,7 @@ Daftar Barang
 
         $.get(url)
             .done((response) => {
+                $('#modal-form .kode-barang-label').text(response.kode_barang);
                 $('#modal-form [name=kode_barang]').val(response.kode_barang);
                 $('#modal-form [name=nama_barang]').val(response.nama_barang);
                 $('#modal-form [name=id_kategori]').val(response.id_kategori);

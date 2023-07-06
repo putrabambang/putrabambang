@@ -10,7 +10,7 @@ use App\Models\Penjualan;
 use App\Models\Penggilingan;
 use App\Models\Barang;
 use Illuminate\Http\Request;
-use App\Models\Penjualandetail;
+use App\Models\PenjualanDetail;
 
 class DashboardController extends Controller
 {

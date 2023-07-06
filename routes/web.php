@@ -70,7 +70,8 @@ Route::group(['middleware' => 'auth'], function () {
         Route::get('/scan', [PenjualanController::class, 'scan'])->name('scan');
         Route::get('/penjualan', [PenjualanController::class, 'index'])->name('penjualan.index');
         Route::get('/penjualan/{id}', [PenjualanController::class, 'show'])->name('penjualan.show');
-        Route::delete('/penjualan/{id}', [PenjualanController::class, 'destroy'])->name('penjualan.destroy'); Route::get('/penjualandetail', [PenjualanDetailController::class, 'index'])->name('penjualan_detail.index');
+        Route::delete('/penjualan/{id}', [PenjualanController::class, 'destroy'])->name('penjualan.destroy'); 
+        Route::get('/penjualandetail', [PenjualanDetailController::class, 'index'])->name('penjualan_detail.index');
 
         Route::get('/transaksi/baru', [PenjualanController::class, 'create'])->name('transaksi.baru');
         Route::post('/transaksi/simpan', [PenjualanController::class, 'store'])->name('transaksi.simpan');

@@ -3,8 +3,8 @@
 namespace App\Http\Controllers;
 
 //use App\Models\Pembelian;
-use App\Models\pengeluaran;
-use App\Models\penjualan;
+use App\Models\Pengeluaran;
+use App\Models\Penjualan;
 use Illuminate\Http\Request;
 use PDF;
 

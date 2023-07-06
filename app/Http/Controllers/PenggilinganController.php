@@ -1,8 +1,8 @@
 <?php
 
 namespace App\Http\Controllers;
-use App\Models\penggilingan;
-use App\Models\penggilingan_detail;
+use App\Models\Penggilingan;
+use App\Models\Penggilingan_detail;
 use App\Models\Item;
 use App\Models\Setting;
 use Illuminate\Http\Request;

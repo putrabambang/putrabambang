@@ -2,8 +2,8 @@
 namespace App\Http\Controllers;
 use App\Models\Setting;
 use Illuminate\Http\Request;
-use App\Models\barang;
-use App\Models\kategori;
+use App\Models\Barang;
+use App\Models\Kategori;
 use Alert;
 use PDF;
 

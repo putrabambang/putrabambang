@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 use App\Models\Pengeluaranbakso;
-use App\Models\penggilingan;
+use App\Models\Penggilingan;
 use Illuminate\Http\Request;
 use PDF;
 

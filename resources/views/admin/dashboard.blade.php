@@ -114,6 +114,20 @@
             <a href="{{ route('penggilingan.index') }}" class="small-box-footer">Lihat <i class="fa fa-arrow-circle-right"></i></a>
         </div>
     </div>
+    <div class="col-lg-3 col-xs-6">
+        <!-- small box -->
+        <div class="small-box bg-red">
+            <div class="inner">
+                <h3>{{ $pembelian }}</h3>
+
+                <p>Pembelian</p>
+            </div>
+            <div class="icon">
+            <i class="fa fa-cart-arrow-down" aria-hidden="true"></i>
+            </div>
+            <a href="{{ route('pembelian.index') }}" class="small-box-footer">Lihat <i class="fa fa-arrow-circle-right"></i></a>
+        </div>
+    </div>
     <!-- ./col -->
 </div>
 <!-- /.row -->
@@ -142,6 +156,8 @@
     </div>
     <!-- /.col -->
 </div>
+<!-- /.row (main row) -->
+
 <!-- /.row (main row) -->
 <div class="row">
     <div class="col-lg-12">

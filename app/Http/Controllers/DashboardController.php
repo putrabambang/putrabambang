@@ -7,15 +7,25 @@ use App\Models\Member;
 use App\Models\Pengeluaran;
 use App\Models\Pengeluaranbakso;
 use App\Models\Penjualan;
+use App\Models\Pembelian;
 use App\Models\Penggilingan;
 use App\Models\Barang;
 use Illuminate\Http\Request;
 use App\Models\PenjualanDetail;
-
+use Carbon\Carbon;
+use Illuminate\Support\Facades\DB;
 class DashboardController extends Controller
 {
     public function index()
     {
+        
+        $startOfMonth = Carbon::now()->subMonth()->startOfMonth();
+        $endOfMonth = Carbon::now()->subMonth()->endOfMonth();
+        $data = DB::table('penjualan_detail')
+        ->select(DB::raw('DATE(created_at) as date'), DB::raw('SUM(jumlah) as total'))
+        ->whereBetween('created_at', [$startOfMonth, $endOfMonth])
+        ->groupBy('date')
+        ->get();
         $tanggal_a = date('Y-m-');
         $tanggal_awal = date('Y-m-01');
         $tanggal_akhir = date('Y-m-d');
@@ -26,6 +36,7 @@ class DashboardController extends Controller
         $penggilingan = Penggilingan::count();
         $member = Member::count();
         $barangterjual = PenjualanDetail::where('created_at', 'LIKE', "%$tanggal_a%")->sum('jumlah');
+        $pembelian = Pembelian::count();
         $orderan = Penggilingan::where('status', 'LIKE', 1)->count();
         $data_tanggal = [];
         $data_pendapatan = [];
@@ -62,7 +73,9 @@ class DashboardController extends Controller
                 'tanggal_akhir',
                 'data_tanggal',
                 'data_penggilingan',
-                'data_pendapatan'
+                'data_pendapatan',
+                'data',
+                'pembelian'
             ));
         } elseif (auth()->user()->level == 2) {
             return view('kasir.dashboard', compact(

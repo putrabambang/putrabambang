@@ -13,6 +13,7 @@
                 <div class="modal-body">
                 <div class="form-group row">
                        <div class="col-lg-6">
+                       <input type="hidden" name="kode_barang" id="kode_barang" class="form-control">
                        <span class="label label-success kode-barang-label" style="font-size: 18px;">
                         </div>
                     </div>

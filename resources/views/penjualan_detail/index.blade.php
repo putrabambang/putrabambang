@@ -412,7 +412,7 @@
         $('#modal-member').modal('hide');
     }
 
-    function deleteData() {
+    function deleteData(url) {
         Swal.fire({
         title: 'kamu yakin menghapus data ini?',
         text: "kamu tidak dapat mengembalikan data ini!",
@@ -436,7 +436,7 @@
                         icon:     'success', 
                         toast: true,
                         showConfirmButton: false,
-                        timer: 1500}
+                        timer: 1900}
                         
 
                                  )

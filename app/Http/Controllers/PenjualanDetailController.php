@@ -130,11 +130,18 @@ class PenjualanDetailController extends Controller
     }
 
     public function destroy($id)
-    {
-        $detail = PenjualanDetail::find($id);
-        $detail->delete();
-
-        return response(null, 204);
+    {  
+        $detail = PenjualanDetail::find($id); 
+        $cek = Penjualan::find($detail->id_penjualan);
+        
+        if ($cek->total_item == 0) {
+            $detail->delete();
+        } else {
+            $barang = Barang::find($detail->id_barang);
+            $barang->stok += $detail->jumlah;
+            $barang->update();
+            $detail->delete();
+        }
     }
 
     public function loadForm($diskon = 0, $total = 0, $diterima = 0)

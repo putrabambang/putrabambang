@@ -8,11 +8,14 @@ use App\Models\PenjualanDetail;
 use App\Models\Barang;
 use App\Models\Setting;
 use Illuminate\Http\Request;
+use PDF;
 
 class PenjualanDetailController extends Controller
 {
     public function index(Request $request)
     {
+        $setting = Setting::first();
+
         $barang = Barang::where('stok', '>', 0)
             ->orderBy('nama_barang')
             ->get();
@@ -24,12 +27,12 @@ class PenjualanDetailController extends Controller
             $penjualan = Penjualan::find($id_penjualan);
             $memberSelected = $penjualan->member ?? new Member();
 
-            return view('penjualan_detail.index', compact('barang', 'member', 'diskon', 'id_penjualan', 'penjualan', 'memberSelected'));
+            return view('penjualan_detail.index', compact('barang', 'member', 'diskon', 'id_penjualan','setting', 'penjualan', 'memberSelected'));
         } elseif ($id_penjualan = session('id_penjualan')) {
             $penjualan = Penjualan::find($id_penjualan);
             $memberSelected = $penjualan->member ?? new Member();
 
-            return view('penjualan_detail.index', compact('barang', 'member', 'diskon', 'id_penjualan', 'penjualan', 'memberSelected'));
+            return view('penjualan_detail.index', compact('barang', 'member', 'diskon', 'id_penjualan','setting', 'penjualan', 'memberSelected'));
         } else {
             if (auth()->user()->level == 1) {
                 return redirect()->route('transaksi.baru');
@@ -120,7 +123,6 @@ class PenjualanDetailController extends Controller
     return response()->json('Data berhasil disimpan', 200);
 }
 
-
     public function update(Request $request, $id)
     {
         $detail = PenjualanDetail::find($id);
@@ -164,5 +166,34 @@ class PenjualanDetailController extends Controller
     {
         $stok = Barang::with('penjualan_detail')->get();
         return view('barang.stok', compact('stok'));
+    }
+    public function notaKecil()
+    {
+        $setting = Setting::first();
+        $penjualan = Penjualan::find(session('id_penjualan'));
+        if (!$penjualan) {
+            abort(404);
+        }
+        $detail = PenjualanDetail::with('barang')
+            ->where('id_penjualan', session('id_penjualan'))
+            ->get();
+
+        return view('penjualan_detail.nota_kecil', compact('setting', 'penjualan', 'detail'));
+    }
+
+    public function notaBesar()
+    {
+        $setting = Setting::first();
+        $penjualan = Penjualan::find(session('id_penjualan'));
+        if (!$penjualan) {
+            abort(404);
+        }
+        $detail = PenjualanDetail::with('barang')
+            ->where('id_penjualan', session('id_penjualan'))
+            ->get();
+
+        $pdf = PDF::loadView('penjualan_detail.nota_besar', compact('setting', 'penjualan', 'detail'));
+        $pdf->setPaper(0, 0, 609, 440, 'potrait');
+        return $pdf->stream('Transaksi-' . date('Y-m-d-his') . '.pdf');
     }
 }

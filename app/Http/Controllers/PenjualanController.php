@@ -112,8 +112,6 @@ class PenjualanController extends Controller
             $barang->stok -= $item->jumlah;
             $barang->update();
         }
-
-        return redirect()->route('transaksi.selesai');
     }
 
     public function show($id)
@@ -160,13 +158,12 @@ class PenjualanController extends Controller
 
         return response(null, 204);
     }
+//  public function selesai()
+//    {
+//        $setting = Setting::first();
 
-    public function selesai()
-    {
-        $setting = Setting::first();
-
-        return view('penjualan.selesai', compact('setting'));
-    }
+ //       return view('penjualan.selesai', compact('setting'));
+ //   }
 
     public function notaKecil()
     {

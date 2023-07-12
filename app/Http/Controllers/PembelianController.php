@@ -81,7 +81,7 @@ class PembelianController extends Controller
 
         $detail = PembelianDetail::where('id_pembelian', $pembelian->id_pembelian)->get();
         foreach ($detail as $item) {
-            $barang = barang::find($item->id_barang);
+            $barang = Barang::find($item->id_barang);
             $barang->stok_gudang += $item->jumlah;
             $barang->update();
         }

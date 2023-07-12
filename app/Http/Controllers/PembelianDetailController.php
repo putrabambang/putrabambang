@@ -13,7 +13,7 @@ class PembelianDetailController extends Controller
     public function index()
     {
         $id_pembelian = session('id_pembelian');
-        $barang = barang::orderBy('nama_barang')->get();
+        $barang = Barang::orderBy('nama_barang')->get();
         $supplier = Supplier::find(session('id_supplier'));
         $diskon = Pembelian::find($id_pembelian)->diskon ?? 0;
 
@@ -26,7 +26,7 @@ class PembelianDetailController extends Controller
 
     public function data($id)
     {
-        $detail = PembelianDetail::with('barang')
+        $detail = PembelianDetail::with('Barang')
             ->where('id_pembelian', $id)
             ->get();
         $data = array();
@@ -68,7 +68,7 @@ class PembelianDetailController extends Controller
 
     public function store(Request $request)
     {
-        $barang = barang::where('id_barang', $request->id_barang)->first();
+        $barang = Barang::where('id_barang', $request->id_barang)->first();
         if (! $barang) {
             return response()->json('Data gagal disimpan', 400);
         }

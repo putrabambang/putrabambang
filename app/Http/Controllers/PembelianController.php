@@ -91,7 +91,7 @@ class PembelianController extends Controller
 
     public function show($id)
     {
-        $detail = PembelianDetail::with('barang')->where('id_pembelian', $id)->get();
+        $detail = PembelianDetail::with('Barang')->where('id_pembelian', $id)->get();
 
         return datatables()
             ->of($detail)

@@ -151,7 +151,8 @@
             <div class="box-footer">
                 <button type="submit" class="btn btn-primary btn-sm btn-flat pull-right btn-simpan"><i class="fa fa-floppy-o"></i> Simpan Transaksi</button>
                 <button type="button" class="btn btn-danger btn-sm btn-flat" onclick="batalPenjualan('{{ route('penjualan.destroy', $id_penjualan) }}')"><i class="fa fa-times-circle"></i> Batal Transaksi</button>
-                               
+                 <p class="text-center">Pastikan Jumlah,harga,uang di terima dan kembalian Seblum Menyimpan Transaksi ini</p>
+                            
         </div>
         </div>
     </div>

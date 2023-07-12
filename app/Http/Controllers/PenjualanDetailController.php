@@ -44,7 +44,7 @@ class PenjualanDetailController extends Controller
 
     public function data($id)
     {
-        $detail = PenjualanDetail::with('barang')
+        $detail = PenjualanDetail::with('Barang')
             ->where('id_penjualan', $id)
             ->get();
 

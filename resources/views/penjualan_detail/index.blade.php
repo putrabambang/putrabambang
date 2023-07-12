@@ -290,31 +290,52 @@
         }).focus(function () {
             $(this).select();
         });
-
         $('.btn-simpan').on('click', function () {
     $('.form-penjualan').submit();
 });
 
 $('.form-penjualan').on('submit', function (e) {
     e.preventDefault();
+    var form = $(this);
 
-    Swal.fire({
-        icon: 'success',
-        title: 'Transaksi berhasil disimpan',
-        showCancelButton: true,
-        confirmButtonText: 'Cetak Nota',
-        cancelButtonText: 'Transaksi Baru'
-    }).then((result) => {
-        if (result.isConfirmed) {
-            // Redirect ke halaman cetak nota
-            @if ($setting->tipe_nota == 1)
-                window.location.href = '{{ route("transaksi.nota_kecil") }}';
-            @else
-                window.location.href = '{{ route("transaksi.nota_besar") }}';
-            @endif
-        } else {
-            // Redirect ke halaman transaksi baru
-            window.location.href = '{{ route("transaksi.baru") }}';
+    $.ajax({
+        url: form.attr('action'),
+        type: form.attr('method'),
+        data: form.serialize(),
+        success: function (response) {
+            Swal.fire({
+                icon: 'success',
+                title: 'Transaksi berhasil disimpan',
+                showCancelButton: true,
+                confirmButtonText: 'Cetak Nota',
+                cancelButtonText: 'Transaksi Baru'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    // Buka halaman cetak nota dalam jendela pop-up
+                    var notaUrl = '';
+                    @if ($setting->tipe_nota == 1)
+                        notaUrl = '{{ route("transaksi.nota_kecil") }}';
+                    @else
+                        notaUrl = '{{ route("transaksi.nota_besar") }}';
+                    @endif
+
+                    window.open(notaUrl, 'Nota Penjualan', 'width=800,height=600');
+                    
+                    // Mengarahkan pengguna ke halaman transaksi baru
+                    window.location.href = '{{ route("transaksi.baru") }}';
+                } else {
+                    // Buka halaman transaksi baru dalam window saat ini
+                    window.location.href = '{{ route("transaksi.baru") }}';
+                }
+            });
+        },
+        error: function (xhr, status, error) {
+            // Penanganan kesalahan jika ada
+            Swal.fire({
+                icon: 'error',
+                title: 'Oops...',
+                text: 'Terjadi kesalahan saat menyimpan transaksi.'
+            });
         }
     });
 });

@@ -112,6 +112,7 @@ class PenjualanController extends Controller
             $barang->stok -= $item->jumlah;
             $barang->update();
         }
+        return response()->json('Transaksi berhasil disimpan', 200);
     }
 
     public function show($id)
@@ -158,12 +159,9 @@ class PenjualanController extends Controller
 
         return response(null, 204);
     }
-//  public function selesai()
-//    {
-//        $setting = Setting::first();
-
- //       return view('penjualan.selesai', compact('setting'));
- //   }
+  public function selesai()
+   {
+  }
 
     public function notaKecil()
     {

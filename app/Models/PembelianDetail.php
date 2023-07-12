@@ -13,8 +13,8 @@ class PembelianDetail extends Model
     protected $primaryKey = 'id_pembelian_detail';
     protected $guarded = [];
 
-    public function barang()
+    public function Barang()
     {
-        return $this->hasOne(barang::class, 'id_barang', 'id_barang');
+        return $this->hasOne(Barang::class, 'id_barang', 'id_barang');
     }
 }

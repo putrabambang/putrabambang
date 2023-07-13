@@ -308,8 +308,15 @@ $('.form-penjualan').on('submit', function (e) {
                 icon: 'success',
                 title: 'Transaksi berhasil disimpan',
                 showCancelButton: true,
+                cancelButtonText: 'Dashboard',
                 confirmButtonText: 'Cetak Nota',
-                cancelButtonText: 'Transaksi Baru'
+                showCloseButton: true,
+                closeButtonAriaLabel: 'Tutup',
+                showCancelButton: true,
+                cancelButtonText: 'Transaksi Baru',
+                showHomeButton: true,
+                homeButtonAriaLabel: 'Beranda',
+                reverseButtons: true // Membalikkan posisi tombol
             }).then((result) => {
                 if (result.isConfirmed) {
                     // Buka halaman cetak nota dalam jendela pop-up
@@ -321,12 +328,18 @@ $('.form-penjualan').on('submit', function (e) {
                     @endif
 
                     window.open(notaUrl, 'Nota Penjualan', 'width=800,height=600');
-                    
+                } else if (result.dismiss === Swal.DismissReason.cancel) {
+                    // Tindakan ketika tombol Transaksi Baru diklik
                     // Mengarahkan pengguna ke halaman transaksi baru
                     window.location.href = '{{ route("transaksi.baru") }}';
-                } else {
-                    // Buka halaman transaksi baru dalam window saat ini
-                    window.location.href = '{{ route("transaksi.baru") }}';
+                } else if (result.dismiss === Swal.DismissReason.close) {
+                    // Tindakan ketika tombol Tutup diklik
+                    // Mengarahkan pengguna ke halaman dashboard
+                    window.location.href = '{{ route("dashboard") }}';
+                } else if (result.dismiss === Swal.DismissReason.home) {
+                    // Tindakan ketika tombol Beranda diklik
+                    // Mengarahkan pengguna ke halaman beranda (home)
+                    window.location.href = '{{ route("dashboard") }}';
                 }
             });
         },
@@ -340,6 +353,9 @@ $('.form-penjualan').on('submit', function (e) {
         }
     });
 });
+
+
+
 
     });
 

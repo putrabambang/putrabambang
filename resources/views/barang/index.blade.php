@@ -205,6 +205,55 @@ Daftar Barang
         $('#modal-form [name=_method]').val('post');
         $('#modal-form [name=nama_barang]').focus();
     }
+    function tambahStok(id_barang) {
+    Swal.fire({
+        title: 'Tambah Stok Barang',
+        input: 'number',
+        inputLabel: 'Jumlah Stok',
+        inputAttributes: {
+            min: 1
+        },
+        showCancelButton: true,
+        confirmButtonText: 'Tambah',
+        cancelButtonText: 'Batal',
+        showLoaderOnConfirm: true,
+        preConfirm: (jumlahStok) => {
+            return fetch('{{ route("barang.tambah_stok") }}', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                body: JSON.stringify({
+                    id_barang: id_barang,
+                    jumlah_stok: jumlahStok
+                })
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error(response.statusText);
+                }
+                return response.json();
+            })
+            .catch(error => {
+                Swal.showValidationMessage(`Request failed: ${error}`);
+            });
+        },
+        allowOutsideClick: () => !Swal.isLoading()
+    }).then((result) => {
+        if (result.isConfirmed) {
+            Swal.fire({
+                icon: 'success',
+                title: 'Stok barang berhasil ditambah',
+                showCancelButton: false,
+                confirmButtonText: 'OK'
+            }).then(() => {
+                // Refresh halaman atau lakukan tindakan lain yang diperlukan
+                location.reload();
+            });
+        }
+    });
+}
     function jumlahcetak(url) {
         Swal.fire({
             title: 'Masukkan jumlah cetak',

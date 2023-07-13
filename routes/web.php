@@ -43,6 +43,8 @@ Route::group(['middleware' => 'auth'], function () {
         Route::get('/barang/data', [BarangController::class, 'data'])->name('barang.data');
         Route::post('/barang/delete-selected', [BarangController::class, 'deleteSelected'])->name('barang.delete_selected');
         Route::post('/barang/cetak-barcode', [BarangController::class, 'cetakBarcode'])->name('barang.cetak_barcode');
+        Route::post('/barang/tambah_stok', [BarangController::class, 'tambahstok'])->name('barang.tambah_stok');
+
         Route::resource('/barang', BarangController::class);
         Route::get('/pembelian/data', [PembelianController::class, 'data'])->name('pembelian.data');
         Route::get('/pembelian/{id}/create', [PembelianController::class, 'create'])->name('pembelian.create');

@@ -51,6 +51,8 @@ public function data()
            <div class="btn-group">
            <button type="button"onclick="editForm(`'.route('barang.update',$barang->id_barang).'`)"  class="btn btn-xs btn-info btn-flat"><i class="fa fa-pencil"></i></button>
            <button type="button"onclick="deleteData(`'.route('barang.destroy',$barang->id_barang).'`)" class="btn btn-xs btn-danger btn-flat"><i class="fa fa-trash"></i></button>
+           <button type="button" onclick="tambahStok(`'.$barang->id_barang.'`)" class="btn btn-xs btn-success btn-flat"><i class="fa fa-plus"></i></button>
+           
            </div>
            ';
        })
@@ -58,11 +60,29 @@ public function data()
        ->make(true);
 
 }
+
     /**
      * Show the form for creating a new resource.
      *
      * @return \Illuminate\Http\Response
      */
+
+
+     public function tambahStok(Request $request)
+{
+    $id_barang = $request->input('id_barang');
+    $jumlah_stok = $request->input('jumlah_stok');
+
+    try {
+        $barang = Barang::find($id_barang);
+        $barang->stok += $jumlah_stok;
+        $barang->save();
+
+        return response()->json(['message' => 'Stok barang berhasil ditambah'], 200);
+    } catch (\Exception $e) {
+        return response()->json(['message' => 'Terjadi kesalahan saat menambah stok barang'], 500);
+    }
+}
     public function create()
     {
         //
@@ -76,34 +96,40 @@ public function data()
      */
     public function store(Request $request)
     {
-       $setting=Setting::first();
-
-       $cek = barang::count();
-       if($cek == 0){
-        
-           //$kodebarang = 'ABI00001';
-        $kodebarang =$setting->kode_barang.'00001';
-       }else{
-
-        $ambil = barang::orderBy('kode_barang', 'desc')->first();
-
-           $nourut = (int)substr($ambil->kode_barang, -5) +1;
-           $kodebarang = $setting->kode_barang. tambah_nol_didepan($nourut,5);
-         //dd($ambil);
-       }
-        $barang = new barang();
+        $setting = Setting::first();
+        $kodebarang = '';
+    
+        $existingBarang = Barang::pluck('kode_barang')->toArray();
+        $maxKodeBarang = max($existingBarang);
+        $maxNourut = (int)substr($maxKodeBarang, -5);
+    
+        for ($i = 1; $i <= $maxNourut; $i++) {
+            $currentKodeBarang = $setting->kode_barang . tambah_nol_didepan($i, 5);
+            if (!in_array($currentKodeBarang, $existingBarang)) {
+                $kodebarang = $currentKodeBarang;
+                break;
+            }
+        }
+    
+        // Jika tidak ada kode barang yang terlewatkan, gunakan kode barang berikutnya
+        if (empty($kodebarang)) {
+            $nextNourut = $maxNourut + 1;
+            $kodebarang = $setting->kode_barang . tambah_nol_didepan($nextNourut, 5);
+        }
+    
+        $barang = new Barang();
         $barang->kode_barang = $kodebarang;
         $barang->nama_barang = $request->nama_barang;
         $barang->id_kategori = $request->id_kategori;
         $barang->harga_jual = $request->harga_jual;
-        $barang->modal= $request->modal;
+        $barang->modal = $request->modal;
         $barang->stok = $request->stok;
         $barang->stok_gudang = $request->stok_gudang;
         $barang->save();
-  
-       // Alert::success('Success Title', 'Success Message');
-       return response()->json('Data berhasil disimpan', 200);
+    
+        return response()->json('Data berhasil disimpan', 200);
     }
+    
 
     /**
      * Show the form for editing the specified resource.

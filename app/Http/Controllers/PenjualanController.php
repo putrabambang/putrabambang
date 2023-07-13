@@ -93,8 +93,16 @@ class PenjualanController extends Controller
     }
 
     public function store(Request $request)
-    {
+{
+    // Pengecekan apakah sudah terdapat Penjualan dengan data yang sama
+    $penjualan = Penjualan::where('id_penjualan', $request->id_penjualan)
+        ->where('total_harga', $request->total)
+        ->first();
+
+    if ($penjualan === null) {
+        // Jika belum terdapat Penjualan dengan data yang sama, lakukan pengurangan stok barang
         $penjualan = Penjualan::findOrFail($request->id_penjualan);
+        $penjualan->id_penjualan = $request->id_penjualan;
         $penjualan->id_member = $request->id_member;
         $penjualan->total_item = $request->total_item;
         $penjualan->total_harga = $request->total;
@@ -112,8 +120,14 @@ class PenjualanController extends Controller
             $barang->stok -= $item->jumlah;
             $barang->update();
         }
+
         return response()->json('Transaksi berhasil disimpan', 200);
+    } else {
+        // Jika terdapat Penjualan dengan data yang sama, tidak dilakukan pengurangan stok
+        return response()->json('Data penjualan dengan data yang sama sudah pernah disimpan sebelumnya', 200);
     }
+}
+
 
     public function show($id)
     {

@@ -331,7 +331,7 @@ $('.form-penjualan').on('submit', function (e) {
     title: 'Pilih Tindakan Selanjutnya',
     showCancelButton: true,
     cancelButtonText: 'Transaksi Baru',
-    confirmButtonText: 'Dashboard',
+    confirmButtonText: 'Menu Utama',
     showCloseButton: true,
     closeButtonAriaLabel: 'Tutup'
 }).then((result) => {

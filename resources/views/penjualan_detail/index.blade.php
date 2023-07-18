@@ -61,6 +61,7 @@
                             <div class="input-group">
                                 <input type="hidden" name="id_penjualan" id="id_penjualan"value="{{ $id_penjualan }}"> 
                                 <input type="hidden" name="id_barang" id="id_barang">
+                                <input type="hidden" name="status" id="status" value="1">
                                 <input  onchange="tambahbarang()"type="text"  class="form-control" name="kode_barang" id="kode_barang">
                                 <span class="input-group-btn">
                                    
@@ -96,6 +97,7 @@
                         <form action="{{ route('transaksi.simpan') }}" class="form-penjualan" method="post">
                             @csrf
                             <input type="hidden" name="id_penjualan" value="{{ $id_penjualan }}">
+                            <input type="hidden" name="status" id="status" value="1">
                             <input type="hidden" name="total" id="total">
                             <input type="hidden" name="total_item" id="total_item">
                             <input type="hidden" name="bayar" id="bayar">

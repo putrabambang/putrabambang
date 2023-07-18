@@ -104,7 +104,7 @@ class PenjualanDetailController extends Controller
     if ($penjualan) {
         // Jika barang sudah ada, tambahkan jumlahnya
         $penjualan->jumlah += 1;
-        $penjualan->subtotal = $penjualan->harga_jual - ($penjualan->diskon / 100 * $penjualan->harga_jual);
+        $penjualan->subtotal = $penjualan->harga_jual  * $penjualan->jumlah - ($penjualan->diskon / 100 * $penjualan->harga_jual);
         $penjualan->save();
 
         return response()->json('Data berhasil disimpan', 200);
@@ -118,6 +118,7 @@ class PenjualanDetailController extends Controller
     $detail->jumlah = 1;
     $detail->diskon = $barang->diskon;
     $detail->subtotal = $barang->harga_jual - ($barang->diskon / 100 * $barang->harga_jual);
+    $detail->status =0;
     $detail->save();
 
     return response()->json('Data berhasil disimpan', 200);

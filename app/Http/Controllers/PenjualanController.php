@@ -86,49 +86,74 @@ class PenjualanController extends Controller
         $penjualan->bayar = 0;
         $penjualan->diterima = 0;
         $penjualan->id_user = auth()->id();
+        $penjualan->status = 0;
         $penjualan->save();
 
         session(['id_penjualan' => $penjualan->id_penjualan]);
         return redirect()->route('transaksi.index');
     }
-
+    
     public function store(Request $request)
-{
-    // Pengecekan apakah sudah terdapat Penjualan dengan data yang sama
-    $penjualan = Penjualan::where('id_penjualan', $request->id_penjualan)
-        ->where('total_harga', $request->total)
-        ->first();
-
-    if ($penjualan === null) {
-        // Jika belum terdapat Penjualan dengan data yang sama, lakukan pengurangan stok barang
-        $penjualan = Penjualan::findOrFail($request->id_penjualan);
-        $penjualan->id_penjualan = $request->id_penjualan;
-        $penjualan->id_member = $request->id_member;
-        $penjualan->total_item = $request->total_item;
-        $penjualan->total_harga = $request->total;
-        $penjualan->diskon = $request->diskon;
-        $penjualan->bayar = $request->bayar;
-        $penjualan->diterima = $request->diterima;
-        $penjualan->update();
-
-        $detail = PenjualanDetail::where('id_penjualan', $penjualan->id_penjualan)->get();
-        foreach ($detail as $item) {
-            $item->diskon = $request->diskon;
-            $item->update();
-
-            $barang = Barang::find($item->id_barang);
-            $barang->stok -= $item->jumlah;
-            $barang->update();
+    {
+        // Pengecekan apakah sudah terdapat Penjualan dengan data yang sama
+        $penjualan = Penjualan::where('id_penjualan', $request->id_penjualan)->first();
+    
+        if ($penjualan->status == 0) {
+            // Jika status penjualan adalah 0, lakukan pengurangan stok barang
+            $penjualan = Penjualan::findOrFail($request->id_penjualan);
+            $penjualan->id_penjualan = $request->id_penjualan;
+            $penjualan->id_member = $request->id_member;
+            $penjualan->total_item = $request->total_item;
+            $penjualan->total_harga = $request->total;
+            $penjualan->diskon = $request->diskon;
+            $penjualan->bayar = $request->bayar;
+            $penjualan->diterima = $request->diterima;
+            $penjualan->status += $request->status;
+            $penjualan->update();
+    
+            $detail = PenjualanDetail::where('id_penjualan', $penjualan->id_penjualan)->get();
+            foreach ($detail as $item) {
+                if ($item->status == 0) {
+                    $item->diskon = $request->diskon;
+                    $item->status += 1; // Tambahkan status 1 untuk menandai bahwa barang telah diproses
+                    $item->update();
+    
+                    $barang = Barang::find($item->id_barang);
+                    $barang->stok -= $item->jumlah;
+                    $barang->update();
+                }
+            }
+    
+            return response()->json('Transaksi berhasil disimpan', 200);
+        } else {
+            // Jika status penjualan tidak sama dengan 0, lakukan pengecekan pada status barang di PenjualanDetail
+            $penjualan = Penjualan::findOrFail($request->id_penjualan);
+            $penjualan->id_penjualan = $request->id_penjualan;
+            $penjualan->id_member = $request->id_member;
+            $penjualan->total_item = $request->total_item;
+            $penjualan->total_harga = $request->total;
+            $penjualan->diskon = $request->diskon;
+            $penjualan->bayar = $request->bayar;
+            $penjualan->diterima = $request->diterima;
+            $penjualan->update();
+    
+            $detail = PenjualanDetail::where('id_penjualan', $penjualan->id_penjualan)->get();
+            foreach ($detail as $item) {
+                if ($item->status == 0) {
+                    $item->diskon = $request->diskon;
+                    $item->status += 1; // Tambahkan status 1 untuk menandai bahwa barang telah diproses
+                    $item->update();
+    
+                    $barang = Barang::find($item->id_barang);
+                    $barang->stok -= $item->jumlah;
+                    $barang->update();
+                }
+            }
+    
+            return response()->json('Data penjualan dengan data yang sama sudah pernah disimpan sebelumnya', 200);
         }
-
-        return response()->json('Transaksi berhasil disimpan', 200);
-    } else {
-        // Jika terdapat Penjualan dengan data yang sama, tidak dilakukan pengurangan stok
-        return response()->json('Data penjualan dengan data yang sama sudah pernah disimpan sebelumnya', 200);
     }
-}
-
-
+    
     public function show($id)
     {
         $detail = PenjualanDetail::with('barang')->where('id_penjualan', $id)->get();

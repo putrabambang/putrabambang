@@ -41,7 +41,7 @@ class DashboardController extends Controller
         $data_tanggal = [];
         $data_pendapatan = [];
         $data_penggilingan = [];
-
+        // Mengambil data penjualan per bulan dari database
         while (strtotime($tanggal_awal) <= strtotime($tanggal_akhir)) {
             $data_tanggal[] = (int)substr($tanggal_awal, 8, 2);
 
@@ -57,7 +57,55 @@ class DashboardController extends Controller
 
             $tanggal_awal = date('Y-m-d', strtotime("+1 day", strtotime($tanggal_awal)));
         }
+        // Mendapatkan tahun saat ini
+        $currentYear = Carbon::now()->year;
 
+        // Mendapatkan tahun sebelumnya
+        $previousYear = $currentYear - 1;
+
+        // Mengambil data penjualan dari tahun ini dan tahun sebelumnya
+        $dataTahunIni = Penjualan::whereYear('created_at', $currentYear)
+            ->select(
+                DB::raw('MONTH(created_at) as bulan'),
+                DB::raw('SUM(bayar) as total_pendapatan')
+            )
+            ->groupBy('bulan')
+            ->get();
+
+        $dataTahunSebelumnya = Penjualan::whereYear('created_at', $previousYear)
+            ->select(
+                DB::raw('MONTH(created_at) as bulan'),
+                DB::raw('SUM(bayar) as total_pendapatan')
+            )
+            ->groupBy('bulan')
+            ->get();
+
+        // Format data bulan dan total pendapatan untuk tahun ini
+        $monthNames = [
+            1 => "January",
+            2 => "February",
+            3 => "March",
+            4 => "April",
+            5 => "May",
+            6 => "June",
+            7 => "July",
+            8 => "August",
+            9 => "September",
+            10 => "October",
+            11 => "November",
+            12 => "December"
+        ];
+
+        $formattedDataTahunIni = $dataTahunIni->map(function ($item) use ($monthNames) {
+            $monthName = $monthNames[$item->bulan];
+            return [$monthName, $item->total_pendapatan];
+        });
+
+        // Format data bulan dan total pendapatan untuk tahun sebelumnya
+        $formattedDataTahunSebelumnya = $dataTahunSebelumnya->map(function ($item) use ($monthNames) {
+            $monthName = $monthNames[$item->bulan];
+            return [$monthName, $item->total_pendapatan];
+        });
         $tanggal_awal = date('Y-m-01');
 
         if (auth()->user()->level == 1) {
@@ -75,6 +123,8 @@ class DashboardController extends Controller
                 'data_penggilingan',
                 'data_pendapatan',
                 'data',
+                'formattedDataTahunIni',
+                'formattedDataTahunSebelumnya',
                 'pembelian'
             ));
         } elseif (auth()->user()->level == 2) {

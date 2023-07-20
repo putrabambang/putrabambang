@@ -39,6 +39,7 @@
                         <th>Diskon</th>
                         <th>Total Bayar</th>
                         <th>Kasir</th>
+                        <th>Status</th>
                         <th width="15%"><i class="fa fa-cog"></i></th>
                     </thead>
                     <tfoot>
@@ -77,25 +78,38 @@
                 url: '{{ route('penjualan.data', [$tanggalAwal, $tanggalAkhir]) }}',
             },
             columns: [
-                {data: 'DT_RowIndex', searchable: false, sortable: false},
-                {data: 'id_penjualan'},
-                {data: 'tanggal'},
-                {data: 'kode_member'},
-                {data: 'total_item'},
-                {data: 'total_harga'},
-                {data: 'diskon'},
-                {data: 'bayar'},
-                {data: 'kasir'},
-                {data: 'aksi', searchable: false, sortable: false},
-            ],      
-            columnDefs:
-[
-    
-    {
-        targets: 5,
-        render: $.fn.dataTable.render.number( '.', '.',0, 'Rp. ' )
-    },
-], 
+            {data: 'DT_RowIndex', searchable: false, sortable: false},
+            {data: 'id_penjualan'},
+            {data: 'tanggal'},
+            {data: 'kode_member'},
+            {data: 'total_item'},
+            {data: 'total_harga',
+                render: $.fn.dataTable.render.number('.', '.', 0, 'Rp. ')
+            },
+            {data: 'diskon'},
+            {data: 'bayar',
+                render: $.fn.dataTable.render.number('.', '.', 0, 'Rp. ')
+            },
+            {data: 'kasir'},
+            {data: 'status', // Tambahkan kolom "Status" di tabel DataTables
+                render: function (data) {
+                    if (data === 0) {
+                        return '<span class="label label-danger">Belum Selesai</span>';
+                    } else if (data > 0) {
+                        return '<span class="label label-success">Selesai</span>';
+                    } else {
+                        return '';
+                    }
+                }
+            },
+            {data: 'aksi', searchable: false, sortable: false},
+        ],
+        columnDefs: [
+            {
+                targets: [5, 7],
+                render: $.fn.dataTable.render.number('.', '.', 0, 'Rp. ')
+            },
+        ],
             "footerCallback": function ( row, data, start, end, display ) {
                 var api = this.api(), data;
     

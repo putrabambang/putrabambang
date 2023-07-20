@@ -219,27 +219,14 @@
 <script src="{{ asset('AdminLTE-2/bower_components/Flot/jquery.flot.categories.js') }}"></script>
 <script>
 $(function() {
-       // Variabel yang berisi data grafik untuk tahun ini
-       var dataTahunIni = @json($formattedDataTahunIni);
+           // Variabel yang berisi data grafik untuk tahun ini
+           var dataTahunIni = @json($formattedDataTahunIni);
 
 // Variabel yang berisi data grafik untuk tahun sebelumnya
 var dataTahunSebelumnya = @json($formattedDataTahunSebelumnya);
 
 $(function() {
-    var bar_data = [
-        {
-            data: dataTahunIni,
-            label: 'Tahun Ini',
-            color: '#3c8dbc'
-        },
-        {
-            data: dataTahunSebelumnya,
-            label: 'Tahun Sebelumnya',
-            color: '#f56954'
-        }
-    ];
-
-    $.plot('#bar-chart', bar_data, {
+    var options = {
         grid: {
             borderWidth: 1,
             borderColor: '#f3f3f3',
@@ -259,7 +246,27 @@ $(function() {
         legend: {
             position: 'nw'
         }
-    });
+    };
+
+    // Combine data for both years
+    var combinedData = [
+        {
+            data: dataTahunIni,
+            label: 'Tahun Ini',
+            color: '#3c8dbc'
+        },
+        {
+            data: dataTahunSebelumnya,
+            label: 'Tahun Sebelumnya',
+            color: '#f56954',
+            bars: {
+                barWidth: 0.2, // Set different bar width for the previous year bars
+                align: 'right' // Align the previous year bars to the right
+            }
+        }
+    ];
+
+    $.plot('#bar-chart', combinedData, options);
 });
 });
 $(function() {

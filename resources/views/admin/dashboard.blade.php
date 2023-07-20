@@ -158,23 +158,21 @@
 </div>
 <!-- /.row (main row) -->
 <div class="box box-primary">
-            <div class="box-header with-border">
-              <i class="fa fa-bar-chart-o"></i>
-
-              <h3 class="box-title">grafik pendapatan tahun ini</h3>
-
-              <div class="box-tools pull-right">
-                <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
-                </button>
+        <div class="box-header with-border">
+            <i class="fa fa-bar-chart-o"></i>
+            <h3 class="box-title">grafik pendapatan tahun ini</h3>
+            <div class="box-tools pull-right">
+                <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
                 <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
-              </div>
             </div>
-            <div class="box-body">
+        </div>
+        <div class="box-body">
             <div id="bar-chart" style="height: 300px;"></div>
-            </div>
-            <!-- /.box-body-->
-          </div>
-          <!-- /.box -->
+            <div id="tooltip" class="flot-tooltip"></div>
+        </div>
+        <!-- /.box-body-->
+    </div>
+    <!-- /.box -->
 
 <!-- /.row (main row) -->
 <div class="row">
@@ -219,10 +217,10 @@
 <script src="{{ asset('AdminLTE-2/bower_components/Flot/jquery.flot.categories.js') }}"></script>
 <script>
 $(function() {
-           // Variabel yang berisi data grafik untuk tahun ini
-           var dataTahunIni = @json($formattedDataTahunIni);
+  // Data grafik untuk tahun ini
+  var dataTahunIni = @json($formattedDataTahunIni);
 
-// Variabel yang berisi data grafik untuk tahun sebelumnya
+// Data grafik untuk tahun sebelumnya
 var dataTahunSebelumnya = @json($formattedDataTahunSebelumnya);
 
 $(function() {
@@ -243,12 +241,28 @@ $(function() {
             mode: 'categories',
             tickLength: 0
         },
+        yaxis: {
+            tickFormatter: function (val, axis) {
+                // Format angka menjadi mata uang Rupiah
+                return "Rp " + val.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+            }
+        },
         legend: {
             position: 'nw'
+        },
+        tooltip: {
+            show: true,
+            content: function(label, xval, yval, flotItem){
+                var dataset = flotItem.seriesIndex;
+                var data = (dataset === 0) ? dataTahunIni : dataTahunSebelumnya;
+                var month = data[xval][0];
+                var revenue = data[xval][1];
+                return month + ": Rp " + revenue.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+            }
         }
     };
 
-    // Combine data for both years
+    // Gabungkan data untuk kedua tahun
     var combinedData = [
         {
             data: dataTahunIni,
@@ -260,8 +274,8 @@ $(function() {
             label: 'Tahun Sebelumnya',
             color: '#f56954',
             bars: {
-                barWidth: 0.2, // Set different bar width for the previous year bars
-                align: 'right' // Align the previous year bars to the right
+                barWidth: 0.2, // Atur lebar batang berbeda untuk tahun sebelumnya
+                align: 'right' // Geser batang tahun sebelumnya ke sebelah kanan
             }
         }
     ];

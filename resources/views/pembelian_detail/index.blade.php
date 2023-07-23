@@ -66,7 +66,7 @@
                             <div class="input-group">
                                 <input type="hidden" name="id_pembelian" id="id_pembelian" value="{{ $id_pembelian }}">
                                 <input type="hidden" name="id_barang" id="id_barang">
-                                <input type="text" class="form-control" name="kode_barang" id="kode_barang">
+                                <input  onchange="tambahbarang()"type="text"  class="form-control" name="kode_barang" id="kode_barang">
                                 <span class="input-group-btn">
                                     <button onclick="tampilbarang()" class="btn btn-info btn-flat" type="button"><i class="fa fa-arrow-right"></i></button>
                                 </span>
@@ -221,18 +221,37 @@
     function pilihbarang(id, kode) {
         $('#id_barang').val(id);
         $('#kode_barang').val(kode);
-        hidebarang();
+        //hidebarang();
         tambahbarang();
     }
 
     function tambahbarang() {
         $.post('{{ route('pembelian_detail.store') }}', $('.form-barang').serialize())
             .done(response => {
-                $('#kode_barang').focus();
+                Swal.fire({toast: true,
+                        icon: 'success',
+                        title: 'Success',
+                        text: 'Berhasil Menambah Barang!',
+                        showConfirmButton: false,
+                        position: 'top-right',
+                        timer: 1500
+                        //footer: '<a href="">Why do I have this issue?</a>'
+                        })
+                //$('#kode_barang').focus();
+                $('#kode_barang').val("").focus().select();
                 table.ajax.reload(() => loadForm($('#diskon').val()));
             })
             .fail(errors => {
-                alert('Tidak dapat menyimpan data');
+                Swal.fire({ 
+                        toast: true,
+                        icon: 'error',
+                        title: 'Oops...',
+                        text: 'Tidak dapat menambah data!',
+                        showConfirmButton: false,
+                        position: 'top-right',
+                        timer: 1500
+                        //footer: '<a href="">Why do I have this issue?</a>'
+                        })
                 return;
             });
     }

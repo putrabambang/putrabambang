@@ -93,7 +93,7 @@
             {data: 'kasir'},
             {data: 'status', // Tambahkan kolom "Status" di tabel DataTables
                 render: function (data) {
-                    if (data === 0) {
+                if (data == 0) {
                         return '<span class="label label-danger">Belum Selesai</span>';
                     } else if (data > 0) {
                         return '<span class="label label-success">Selesai</span>';

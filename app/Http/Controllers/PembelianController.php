@@ -122,7 +122,7 @@ class PembelianController extends Controller
         foreach ($detail as $item) {
             $barang = Barang::find($item->id_barang);
             if ($barang) {
-                $barang->stok -= $item->jumlah;
+                $barang->stok_gudang -= $item->jumlah;
                 $barang->update();
             }
             $item->delete();

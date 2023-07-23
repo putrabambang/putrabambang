@@ -72,7 +72,18 @@ class PembelianDetailController extends Controller
         if (! $barang) {
             return response()->json('Data gagal disimpan', 400);
         }
-
+        $pembelian = PembelianDetail::where('id_Pembelian', $request->id_pembelian)
+        ->where('id_barang', $barang->id_barang)
+        ->first();
+        if ($pembelian) {
+            // Jika barang sudah ada, tambahkan jumlahnya
+            $pembelian->jumlah += 1;
+            $pembelian->subtotal = $pembelian->harga_beli  * $pembelian->jumlah;
+            $pembelian->save();
+    
+            return response()->json('Data berhasil disimpan', 200);
+        }
+    
         $detail = new PembelianDetail();
         $detail->id_pembelian = $request->id_pembelian;
         $detail->id_barang = $barang->id_barang;

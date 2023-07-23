@@ -261,7 +261,8 @@ $(function() {
                 return month + ": Rp " + revenue.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
             }
         },
-        responsive : true,
+        pointDot : true,
+        responsive : true
     };
 
     // Gabungkan data untuk kedua tahun

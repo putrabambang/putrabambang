@@ -289,6 +289,7 @@ Daftar Barang
                 $('#modal-form [name=kode_barang]').val(response.kode_barang);
                 $('#modal-form [name=nama_barang]').val(response.nama_barang);
                 $('#modal-form [name=id_kategori]').val(response.id_kategori);
+                $('#modal-form [name=modal]').val(response.modal);
                 $('#modal-form [name=harga_jual]').val(response.harga_jual);
                 $('#modal-form [name=stok]').val(response.stok);
                 $('#modal-form [name=stok_gudang]').val(response.stok_gudang);

@@ -225,6 +225,7 @@ var dataTahunSebelumnya = @json($formattedDataTahunSebelumnya);
 
 $(function() {
     var options = {
+        
         grid: {
             borderWidth: 1,
             borderColor: '#f3f3f3',
@@ -259,7 +260,8 @@ $(function() {
                 var revenue = data[xval][1];
                 return month + ": Rp " + revenue.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
             }
-        }
+        },
+        responsive : true,
     };
 
     // Gabungkan data untuk kedua tahun
@@ -306,7 +308,7 @@ $(function() {
     };
 
     var salesChartOptions = {
-        pointDot : false,
+        pointDot : true,
         responsive : true
     };
 

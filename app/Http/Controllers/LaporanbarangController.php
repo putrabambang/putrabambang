@@ -1,12 +1,14 @@
 <?php
 
 namespace App\Http\Controllers;
-
+use App\Exports\LaporanBarangExport;
+use Maatwebsite\Excel\Facades\Excel;
 use App\Models\PenjualanDetail;
 use App\Models\Barang;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 use PDF;
+use Illuminate\Support\Facades\View;
 
 class LaporanbarangController extends Controller
 {
@@ -59,12 +61,33 @@ class LaporanbarangController extends Controller
             ->make(true);
     }
 
+    public function exportExcel($awal, $akhir)
+    {
+        $export = new LaporanBarangExport($awal, $akhir);
+        return Excel::download($export, 'Laporan-barang-' . date('Y-m-d-his') . '.xlsx');
+    }
     public function exportPDF($awal, $akhir)
     {
+        $tanggal = $awal;
+        $tanggalAkhir = $akhir;
+
+        $awal = date('Y-m-d', strtotime("+1 day", strtotime($awal)));
+        $barang = PenjualanDetail::with('barang')
+            ->select('id_barang', DB::raw('SUM(jumlah) as jumlah_penjualan'))
+            ->whereBetween('created_at', ["$tanggal", "$tanggalAkhir"])
+            ->orWhere('created_at', 'LIKE', "%$tanggalAkhir%")
+            ->orderBy('jumlah_penjualan', 'desc')
+            ->groupBy('id_barang')
+            ->get();
+
         $data = $this->data($awal, $akhir);
-        $pdf = PDF::loadView('laporanbarang.pdf', compact('awal', 'akhir', 'data'));
-        $pdf->setPaper('a4', 'potrait');
+        $barangArray = $barang->toArray();
+        //dd($barangArray);
+    
+        $pdf = PDF::loadView('laporanbarang.pdf', compact('barangArray', 'awal', 'akhir'));
+    
 
         return $pdf->stream('Laporan-barang-' . date('Y-m-d-his') . '.pdf');
     }
+    
 }

@@ -19,7 +19,10 @@
         <div class="box">
             <div class="box-header with-border">
                 <button onclick="updatePeriode()" class="btn btn-info btn-xs btn-flat"><i class="fa fa-plus-circle"></i> Ubah Periode</button>
-                <a href="{{ route('laporan.export_pdf', [$tanggalAwal, $tanggalAkhir]) }}" target="_blank" class="btn btn-success btn-xs btn-flat"><i class="fa fa-file-excel-o"></i> Export PDF</a>
+                <a href="{{ route('laporanbarang.export_excel', [$tanggalAwal, $tanggalAkhir]) }}" class="btn btn-success btn-xs btn-flat">
+    <i class="fa fa-file-excel-o"></i> Export Excel
+</a>
+                <a href="{{ route('laporanbarang.export_pdf', [$tanggalAwal, $tanggalAkhir]) }}" target="_blank" class="btn btn-success btn-xs btn-flat"><i class="fa fa-file-pdf-o"></i> Export PDF</a>
             </div>
             <div class="box-body table-responsive">
                 <table class="table table-stiped table-bordered">
@@ -69,61 +72,64 @@
                 {data: 'jumlah'},
                 {data: 'subtotal'}
             ],
-            columnDefs:
-[
-    
-    {
-        targets: 5,
-        render: $.fn.dataTable.render.number( '.', '.',0, 'Rp. ' )
-    },
-],
+            columnDefs: [
+                {
+                    targets: 5,
+                    render: $.fn.dataTable.render.number('.', '.', 0, 'Rp. ')
+                },
+            ],
            
-            "footerCallback": function ( row, data, start, end, display ) {
-                var api = this.api(), data;
-    
+            "footerCallback": function (row, data, start, end, display) {
+                var api = this.api(),
+                    data;
+
                 // Remove the formatting to get integer data for summation
-                var intVal = function ( i ) {
+                var intVal = function (i) {
                     return typeof i === 'string' ?
-                        i.replace(/[Rp,]/g, '')*1 :
+                        i.replace(/[Rp,]/g, '') * 1 :
                         typeof i === 'number' ?
-                            i : 0;
+                        i : 0;
                 };
-    
+
                 // Total over all pages
                 total = api
-                    .column(4 )
+                    .column(4)
                     .data()
-                    .reduce( function (a, b) {
+                    .reduce(function (a, b) {
                         return intVal(a) + intVal(b);
-                    }, 0 );
-    
+                    }, 0);
+
                 // Total over this page
                 pageTotal = api
-                    .column( 5, { page: 'current'} )
+                    .column(5, {
+                        page: 'current'
+                    })
                     .data()
-                    .reduce( function (a, b) {
+                    .reduce(function (a, b) {
                         return intVal(a) + intVal(b);
-                    }, 0 );
-    
+                    }, 0);
+
                 // Update footer
-                var numFormat = $.fn.dataTable.render.number( '.', '.',0, 'Rp. ' ).display;
-                $( api.column( 5 ).footer() ).html(
-                    ''+ numFormat(pageTotal)
+                var numFormat = $.fn.dataTable.render.number('.', '.', 0, 'Rp. ').display;
+                $(api.column(5).footer()).html(
+                    '' + numFormat(pageTotal)
                 );
-                $( api.column( 4 ).footer() ).html(
-                    ''+total+''
+                $(api.column(4).footer()).html(
+                    '' + numFormat(total) + ''
                 );
             }
-        
+
         });
-       
+
         $('.datepicker').datepicker({
             format: 'yyyy-mm-dd',
             autoclose: true
         });
     });
-function updatePeriode() {
+
+    function updatePeriode() {
         $('#modal-form').modal('show');
     }
 </script>
 @endpush
+

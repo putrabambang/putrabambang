@@ -1,40 +1,59 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Laporan Pendapatan</title>
+    <title>Laporan Barang</title>
+    <style>
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
 
-    <link rel="stylesheet" href="{{ asset('/AdminLTE-2/bower_components/bootstrap/dist/css/bootstrap.min.css') }}">
+        th, td {
+            padding: 8px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+
+        th {
+            background-color: #f2f2f2;
+        }
+
+        .label-success {
+            background-color: #4CAF50;
+            color: white;
+            padding: 4px 8px;
+            border-radius: 4px;
+        }
+
+    </style>
 </head>
 <body>
-    <h3 class="text-center">Laporan Pendapatan</h3>
-    <h4 class="text-center">
-        Tanggal {{ tanggal_indonesia($awal, false) }}
-        s/d
-        Tanggal {{ tanggal_indonesia($akhir, false) }}
-    </h4>
+    <h2>Laporan Barang</h2>
+    <p><strong>Periode:</strong> {{ date('d M Y', strtotime($awal)) }} - {{ date('d M Y', strtotime($akhir)) }}</p>
 
-    <table class="table table-striped">
+    <table>
         <thead>
             <tr>
-                <th width="5%">No</th>
-                <th>Tanggal</th>
-                <th>Penjualan</th>
-                <th>Pengeluaran</th>
-                <th>Pendapatan</th>
+                <th>No</th>
+                <th>Kode Barang</th>
+                <th>Nama Barang</th>
+                <th>Harga Jual</th>
+                <th>Jumlah Terjual</th>
+                <th>Subtotal</th>
             </tr>
         </thead>
         <tbody>
-            @foreach ($data as $row)
-                <tr>
-                    @foreach ($row as $col)
-                        <td>{{ $col }}</td>
-                    @endforeach
-                </tr>
-            @endforeach
-        </tbody>
+        @foreach ($barangArray as $key => $item)
+    <tr>
+        <td>{{ $key + 1 }}</td>
+        <td>{!! $item['barang']['kode_barang'] !!}</td>
+        <td>{{ $item['barang']['nama_barang'] }}</td>
+        <td>{{ format_uang($item['barang']['harga_jual']) }}</td>
+        <td>{{ format_uang($item['jumlah_penjualan']) }}</td>
+        <td>{{ format_uang($item['jumlah_penjualan'] * $item['barang']['harga_jual']) }}</td>
+    </tr>
+@endforeach
+</tbody>
     </table>
 </body>
 </html>

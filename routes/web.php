@@ -38,6 +38,8 @@ Route::middleware([
 Route::group(['middleware' => 'auth'], function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
     Route::group(['middleware' => 'level:1'], function () {
+      
+
         Route::get('/kategori/data', [KategoriController::class, 'data'])->name('kategori.data');
         Route::resource('/kategori', KategoriController::class);
         Route::get('/barang/data', [BarangController::class, 'data'])->name('barang.data');
@@ -86,7 +88,7 @@ Route::group(['middleware' => 'auth'], function () {
         Route::get('/transaksi/{id}/data', [PenjualanDetailController::class, 'data'])->name('transaksi.data');
         Route::get('/transaksi/loadform/{diskon}/{total}/{diterima}', [PenjualanDetailController::class, 'loadForm'])->name('transaksi.load_form');
         Route::resource('/transaksi', PenjualanDetailController::class)->except('create', 'show', 'edit');
-
+        Route::get('/laporanbarang/export-excel/{awal}/{akhir}',[LaporanbarangController::class, 'exportexcel'])->name('laporanbarang.export_excel');
         Route::get('/laporanbarang', [LaporanbarangController::class, 'index'])->name('laporanbarang.index');
         Route::get('/laporanbarang/data/{awal}/{akhir}', [LaporanbarangController::class, 'data'])->name('laporanbarang.data');
         Route::get('/laporanbarang/pdf/{awal}/{akhir}', [LaporanbarangController::class, 'exportPDF'])->name('laporanbarang.export_pdf');

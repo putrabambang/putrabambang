@@ -68,8 +68,9 @@
             </div>
 
             <div class="box-footer">
-                <button type="submit" class="btn btn-primary btn-sm btn-flat pull-right btn-simpan"><i class="fa fa-floppy-o"></i> Simpan Transaksi</button>
-            </div>
+            <button type="submit" class="btn btn-primary btn-sm btn-flat pull-right btn-simpan"><i class="fa fa-floppy-o"></i> Simpan Transaksi</button>
+            <button type="button" class="btn btn-danger btn-sm btn-flat" onclick="bataltransfer('{{ route('transfer.destroy', $id_transfer) }}')"><i class="fa fa-times-circle"></i> Batal Transaksi</button>
+             </div>
         </div>
     </div>
 </div>
@@ -141,6 +142,49 @@
             e.preventDefault();
             $('.form-transfer').submit();
         });
+        $('.form-transfer').on('submit', function (e) {
+    e.preventDefault();
+    var form = $(this);
+
+    $.ajax({
+        url: form.attr('action'),
+        type: form.attr('method'),
+        data: form.serialize(),
+        success: function (response) {
+            Swal.fire({
+                icon: 'success',
+                title: 'Transfer barang berhasil',
+                showCancelButton: true,
+                cancelButtonText: 'Dashboard',
+                confirmButtonText: 'transfer baru',
+                showCloseButton: true,
+                closeButtonAriaLabel: 'Tutup',
+                showCancelButton: true,
+                cancelButtonText: 'Dashboard'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    window.location.href = '{{ route("transfer.baru") }}';
+                } else if (result.dismiss === Swal.DismissReason.cancel) {
+                    // Tindakan ketika tombol Transaksi Baru diklik
+                    // Mengarahkan pengguna ke halaman transaksi baru
+                    window.location.href = '{{ route("dashboard") }}';
+                } else if (result.dismiss === Swal.DismissReason.close) {
+                    // Tindakan ketika tombol Tutup diklik
+                    // Mengarahkan pengguna ke halaman dashboard
+                    window.location.href = '{{ route("dashboard") }}';
+                }
+            });
+        },
+        error: function (xhr, status, error) {
+            // Penanganan kesalahan jika ada
+            Swal.fire({
+                icon: 'error',
+                title: 'Oops...',
+                text: 'Terjadi kesalahan saat menyimpan transaksi.'
+            });
+        }
+    });
+});
     });
 
     function tampilbarang() {

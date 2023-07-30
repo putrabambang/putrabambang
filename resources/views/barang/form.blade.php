@@ -64,13 +64,6 @@
                             <span class="help-block with-errors"></span>
                         </div>
                     </div>
-                    <div class="form-group row">
-                        <label for="tambahstok" class="col-lg-2 col-lg-offset-1 control-label">Tambah Stok</label>
-                        <div class="col-lg-6">
-                            <input type="number" name="tambahstok" id="tambahstok" class="form-control" required value="0" autofocus>
-                            <span class="help-block with-errors"></span>
-                        </div>
-                    </div>
                 </div>
                 <div class="modal-footer">
                     <button class="btn btn-sm btn-flat btn-primary"><i class="fa fa-save"></i> Simpan</button>

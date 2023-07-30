@@ -14,9 +14,9 @@
     <div class="col-lg-12">
         <div class="box">
             <div class="box-header with-border">
-                <button onclick="window.location.href='{{ route('transfer.baru') }}'"  class="btn btn-success btn-xs btn-flat"><i class="fa fa-plus-circle"></i> Transaksi Baru</button>
+                <button onclick="window.location.href='{{ route('transfer.baru') }}'"  class="btn btn-success btn-xs btn-flat"><i class="fa fa-exchange"></i> Transfer baru</button>
                 @if(!empty(session('id_transfer')))
-                <a href="{{ route('transfer_detail.index') }}" class="btn btn-info btn-xs btn-flat"><i class="fa fa-pencil"></i> Transaksi Aktif</a>
+                <a href="{{ route('transfer_detail.index') }}" class="btn btn-info btn-xs btn-flat"><i class=" fa fa-edit"></i> Transfer Aktif</a>
                 @endif
             </div>
             <div class="box-body table-responsive">
@@ -26,7 +26,7 @@
                         <th>Tanggal</th>
                         <th>Total Item</th>
                         <th>User</th>
-                        <th>Role</th>
+                        <th>Role Transfer</th>
                         <th width="15%"><i class="fa fa-cog"></i></th>
                     </thead>
                 </table>
@@ -55,8 +55,18 @@
                 {data: 'DT_RowIndex', searchable: false, sortable: false},
                 {data: 'tanggal'},
                 {data: 'total_item'},
-                {data: 'id_user'}, // Ubah 'user' menjadi 'id_user'
-                {data: 'role'},
+                {data: 'kasir'},
+                {data: 'role',
+                    render: function (data) {
+                if (data == 0) {
+                        return '<span class="label label-danger">gudang</span>';
+                    } else if (data > 0) {
+                        return '<span class="label label-success">pajangan</span>';
+                    } else {
+                        return '';
+                    }
+                }
+            },
                 {data: 'aksi', searchable: false, sortable: false},
             ]
         });

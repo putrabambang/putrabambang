@@ -51,9 +51,11 @@ Route::group(['middleware' => 'auth'], function () {
 
 
         Route::get('/transfer/data', [TransferController::class, 'data'])->name('transfer.data');
+       
         Route::get('/transfer/baru', [TransferController::class, 'create'])->name('transfer.baru');
         Route::resource('/transfer',TransferController::class)->except('create');
-
+        Route::post('/transfer/simpan', [TransferController::class, 'store'])->name('transfer.simpan');
+       
         Route::get('/transfer_detail/{id}/data', [TransferDetailController::class, 'data'])->name('transfer_detail.data');
         Route::resource('/transfer_detail', TransferDetailController::class)->except('create', 'show', 'edit');
 

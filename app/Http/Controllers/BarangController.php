@@ -170,7 +170,6 @@ public function data()
         $barang->stok = $request->stok;
         $barang->modal= $request->modal;
         $barang->stok_gudang = $request->stok_gudang;
-        $barang->stok  +=  $request->tambahstok;
         $barang->update();
 
 

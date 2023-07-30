@@ -12,7 +12,6 @@
                         <th width="5%">No</th>
                         <th>Kode</th>
                         <th>Nama</th>
-                        <th>Harga</th>
                         <th>Jumlah</th>
                     </thead>
                 </table>

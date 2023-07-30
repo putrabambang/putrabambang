@@ -31,8 +31,8 @@ class TransferController extends Controller
                 return 'Rp. ' . format_uang($transfer->total_harga);
             })
             
-            ->editColumn('user', function ($transfer) {
-                return $transfer->user ;
+            ->editColumn('kasir', function ($transfer) {
+                return $transfer->user->name ?? '';
             })
             ->addColumn('aksi', function ($transfer) {
                 return '

@@ -18,4 +18,8 @@ class Transfer extends Model
     {
         return $this->hasMany(TransferDetail::class, 'id_transfer', 'id_transfer');
     }
+    public function user()
+    {
+        return $this->hasOne(User::class, 'id', 'id_user');
+    }
 }

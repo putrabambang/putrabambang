@@ -67,7 +67,6 @@ class TransferDetailController extends Controller
         if ($transfer) {
             // Jika barang sudah ada, tambahkan jumlahnya
             $transfer->jumlah += 1;
-            $transfer->subtotal = $transfer->harga_beli  * $transfer->jumlah;
             $transfer->save();
 
             return response()->json('Data berhasil disimpan', 200);

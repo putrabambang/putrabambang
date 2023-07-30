@@ -20,6 +20,8 @@ use App\Http\Controllers\{
     PengeluaranbaksoController,
     LaporanbaksoController,
     LaporanbarangController,
+    TransferDetailController,
+    TransferController
 };
 use Illuminate\Support\Facades\Route;
 
@@ -46,6 +48,19 @@ Route::group(['middleware' => 'auth'], function () {
         Route::post('/barang/delete-selected', [BarangController::class, 'deleteSelected'])->name('barang.delete_selected');
         Route::post('/barang/cetak-barcode', [BarangController::class, 'cetakBarcode'])->name('barang.cetak_barcode');
         Route::post('/barang/tambah_stok', [BarangController::class, 'tambahstok'])->name('barang.tambah_stok');
+
+
+        Route::get('/transfer/data', [TransferController::class, 'data'])->name('transfer.data');
+        Route::get('/transfer/baru', [TransferController::class, 'create'])->name('transfer.baru');
+        Route::resource('/transfer',TransferController::class)->except('create');
+
+        Route::get('/transfer_detail/{id}/data', [TransferDetailController::class, 'data'])->name('transfer_detail.data');
+        Route::resource('/transfer_detail', TransferDetailController::class)->except('create', 'show', 'edit');
+
+
+
+
+
 
         Route::resource('/barang', BarangController::class);
         Route::get('/pembelian/data', [PembelianController::class, 'data'])->name('pembelian.data');

@@ -56,6 +56,11 @@
           </a>
       </li>
       <li>
+        <a href="{{ route('transfer.index') }}">
+            <i class="fa fa-download"></i> <span>Transfer</span>
+        </a>
+    </li>
+      <li>
                 <a href="{{ route('pembelian.index') }}">
                     <i class="fa fa-download"></i> <span>Pembelian</span>
                 </a>

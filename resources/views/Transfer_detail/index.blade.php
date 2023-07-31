@@ -75,7 +75,7 @@
     </div>
 </div>
 
-@includeIf('transfer_detail.barang')
+@includeIf('Transfer_detail.barang')
 @endsection
 
 @push('scripts')

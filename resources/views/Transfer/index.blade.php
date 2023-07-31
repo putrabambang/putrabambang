@@ -35,7 +35,7 @@
     </div>
 </div>
 
-@includeIf('transfer.detail')
+@includeIf('Transfer.detail')
 @endsection
 
 @push('scripts')

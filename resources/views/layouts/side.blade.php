@@ -57,7 +57,7 @@
       </li>
       <li>
         <a href="{{ route('transfer.index') }}">
-            <i class="fa fa-download"></i> <span>Transfer</span>
+            <i class="fa fa-exchange"></i> <span>Transfer Barang</span>
         </a>
     </li>
       <li>

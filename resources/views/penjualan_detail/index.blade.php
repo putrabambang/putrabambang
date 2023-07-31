@@ -99,10 +99,14 @@
                             <input type="hidden" name="id_penjualan" value="{{ $id_penjualan }}">
                             <input type="hidden" name="status" id="status" value="1">
                             <input type="hidden" name="total" id="total">
-                            <input type="hidden" name="total_item" id="total_item">
                             <input type="hidden" name="bayar" id="bayar">
                             <input type="hidden" name="id_member" id="id_member" value="{{ $memberSelected->id_member }}">
-
+                            <div class="form-group row">
+                                <label for="total_item" class="col-lg-2 control-label">Total barang</label>
+                                <div class="col-lg-8">
+                                    <input type="text" name="total_item" id="total_item" class="form-control" readonly>
+                                </div>
+                            </div>
                             <div class="form-group row">
                                 <label for="totalrp" class="col-lg-2 control-label">Total</label>
                                 <div class="col-lg-8">

@@ -144,7 +144,7 @@
         $('.form-transfer').on('submit', function (e) {
     e.preventDefault();
     var form = $(this);
-    var form = $(this);
+  
 
     $.ajax({
         url: form.attr('action'),

@@ -68,8 +68,8 @@
             </div>
 
             <div class="box-footer">
-                <button type="submit" class="btn btn-primary btn-sm btn-flat pull-right btn-simpan"><i class="fa fa-floppy-o"></i> Simpan Transaksi</button>
-                <button type="button" class="btn btn-danger btn-sm btn-flat" onclick="bataltransfer('{{ route('transfer.destroy', $id_transfer) }}')"><i class="fa fa-times-circle"></i> Batal Transaksi</button>
+                <button type="submit" class="btn btn-primary btn-sm btn-flat pull-right btn-simpan"><i class="fa fa-floppy-o"></i> Simpan Transfer</button>
+                <button type="button" class="btn btn-danger btn-sm btn-flat" onclick="bataltransfer('{{ route('transfer.destroy', $id_transfer) }}')"><i class="fa fa-times-circle"></i> Batal Transfer</button>
              </div>
         </div>
     </div>
@@ -165,8 +165,8 @@
                 if (result.isConfirmed) {
                     window.location.href = '{{ route("transfer.baru") }}';
                 } else if (result.dismiss === Swal.DismissReason.cancel) {
-                    // Tindakan ketika tombol Transaksi Baru diklik
-                    // Mengarahkan pengguna ke halaman transaksi baru
+                    // Tindakan ketika tombol Transfer Baru diklik
+                    // Mengarahkan pengguna ke halaman Transfer baru
                     window.location.href = '{{ route("dashboard") }}';
                 } else if (result.dismiss === Swal.DismissReason.close) {
                     // Tindakan ketika tombol Tutup diklik
@@ -180,7 +180,7 @@
             Swal.fire({
                 icon: 'error',
                 title: 'Oops...',
-                text: 'Terjadi kesalahan saat menyimpan transaksi.'
+                text: 'Terjadi kesalahan saat menyimpan Transfer.'
             });
         }
     });
@@ -275,7 +275,7 @@
                     success: function (response) {
                         Swal.fire({
                         title: 'Terhapus!',
-                        text: 'Transaksi telah dihapus.',
+                        text: 'Transfer telah dihapus.',
                         icon: 'success',
                         showCancelButton: true,
                         confirmButtonColor: '#3085d6',
@@ -285,7 +285,7 @@
                         timer: 2000
                     }).then((result) => {
                         if (result.isConfirmed) {
-                            // Redirect atau melakukan tindakan untuk transaksi baru
+                            // Redirect atau melakukan tindakan untuk Transfer baru
                             window.location.href = "{{route('transfer.baru')}}";
                         } else {
                             // Redirect atau melakukan tindakan untuk kembali ke menu utama

@@ -22,8 +22,8 @@
                                 <td width="5%">{{ $key+1 }}</td>
                                 <td><span class="label label-success">{{ $item->kode_barang }}</span></td>
                                 <td>{{ $item->nama_barang }}</td>
-                                <td>{{'Rp.'.format_uang( $item->stok) }}</td>
-                                <td>{{'Rp.'.format_uang( $item->stok_gudang) }}</td>
+                                <td>{{( $item->stok) }}</td>
+                                <td>{{( $item->stok_gudang) }}</td>
                                 <td>
                                     <a href="#" class="btn btn-primary btn-xs btn-flat"
                                         onclick="pilihbarang('{{ $item->id_barang }}', '{{ $item->kode_barang }}')">

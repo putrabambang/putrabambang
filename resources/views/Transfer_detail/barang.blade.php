@@ -9,7 +9,7 @@
             <div class="modal-body">
                 <table class="table table-striped table-bordered table-barang">
                     <thead>
-                        <th width="5%">No</th>
+                    <th width="5%">No</th>
                         <th>Kode</th>
                         <th>Nama</th>
                         <th>Stok toko</th>

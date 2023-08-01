@@ -17,4 +17,8 @@ class penggilingan_detail extends Model
     {
         return $this->hasOne(Item::class, 'id_item', 'id_item');
     }
+    public function penjualanDetails()
+    {
+        return $this->hasMany(PenjualanDetail::class, 'id_penjualan', 'id_penjualan');
+    }
 }

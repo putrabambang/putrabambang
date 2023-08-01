@@ -28,7 +28,7 @@ class LaporanbarangController extends Controller
         $tanggal = $awal;
         $tanggalAkhir = $akhir;
 
-        $barang = PenjualanDetail::with('barang')
+        $lbarang = PenjualanDetail::with('barang')
             ->select('id_barang', DB::raw('SUM(jumlah) as jumlah_penjualan'))
             ->whereBetween('created_at', ["$tanggal", "$tanggalAkhir"])
             ->orWhere('created_at', 'LIKE', "%$tanggalAkhir%")
@@ -37,22 +37,22 @@ class LaporanbarangController extends Controller
             ->get();
 
         return datatables()
-            ->of($barang)
+            ->of($lbarang)
             ->addIndexColumn()
-            ->addColumn('kode_barang', function ($barang) {
-                return '<span class="label label-success">' . $barang->barang->kode_barang . '</span>';
+            ->addColumn('kode_barang', function ($lbarang) {
+                return '<span class="label label-success">' . $lbarang->barang->kode_barang . '</span>';
             })
-            ->addColumn('nama_barang', function ($barang) {
-                return $barang->barang->nama_barang;
+            ->addColumn('nama_barang', function ($lbarang) {
+                return $lbarang->barang->nama_barang;
             })
-            ->addColumn('harga_jual', function ($barang) {
-                return 'Rp. ' . format_uang($barang->barang->harga_jual);
+            ->addColumn('harga_jual', function ($lbarang) {
+                return 'Rp. ' . format_uang($lbarang->barang->harga_jual);
             })
-            ->addColumn('jumlah', function ($barang) {
-                return $barang->jumlah_penjualan;
+            ->addColumn('jumlah', function ($lbarang) {
+                return $lbarang->jumlah_penjualan;
             })
-            ->addColumn('subtotal', function ($barang) {
-                return $barang->jumlah_penjualan * $barang->barang->harga_jual;
+            ->addColumn('subtotal', function ($lbarang) {
+                return $lbarang->jumlah_penjualan * $lbarang->barang->harga_jual;
             })
             ->rawColumns(['kode_barang'])
             ->make(true);

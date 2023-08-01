@@ -10,7 +10,7 @@
 
 @section('breadcrumb')
     @parent
-    <li class="active">Laporanp barang terjual</li>
+    <li class="active">Laporan barang terjual</li>
 @endsection
 
 @section('content')
@@ -19,26 +19,30 @@
         <div class="box">
             <div class="box-header with-border">
                 <button onclick="updatePeriode()" class="btn btn-info btn-xs btn-flat"><i class="fa fa-plus-circle"></i> Ubah Periode</button>
-                <a href="{{ route('laporanbarang.export_excel', [$tanggalAwal, $tanggalAkhir]) }}" class="btn btn-success btn-xs btn-flat">
+                <a href="{{ route('laporanbarang.export_excel', ['awal' => $tanggalAwal, 'akhir' => $tanggalAkhir]) }}" class="btn btn-success btn-xs btn-flat">
     <i class="fa fa-file-excel-o"></i> Export Excel
 </a>
-                <a href="{{ route('laporanbarang.export_pdf', [$tanggalAwal, $tanggalAkhir]) }}" target="_blank" class="btn btn-success btn-xs btn-flat"><i class="fa fa-file-pdf-o"></i> Export PDF</a>
+<a href="{{ route('laporanbarang.export_pdf', ['awal' => $tanggalAwal, 'akhir' => $tanggalAkhir]) }}" target="_blank" class="btn btn-success btn-xs btn-flat">
+    <i class="fa fa-file-pdf-o"></i> Export PDF
+</a>
             </div>
             <div class="box-body table-responsive">
-                <table class="table table-stiped table-bordered">
+                <table class="table table-striped table-bordered">
                     <thead>
-                        <th width="5%">No</th>
-                        <th>Kode barang</th>
-                        <th>Nama barang</th>
-                        <th>Harga barang</th>
-                        <th>Jumlah Terjual</th>
-                        <th>Subtotal</th>
+                        <tr>
+                            <th width="5%">No</th>
+                            <th>Kode barang</th>
+                            <th>Nama barang</th>
+                            <th>Harga barang</th>
+                            <th>Jumlah Terjual</th>
+                            <th>Subtotal</th>
+                        </tr>
                     </thead>
                     <tfoot>
                         <tr>
                             <th colspan="4" style="text-align:center">Total</th>
-                            <th ></th>
-                            <th ></th>
+                            <th></th>
+                            <th></th>
                         </tr>
                     </tfoot>
                 </table>
@@ -62,10 +66,16 @@
             serverSide: true,
             autoWidth: false,
             ajax: {
-                url: '{{ route('laporanbarang.data', [$tanggalAwal, $tanggalAkhir]) }}',
+                url: '{{ route('laporanbarang.data') }}',
+                type: 'POST',
+                data: {
+                    '_token': '{{ csrf_token() }}',
+                    'tanggal_awal': '{{ $tanggalAwal }}',
+                    'tanggal_akhir': '{{ $tanggalAkhir }}'
+                }
             },
             columns: [
-                {data: 'DT_RowIndex', searchable: false, sortable: false},  
+                {data: 'DT_RowIndex', searchable: false, sortable: false},
                 {data: 'kode_barang'},
                 {data: 'nama_barang'},
                 {data: 'harga_jual'},
@@ -78,7 +88,7 @@
                     render: $.fn.dataTable.render.number('.', '.', 0, 'Rp. ')
                 },
             ],
-           
+
             "footerCallback": function (row, data, start, end, display) {
                 var api = this.api(),
                     data;
@@ -118,7 +128,6 @@
                     '' + numFormat(total) + ''
                 );
             }
-
         });
 
         $('.datepicker').datepicker({
@@ -132,4 +141,3 @@
     }
 </script>
 @endpush
-

@@ -7,17 +7,10 @@
 @push('css')
 <link rel="stylesheet" href="{{ asset('/AdminLTE-2/bower_components/bootstrap-datepicker/dist/css/bootstrap-datepicker.min.css') }}">
 @endpush
-@extends('layouts.master')
-@section('title')
-    Laporan barang terjual {{ tanggal_indonesia($tanggalAwal, false) }} s/d {{ tanggal_indonesia($tanggalAkhir, false) }}
-@endsection
-@push('css')
-<link rel="stylesheet" href="{{ asset('/AdminLTE-2/bower_components/bootstrap-datepicker/dist/css/bootstrap-datepicker.min.css') }}">
-@endpush
 
 @section('breadcrumb')
     @parent
-    <li class="active">Laporanp barang terjual</li>
+    <li class="active">Laporan barang terjual</li>
 @endsection
 
 @section('content')
@@ -27,9 +20,11 @@
             <div class="box-header with-border">
                 <button onclick="updatePeriode()" class="btn btn-info btn-xs btn-flat"><i class="fa fa-plus-circle"></i> Ubah Periode</button>
                 <a href="{{ route('laporanbarang.export_excel', [$tanggalAwal, $tanggalAkhir]) }}" class="btn btn-success btn-xs btn-flat">
-    <i class="fa fa-file-excel-o"></i> Export Excel
-</a>
-                <a href="{{ route('laporanbarang.export_pdf', [$tanggalAwal, $tanggalAkhir]) }}" target="_blank" class="btn btn-success btn-xs btn-flat"><i class="fa fa-file-pdf-o"></i> Export PDF</a>
+                    <i class="fa fa-file-excel-o"></i> Export Excel
+                </a>
+                <a href="{{ route('laporanbarang.export_pdf', [$tanggalAwal, $tanggalAkhir]) }}" target="_blank" class="btn btn-success btn-xs btn-flat">
+                    <i class="fa fa-file-pdf-o"></i> Export PDF
+                </a>
             </div>
             <div class="box-body table-responsive">
                 <table class="table table-stiped table-bordered">

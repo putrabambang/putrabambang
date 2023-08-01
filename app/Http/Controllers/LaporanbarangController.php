@@ -24,39 +24,39 @@ class LaporanbarangController extends Controller
     }
 
     public function data($awal, $akhir)
-    {   $tanggal = $awal;
-        $tanggalAkhir =$akhir;
+{
+    $tanggal = $awal;
+    $tanggalAkhir = $akhir;
 
-        $awal = date('Y-m-d', strtotime("+1 day", strtotime($awal)));
-        $barang= PenjualanDetail::with('barang')
-        ->select('id_barang',
-        DB::raw('SUM(jumlah) as jumlah_penjualan'))
-       ->wherebetween('created_at',["$tanggal","$tanggalAkhir"])
-       ->orwhere('created_at','like',"%$tanggalAkhir%")
-        ->ORDERBY ('jumlah_penjualan', 'desc')
-        ->GROUPBY('id_barang')
+    $barang = PenjualanDetail::with('barang')
+        ->select('id_barang', DB::raw('SUM(jumlah) as jumlah_penjualan'))
+        ->whereBetween('created_at', ["$tanggal", "$tanggalAkhir"])
+        ->orWhere('created_at', 'like', "%$tanggalAkhir%")
+        ->orderBy('jumlah_penjualan', 'desc')
+        ->groupBy('id_barang')
         ->get();
-        return datatables()
-            ->of($barang)
-            ->addIndexColumn()
-            ->addColumn('kode_barang', function ($barang) {
-                return '<span class="label label-success">' . $barang->barang->kode_barang . '</span>';
-            })
-            ->addColumn('nama_barang', function ($barang) {
-                return $barang->barang->nama_barang;
-            })
-            ->addColumn('harga_jual', function ($barang) {
-                return 'Rp. ' . format_uang($barang->barang->harga_jual);
-            })
-            ->addColumn('jumlah', function ($barang) {
-                return ($barang->jumlah_penjualan);
-            })
-            ->addColumn('subtotal', function ($barang) {
-                return ($barang->jumlah_penjualan * $barang->barang->harga_jual);
-            })
-            ->rawColumns(['kode_barang'])
-            ->make(true);
-    }
+
+    return datatables()
+        ->of($barang)
+        ->addIndexColumn()
+        ->addColumn('kode_barang', function ($barang) {
+            return '<span class="label label-success">' . $barang->barang->kode_barang . '</span>';
+        })
+        ->addColumn('nama_barang', function ($barang) {
+            return $barang->barang->nama_barang;
+        })
+        ->addColumn('harga_jual', function ($barang) {
+            return 'Rp. ' . format_uang($barang->barang->harga_jual);
+        })
+        ->addColumn('jumlah', function ($barang) {
+            return ($barang->jumlah_penjualan);
+        })
+        ->addColumn('subtotal', function ($barang) {
+            return ($barang->jumlah_penjualan * $barang->barang->harga_jual);
+        })
+        ->rawColumns(['kode_barang'])
+        ->make(true);
+}
 
     public function exportExcel($awal, $akhir)
     {

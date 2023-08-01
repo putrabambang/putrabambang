@@ -4,10 +4,6 @@
     Laporan barang terjual {{ tanggal_indonesia($tanggalAwal, false) }} s/d {{ tanggal_indonesia($tanggalAkhir, false) }}
 @endsection
 
-@push('css')
-<link rel="stylesheet" href="{{ asset('/AdminLTE-2/bower_components/bootstrap-datepicker/dist/css/bootstrap-datepicker.min.css') }}">
-@endpush
-
 @section('breadcrumb')
     @parent
     <li class="active">Laporan barang terjual</li>
@@ -27,20 +23,22 @@
                 </a>
             </div>
             <div class="box-body table-responsive">
-                <table class="table table-stiped table-bordered">
+                <table class="table table-striped table-bordered">
                     <thead>
-                        <th width="5%">No</th>
-                        <th>Kode barang</th>
-                        <th>Nama barang</th>
-                        <th>Harga barang</th>
-                        <th>Jumlah Terjual</th>
-                        <th>Subtotal</th>
+                        <tr>
+                            <th width="5%">No</th>
+                            <th>Kode barang</th>
+                            <th>Nama barang</th>
+                            <th>Harga barang</th>
+                            <th>Jumlah Terjual</th>
+                            <th>Subtotal</th>
+                        </tr>
                     </thead>
                     <tfoot>
                         <tr>
                             <th colspan="4" style="text-align:center">Total</th>
-                            <th ></th>
-                            <th ></th>
+                            <th></th>
+                            <th></th>
                         </tr>
                     </tfoot>
                 </table>
@@ -48,10 +46,12 @@
         </div>
     </div>
 </div>
-@includeIf('laporanbarang.form')
+<!-- Your modal or form section -->
 @endsection
+
 @push('scripts')
 <script src="{{ asset('/AdminLTE-2/bower_components/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js') }}"></script>
+
 <script>
     let table;
     $(function () {
@@ -124,4 +124,3 @@
     }
 </script>
 @endpush
-

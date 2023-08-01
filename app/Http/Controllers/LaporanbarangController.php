@@ -24,18 +24,18 @@ class LaporanbarangController extends Controller
     }
 
     public function data($awal, $akhir)
-    {
-        $tanggal = $awal;
-        $tanggalAkhir = $akhir;
+    {   $tanggal = $awal;
+        $tanggalAkhir =$akhir;
 
         $awal = date('Y-m-d', strtotime("+1 day", strtotime($awal)));
-        $barang = PenjualanDetail::with('barang')
-            ->select('id_barang', DB::raw('SUM(jumlah) as jumlah_penjualan'))
-            ->whereBetween('created_at', ["$tanggal", "$tanggalAkhir"])
-            ->orWhere('created_at', 'LIKE', "%$tanggalAkhir%")
-            ->orderBy('jumlah_penjualan', 'desc')
-            ->groupBy('id_barang')
-            ->get();
+        $barang= PenjualanDetail::with('barang')
+        ->select('id_barang',
+        DB::raw('SUM(jumlah) as jumlah_penjualan'))
+       ->wherebetween('created_at',["$tanggal","$tanggalAkhir"])
+       ->orwhere('created_at','like',"%$tanggalAkhir%")
+        ->ORDERBY ('jumlah_penjualan', 'desc')
+        ->GROUPBY('id_barang')
+        ->get();
         return datatables()
             ->of($barang)
             ->addIndexColumn()
@@ -49,7 +49,7 @@ class LaporanbarangController extends Controller
                 return 'Rp. ' . format_uang($barang->barang->harga_jual);
             })
             ->addColumn('jumlah', function ($barang) {
-                return format_uang($barang->jumlah_penjualan);
+                return ($barang->jumlah_penjualan);
             })
             ->addColumn('subtotal', function ($barang) {
                 return ($barang->jumlah_penjualan * $barang->barang->harga_jual);

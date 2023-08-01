@@ -39,6 +39,9 @@ class LaporanbarangController extends Controller
         return datatables()
             ->of($lbarang)
             ->addIndexColumn()
+            ->addColumn('kode_barang', function ($lbarang) {
+                return '<span class="label label-success">' . $lbarang->barang->kode_barang . '</span>';
+            })
             ->addColumn('nama_barang', function ($lbarang) {
                 return $lbarang->barang->nama_barang;
             })

@@ -69,6 +69,12 @@
                 {data: 'jumlah'},
                 {data: 'subtotal'}
             ],
+            columnDefs: [
+                {
+                    targets: 5,
+                    render: $.fn.dataTable.render.number('.', '.', 0, 'Rp. ')
+                },
+            ],
            
             "footerCallback": function (row, data, start, end, display) {
                 var api = this.api(),
@@ -98,9 +104,7 @@
                     }, 0);
                 // Update footer
                 var numFormat = $.fn.dataTable.render.number('.', '.', 0, 'Rp. ').display;
-                $(api.column(5).footer()).html(
-                    '' + numFormat(pageTotal)
-                );
+                
                 $(api.column(4).footer()).html(
                     '' + (total) + ''
                 );

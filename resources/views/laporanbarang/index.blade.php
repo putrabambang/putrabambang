@@ -27,7 +27,6 @@
                     <thead>
                         <tr>
                             <th width="5%">No</th>
-                            <th>Kode barang</th>
                             <th>Nama barang</th>
                             <th>Harga barang</th>
                             <th>Jumlah Terjual</th>
@@ -64,18 +63,11 @@
                 url: '{{ route('laporanbarang.data', [$tanggalAwal, $tanggalAkhir]) }}',
             },
             columns: [
-                {data: 'DT_RowIndex', searchable: false, sortable: false},  
-                {data: 'kode_barang'},
+                {data: 'DT_RowIndex', searchable: false, sortable: false}, 
                 {data: 'nama_barang'},
                 {data: 'harga_jual'},
                 {data: 'jumlah'},
                 {data: 'subtotal'}
-            ],
-            columnDefs: [
-                {
-                    targets: 5,
-                    render: $.fn.dataTable.render.number('.', '.', 0, 'Rp. ')
-                },
             ],
            
             "footerCallback": function (row, data, start, end, display) {

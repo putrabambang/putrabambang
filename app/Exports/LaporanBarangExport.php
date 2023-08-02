@@ -4,6 +4,7 @@
 namespace App\Exports;
 
 use App\Models\PenjualanDetail;
+use App\Models\Barang;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Contracts\View\View;
 use Maatwebsite\Excel\Concerns\FromView;
@@ -33,6 +34,12 @@ class LaporanBarangExport implements FromView
             ->groupBy('id_barang')
             ->get();
 
-        return view('laporanbarang.excel', compact('barang', 'tanggal', 'tanggalAkhir'));
+        // Get the list of unique id_barang from $barang result
+        $idBarangList = $barang->pluck('id_barang')->unique()->toArray();
+
+        // Fetch the data of Barang based on id_barang list
+        $barangData = Barang::whereIn('id_barang', $idBarangList)->get()->keyBy('id_barang');
+
+        return view('laporanbarang.excel', compact('barang', 'barangData', 'tanggal', 'tanggalAkhir'));
     }
 }

@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 use PDF;
 use Illuminate\Support\Facades\View;
-
+use DataTables;
 class LaporanbarangController extends Controller
 {
     public function index(Request $request)
@@ -24,42 +24,55 @@ class LaporanbarangController extends Controller
     }
     public function data($awal, $akhir)
     {
-        $tanggal = $awal;
-        $tanggalAkhir = $akhir;
-        $awal = date('Y-m-d', strtotime("+1 day", strtotime($awal)));
-        $barang = PenjualanDetail::select('id_barang', DB::raw('SUM(jumlah) as jumlah_penjualan'))
-        ->whereBetween('created_at', ["$tanggal", "$tanggalAkhir"])
+        $tanggalAwal = $awal;
+    $tanggalAkhir = $akhir;
+
+    // Menghitung total jumlah penjualan dan subtotal per barang
+    $barang = PenjualanDetail::with('barang')
+        ->select('id_barang', DB::raw('SUM(jumlah) as jumlah_penjualan'))
+        ->whereBetween('created_at', ["$tanggalAwal", "$tanggalAkhir"])
         ->orWhere('created_at', 'LIKE', "%$tanggalAkhir%")
         ->orderBy('jumlah_penjualan', 'desc')
         ->groupBy('id_barang')
         ->get();
-    
-    $barangData = Barang::whereIn('id_barang', $barang->pluck('id_barang'))
-        ->select('id_barang', 'kode_barang')
-        ->get()
-        ->keyBy('id_barang');
-    
-    return datatables()
-        ->of($barang)
+
+    // Mengambil data kode barang dari tabel Barang berdasarkan id_barang yang ada di tabel PenjualanDetail
+    $barangData = collect([]);
+
+    foreach ($barang as $penjualanDetail) {
+        $barangItem = $penjualanDetail->barang;
+        if ($barangItem) {
+            $barangData->push([
+                'id_barang' => $penjualanDetail->id_barang,
+                'kode_barang' => $barangItem->kode_barang,
+                'jumlah_penjualan' => $penjualanDetail->jumlah_penjualan,
+                // Anda bisa tambahkan kolom lain dari tabel Barang yang ingin ditampilkan di sini
+            ]);
+        }
+    }
+
+    return DataTables::of($barangData)
         ->addIndexColumn()
-        ->addColumn('kode_barang', function ($barang) use ($barangData) {
-            return '<span class="label label-success">' . $barangData[$barang->id_barang]->kode_barang . '</span>';
+        ->addColumn('kode_barang', function ($barang) {
+            return '<span class="label label-success">' . $barang['kode_barang'] . '</span>';
         })
-        ->addColumn('nama_barang', function ($barang)  {
-            return $barang->barang->nama_barang;
+        ->addColumn('nama_barang', function ($barang) {
+            return Barang::find($barang['id_barang'])->nama_barang;
         })
-        ->addColumn('harga_jual', function ($barang){
-            return 'Rp. ' . format_uang($barang->barang->harga_jual);
+        ->addColumn('harga_jual', function ($barang) {
+            $harga_jual = Barang::find($barang['id_barang'])->harga_jual;
+            return 'Rp. ' . format_uang($harga_jual);
         })
         ->addColumn('jumlah', function ($barang) {
-            return $barang->jumlah_penjualan;
+            return $barang['jumlah_penjualan'];
         })
-        ->addColumn('subtotal', function ($barang){
-            return ($barang->jumlah_penjualan * $barang->barang->harga_jual);
+        ->addColumn('subtotal', function ($barang) {
+            $harga_jual = Barang::find($barang['id_barang'])->harga_jual;
+            return $barang['jumlah_penjualan'] * $harga_jual;
         })
         ->rawColumns(['kode_barang'])
         ->make(true);
-    }
+}
 
     public function exportExcel($awal, $akhir)
     {

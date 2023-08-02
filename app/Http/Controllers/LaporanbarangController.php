@@ -81,23 +81,35 @@ class LaporanbarangController extends Controller
     }
     public function exportPDF($awal, $akhir)
     {
-        $tanggal = $awal;
-        $tanggalAkhir = $akhir;
+       
+        $tanggalAwal = $this->awal;
+        $tanggalAkhir = $this->akhir;
 
-        $awal = date('Y-m-d', strtotime("+1 day", strtotime($awal)));
+        // Menghitung total jumlah penjualan dan subtotal per barang
         $barang = PenjualanDetail::with('barang')
             ->select('id_barang', DB::raw('SUM(jumlah) as jumlah_penjualan'))
-            ->whereBetween('created_at', ["$tanggal", "$tanggalAkhir"])
+            ->whereBetween('created_at', ["$tanggalAwal", "$tanggalAkhir"])
             ->orWhere('created_at', 'LIKE', "%$tanggalAkhir%")
             ->orderBy('jumlah_penjualan', 'desc')
             ->groupBy('id_barang')
             ->get();
 
-        $data = $this->data($awal, $akhir);
-        $barangArray = $barang->toArray();
-        //dd($barangArray);
+        $barangData = [];
 
-        $pdf = PDF::loadView('laporanbarang.pdf', compact('barangArray', 'awal', 'akhir'));
+        foreach ($barang as $penjualanDetail) {
+            $barangItem = $penjualanDetail->barang;
+            if ($barangItem) {
+                $barangData[] = [
+                    'kode_barang' => $barangItem->kode_barang,
+                    'nama_barang' => $barangItem->nama_barang,
+                    'harga_jual' => $barangItem->harga_jual,
+                    'jumlah_penjualan' => $penjualanDetail->jumlah_penjualan,
+                    'subtotal' => $penjualanDetail->jumlah_penjualan * $barangItem->harga_jual,
+                ];
+            }
+        }
+
+        $pdf = PDF::loadView('laporanbarang.pdf', compact('barangdata', 'awal', 'akhir'));
 
 
         return $pdf->stream('Laporan-barang-' . date('Y-m-d-his') . '.pdf');

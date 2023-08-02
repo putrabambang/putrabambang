@@ -82,8 +82,8 @@ class LaporanbarangController extends Controller
     public function exportPDF($awal, $akhir)
     {
        
-        $tanggalAwal = $this->awal;
-        $tanggalAkhir = $this->akhir;
+        $tanggalAwal = $awal;
+        $tanggalAkhir = $akhir;
 
         // Menghitung total jumlah penjualan dan subtotal per barang
         $barang = PenjualanDetail::with('barang')
@@ -109,7 +109,7 @@ class LaporanbarangController extends Controller
             }
         }
 
-        $pdf = PDF::loadView('laporanbarang.pdf', compact('barangdata', 'awal', 'akhir'));
+        $pdf = PDF::loadView('laporanbarang.pdf', compact( 'barangData','tanggalAwal', 'tanggalAkhir'));
 
 
         return $pdf->stream('Laporan-barang-' . date('Y-m-d-his') . '.pdf');

@@ -1,25 +1,15 @@
 <?php
-
 namespace App\Models;
-
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-
 class Barang extends Model
 {
     use HasFactory;
-
     protected $table = 'barang';
-    protected $primaryKey = 'id_barang';
+    protected $primaryKey ='id_barang';
     protected $guarded = [];
-
     public function kategori()
     {
-        return $this->belongsTo(Kategori::class, 'id_kategori', 'id_kategori');
-    }
-    
-    public function penjualanDetails()
-    {
-        return $this->hasMany(PenjualanDetail::class, 'id_barang', 'id_barang');
+        return $this->hasOne(kategori::class, 'id_kategori', 'id_kategori');
     }
 }

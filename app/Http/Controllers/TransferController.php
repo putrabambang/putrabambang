@@ -11,7 +11,7 @@ class TransferController extends Controller
 {
     public function index()
     {
-        return view('transfer.index');
+        return view('Transfer.index');
     }
 
     public function data()
@@ -56,7 +56,7 @@ class TransferController extends Controller
 
         session(['id_transfer' => $transfer->id_transfer]);
 
-        return redirect()->route('transfer_detail.index');
+        return redirect()->route('Transfer_detail.index');
     }
 
     public function store(Request $request)

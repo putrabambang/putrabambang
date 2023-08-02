@@ -4,7 +4,6 @@
 namespace App\Exports;
 
 use App\Models\PenjualanDetail;
-use App\Models\Barang;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Contracts\View\View;
 use Maatwebsite\Excel\Concerns\FromView;
@@ -22,24 +21,33 @@ class LaporanBarangExport implements FromView
 
     public function view(): View
     {
-        $tanggal = $this->awal;
+        $tanggalAwal = $this->awal;
         $tanggalAkhir = $this->akhir;
 
-        $awal = date('Y-m-d', strtotime("+1 day", strtotime($this->awal)));
+        // Menghitung total jumlah penjualan dan subtotal per barang
         $barang = PenjualanDetail::with('barang')
             ->select('id_barang', DB::raw('SUM(jumlah) as jumlah_penjualan'))
-            ->whereBetween('created_at', ["$tanggal", "$tanggalAkhir"])
+            ->whereBetween('created_at', ["$tanggalAwal", "$tanggalAkhir"])
             ->orWhere('created_at', 'LIKE', "%$tanggalAkhir%")
             ->orderBy('jumlah_penjualan', 'desc')
             ->groupBy('id_barang')
             ->get();
 
-        // Get the list of unique id_barang from $barang result
-        $idBarangList = $barang->pluck('id_barang')->unique()->toArray();
+        $barangData = [];
 
-        // Fetch the data of Barang based on id_barang list
-        $barangData = Barang::whereIn('id_barang', $idBarangList)->get()->keyBy('id_barang');
+        foreach ($barang as $penjualanDetail) {
+            $barangItem = $penjualanDetail->barang;
+            if ($barangItem) {
+                $barangData[] = [
+                    'kode_barang' => $barangItem->kode_barang,
+                    'nama_barang' => $barangItem->nama_barang,
+                    'harga_jual' => $barangItem->harga_jual,
+                    'jumlah_penjualan' => $penjualanDetail->jumlah_penjualan,
+                    'subtotal' => $penjualanDetail->jumlah_penjualan * $barangItem->harga_jual,
+                ];
+            }
+        }
 
-        return view('laporanbarang.excel', compact('barang', 'barangData', 'tanggal', 'tanggalAkhir'));
+        return view('laporanbarang.excel', compact('barangData', 'tanggalAwal', 'tanggalAkhir'));
     }
 }

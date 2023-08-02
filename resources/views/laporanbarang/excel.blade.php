@@ -36,14 +36,17 @@
             </tr>
         </thead>
         <tbody>
-            @foreach ($barang as $key => $item)
+            @php
+                $no = 1;
+            @endphp
+            @foreach ($barang as $item)
                 <tr>
-                    <td>{{ $key + 1 }}</td>
+                    <td>{{ $no++ }}</td>
                     <td>{{ $barangData[$item->id_barang]->kode_barang }}</td>
                     <td>{{ $barangData[$item->id_barang]->nama_barang }}</td>
-                    <td>{{ 'Rp. ' . format_uang($item->barang->harga_jual) }}</td>
+                    <td>{{ 'Rp. ' . format_uang($barangData[$item->id_barang]->harga_jual) }}</td>
                     <td>{{ format_uang($item->jumlah_penjualan) }}</td>
-                    <td>{{ 'Rp. ' . format_uang($item->jumlah_penjualan * $item->barang->harga_jual) }}</td>
+                    <td>{{ 'Rp. ' . format_uang($item->jumlah_penjualan * $barangData[$item->id_barang]->harga_jual) }}</td>
                 </tr>
             @endforeach
         </tbody>

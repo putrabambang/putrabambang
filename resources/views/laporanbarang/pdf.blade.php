@@ -1,8 +1,9 @@
+<!-- resources/views/laporanbarang/excel.blade.php -->
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Laporan Barang</title>
     <style>
+        /* CSS styling for the Excel output */
         table {
             width: 100%;
             border-collapse: collapse;
@@ -17,19 +18,11 @@
         th {
             background-color: #f2f2f2;
         }
-
-        .label-success {
-            background-color: #4CAF50;
-            color: white;
-            padding: 4px 8px;
-            border-radius: 4px;
-        }
-
     </style>
 </head>
 <body>
     <h2>Laporan Barang</h2>
-    <p><strong>Periode:</strong> {{ date('d M Y', strtotime($awal)) }} - {{ date('d M Y', strtotime($akhir)) }}</p>
+    <p><strong>Periode:</strong> {{ date('d M Y', strtotime($tanggal)) }} - {{ date('d M Y', strtotime($tanggalAkhir)) }}</p>
 
     <table>
         <thead>
@@ -43,17 +36,20 @@
             </tr>
         </thead>
         <tbody>
-        @foreach ($barangArray as $key => $item)
-    <tr>
-        <td>{{ $key + 1 }}</td>
-        <td>{!! $item['barang']['kode_barang'] !!}</td>
-        <td>{{ $item['barang']['nama_barang'] }}</td>
-        <td>{{ format_uang($item['barang']['harga_jual']) }}</td>
-        <td>{{ format_uang($item['jumlah_penjualan']) }}</td>
-        <td>{{ format_uang($item['jumlah_penjualan'] * $item['barang']['harga_jual']) }}</td>
-    </tr>
-@endforeach
-</tbody>
+            @php
+                $no = 1;
+            @endphp
+            @foreach ($barang as $item)
+                <tr>
+                    <td>{{ $no++ }}</td>
+                    <td>{{ $barangData[$item->id_barang]->kode_barang }}</td>
+                    <td>{{ $barangData[$item->id_barang]->nama_barang }}</td>
+                    <td>{{ 'Rp. ' . format_uang($barangData[$item->id_barang]->harga_jual) }}</td>
+                    <td>{{ format_uang($item->jumlah_penjualan) }}</td>
+                    <td>{{ 'Rp. ' . format_uang($item->jumlah_penjualan * $barangData[$item->id_barang]->harga_jual) }}</td>
+                </tr>
+            @endforeach
+        </tbody>
     </table>
 </body>
 </html>

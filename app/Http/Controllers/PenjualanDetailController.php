@@ -6,6 +6,7 @@ use App\Models\Member;
 use App\Models\Penjualan;
 use App\Models\PenjualanDetail;
 use App\Models\Barang;
+use App\Models\Kategori;
 use App\Models\Setting;
 use Illuminate\Http\Request;
 use PDF;
@@ -13,15 +14,15 @@ use PDF;
 class PenjualanDetailController extends Controller
 {
     public function index(Request $request)
-    {
+    { 
         $setting = Setting::first();
-
-        $barang = Barang::where('stok', '>', 0)
-            ->orderBy('nama_barang')
-            ->get();
+        $barang = barang::leftJoin('kategori','kategori.id_kategori','barang.id_kategori')
+        ->select('barang.*','nama_kategori')
+        ->where('stok', '>', 0)
+        ->get();
+     
         $member = Member::orderBy('nama')->get();
         $diskon = Setting::first()->diskon ?? 0;
-
         if ($request->has('id_transaksi') && $request->id_transaksi != "") {
             $id_penjualan = $request->id_transaksi;
             $penjualan = Penjualan::find($id_penjualan);

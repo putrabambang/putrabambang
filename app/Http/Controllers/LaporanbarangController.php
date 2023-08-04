@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 use App\Exports\LaporanBarangExport;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Models\PenjualanDetail;
+use App\Models\Kategori;
 use App\Models\Barang;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
@@ -35,16 +36,16 @@ class LaporanbarangController extends Controller
         ->orderBy('jumlah_penjualan', 'desc')
         ->groupBy('id_barang')
         ->get();
-
+       
     // Mengambil data kode barang dari tabel Barang berdasarkan id_barang yang ada di tabel PenjualanDetail
     $barangData = collect([]);
-
     foreach ($barang as $penjualanDetail) {
         $barangItem = $penjualanDetail->barang;
         if ($barangItem) {
             $barangData->push([
                 'id_barang' => $penjualanDetail->id_barang,
                 'kode_barang' => $barangItem->kode_barang,
+                'id_kategori' => $barangItem->id_kategori,
                 'jumlah_penjualan' => $penjualanDetail->jumlah_penjualan,
                 // Anda bisa tambahkan kolom lain dari tabel Barang yang ingin ditampilkan di sini
             ]);
@@ -55,6 +56,9 @@ class LaporanbarangController extends Controller
         ->addIndexColumn()
         ->addColumn('kode_barang', function ($barang) {
             return '<span class="label label-success">' . $barang['kode_barang'] . '</span>';
+        })
+        ->addColumn('nama_kategori', function ($barang) {
+            return kategori::find($barang['id_kategori'])->nama_kategori;
         })
         ->addColumn('nama_barang', function ($barang) {
             return Barang::find($barang['id_barang'])->nama_barang;

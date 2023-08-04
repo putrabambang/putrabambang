@@ -25,6 +25,7 @@
                     <thead>
                         <th width="5%">No</th>
                         <th>Kode barang</th>
+                        <th>Kategori</th>
                         <th>Nama barang</th>
                         <th>Harga barang</th>
                         <th>Jumlah Terjual</th>
@@ -60,6 +61,7 @@
             columns: [
                 {data: 'DT_RowIndex', searchable: false, sortable: false},  
                 {data: 'kode_barang'},
+                {data: 'nama_kategori'},
                 {data: 'nama_barang'},
                 {data: 'harga_jual'},
                 {data: 'jumlah'},

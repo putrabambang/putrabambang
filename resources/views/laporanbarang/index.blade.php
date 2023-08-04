@@ -90,7 +90,7 @@
     
                 // Total over all pages
                 total = api
-                    .column(4 )
+                    .column(5 )
                     .data()
                     .reduce( function (a, b) {
                         return intVal(a) + intVal(b);

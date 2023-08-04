@@ -36,6 +36,7 @@
                             <th colspan="4" style="text-align:center">Total</th>
                             <th ></th>
                             <th ></th>
+                            <th ></th>
                         </tr>
                     </tfoot>
                 </table>
@@ -71,7 +72,7 @@
 [
     
     {
-        targets: 5,
+        targets: 6,
         render: $.fn.dataTable.render.number( '.', '.',0, 'Rp. ' )
     },
 ],
@@ -97,7 +98,7 @@
     
                 // Total over this page
                 pageTotal = api
-                    .column( 5, { page: 'current'} )
+                    .column( 6, { page: 'current'} )
                     .data()
                     .reduce( function (a, b) {
                         return intVal(a) + intVal(b);
@@ -105,10 +106,10 @@
     
                 // Update footer
                 var numFormat = $.fn.dataTable.render.number( '.', '.',0, 'Rp. ' ).display;
-                $( api.column( 5 ).footer() ).html(
+                $( api.column( 6 ).footer() ).html(
                     ''+ numFormat(pageTotal)
                 );
-                $( api.column( 4 ).footer() ).html(
+                $( api.column( 5 ).footer() ).html(
                     ''+total+''
                 );
             }

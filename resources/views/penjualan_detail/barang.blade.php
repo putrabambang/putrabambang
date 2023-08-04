@@ -12,7 +12,7 @@
                         <th width="5%">No</th>
                         <th>Kode</th>
                         <th>Nama</th>
-                        <th>Kategori<th>
+                        <th>Kategori</th>
                         <th>Harga Jual</th>
                         <th><i class="fa fa-cog"></i></th>
                     </thead>

@@ -249,7 +249,7 @@ Daftar Barang
                 confirmButtonText: 'OK'
             }).then(() => {
                 // Refresh halaman atau lakukan tindakan lain yang diperlukan
-                location.reload();
+                table.ajax.reload();
             });
         }
     });

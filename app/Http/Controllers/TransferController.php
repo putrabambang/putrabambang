@@ -56,7 +56,7 @@ class TransferController extends Controller
 
         session(['id_transfer' => $transfer->id_transfer]);
 
-        return redirect()->route('Transfer_detail.index');
+        return redirect()->route('transfer_detail.index');
     }
 
     public function store(Request $request)

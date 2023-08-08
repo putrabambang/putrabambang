@@ -14,7 +14,7 @@ class TransferDetailController extends Controller
         $id_transfer = session('id_transfer');
         $barang = Barang::orderBy('nama_barang')->get();
 
-        return view('transfer_detail.index', compact('id_transfer', 'barang'));
+        return view('Transfer_detail.index', compact('id_transfer', 'barang'));
     }
 
     public function data($id)

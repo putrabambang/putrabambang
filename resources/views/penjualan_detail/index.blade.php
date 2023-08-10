@@ -62,7 +62,7 @@
                                 <input type="hidden" name="id_penjualan" id="id_penjualan"value="{{ $id_penjualan }}"> 
                                 <input type="hidden" name="id_barang" id="id_barang">
                                 <input type="hidden" name="status" id="status" value="1">
-                                <input  onchange="tambahbarang()"type="text"  class="form-control" name="kode_barang" id="kode_barang">
+                                <input onchange="tambahbarang(this.value)" type="text" class="form-control" name="kode_barang" id="kode_barang" autofocus>
                                 <span class="input-group-btn">
                                    
                                     <button onclick="tampilbarang()" class="btn btn-info btn-flat" type="button"><i class="fa fa-arrow-right"></i></button>
@@ -445,35 +445,74 @@ $('.form-penjualan').on('submit', function (e) {
     }
 
     function tambahbarang() {
+        let id = $('#kode_barang').val(); // Ubah ini sesuai dengan data yang Anda gunakan
+// Ambil data jumlah dari tabel penjualan detail berdasarkan kode_barang dan id penjualan
+$.ajax({
+    type: 'GET',
+    url: '{{ route('transaksi.getJumlahPenjualanDetail') }}', // Ubah sesuai dengan route yang sesuai
+    data: {
+        kode_barang: id,
+        id_penjualan: $('#id_penjualan').val() // Ubah sesuai dengan input id_penjualan Anda
+    },
+    success: function(response) {
+        let jumlahDiDetail = parseInt(response.jumlahDiDetail);
+        let stok = parseInt(response.stok); // Ambil nilai stok dari response
+
+        // Pengecekan jumlah dengan stok
+        if ((jumlahDiDetail + 1) > stok) { // Menggunakan jumlahBarang = 1
+            Swal.fire({
+                icon: 'error',
+                title: 'Oops...',
+                text: 'Jumlah Tidak boleh Melebihi Stok!',
+                showConfirmButton: false,
+                timer: 1500
+            });
+            
+            $('#kode_barang').val('').focus();
+                loadTableAndForm($('#diskon').val());
+            return;
+        }
+
+        // Lanjutkan dengan kode tambah barang lainnya (AJAX, dll.)
         $.post('{{ route('transaksi.store') }}', $('.form-barang').serialize())
             .done(response => {
                 Swal.fire({toast: true,
-                        icon: 'success',
-                        title: 'Success',
-                        text: 'Berhasil Menambah Barang!',
-                        showConfirmButton: false,
-                        position: 'top-right',
-                        timer: 1500
-                        //footer: '<a href="">Why do I have this issue?</a>'
-                        })
-                //$('#kode_barang').focus();
-                $('#kode_barang').val("").focus().select();
-                table.ajax.reload(() => loadForm($('#diskon').val()));
+                    icon: 'success',
+                    title: 'Success',
+                    text: 'Berhasil Menambah Barang!',
+                    showConfirmButton: false,
+                    position: 'top-right',
+                    timer: 1500
+                });
+
+                $('#kode_barang').val('').focus();
+                loadTableAndForm($('#diskon').val());
             })
             .fail(errors => {
-                Swal.fire({ 
-                        toast: true,
-                        icon: 'error',
-                        title: 'Oops...',
-                        text: 'Tidak dapat menambah data!',
-                        showConfirmButton: false,
-                        position: 'top-right',
-                        timer: 1500
-                        //footer: '<a href="">Why do I have this issue?</a>'
-                        })
-                return;
+                Swal.fire({
+                    toast: true,
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: 'Tidak dapat menambah data!',
+                    showConfirmButton: false,
+                    position: 'top-right',
+                    timer: 1500
+                });
+
+                $('#kode_barang').val('').focus();
             });
+    },
+    error: function(error) {
+        console.error(error);
     }
+});
+ }
+    function loadTableAndForm(diskon) {
+        table.ajax.reload(() => {
+            loadForm(diskon);
+        });
+    }
+
     function tampilMember() {
         $('#modal-member').modal('show');
     }

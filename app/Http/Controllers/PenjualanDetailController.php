@@ -13,6 +13,30 @@ use PDF;
 
 class PenjualanDetailController extends Controller
 {
+    public function getJumlahPenjualanDetail(Request $request)
+{   
+    $kode_barang = $request->input('kode_barang');
+    $barang = Barang::where('kode_barang', $kode_barang)->first();
+
+    if (!$barang) {
+        return response()->json('Data barang tidak ditemukan', 404);
+    }
+
+    $id_penjualan = $request->input('id_penjualan');
+
+    $jumlahDiDetail = PenjualanDetail::where('id_barang', $barang->id_barang)
+        ->where('id_penjualan', $id_penjualan)
+        ->sum('jumlah');
+
+    // Mengambil stok barang dari tabel barang
+    $stok = $barang->stok;
+    $jumlahBarang = 1;
+    return response()->json([
+        'jumlahDiDetail' => $jumlahDiDetail,
+        'stok' => $stok,
+        'jumlahBarang' => $jumlahBarang
+    ]);
+}
     public function index(Request $request)
     { 
         $setting = Setting::first();
@@ -89,41 +113,45 @@ class PenjualanDetailController extends Controller
     }
 
     public function store(Request $request)
-{
-    $barang = Barang::where('id_barang', $request->id_barang)
-        ->orWhere('kode_barang', $request->kode_barang)
-        ->first();
+    {
+        $barang = Barang::where('id_barang', $request->id_barang)
+            ->orWhere('kode_barang', $request->kode_barang)
+            ->first();
+        
+        if (!$barang) {
+            return response()->json('Data barang tidak ada', 400);
+        }
     
-    if (!$barang) {
-        return response()->json('Data gagal disimpan', 400);
-    }
-
-    $penjualan = PenjualanDetail::where('id_penjualan', $request->id_penjualan)
-        ->where('id_barang', $barang->id_barang)
-        ->first();
-
-    if ($penjualan) {
-        // Jika barang sudah ada, tambahkan jumlahnya
-        $penjualan->jumlah += 1;
-        $penjualan->subtotal = $penjualan->harga_jual  * $penjualan->jumlah - ($penjualan->diskon / 100 * $penjualan->harga_jual);
-        $penjualan->save();
-
+        // Jumlah barang yang akan ditambahkan
+        $jumlahBarang = 1;
+    
+        $penjualan = PenjualanDetail::where('id_penjualan', $request->id_penjualan)
+            ->where('id_barang', $barang->id_barang)
+            ->first();
+    
+        if ($penjualan) {
+            // Jika barang sudah ada, tambahkan jumlahnya
+            $penjualan->jumlah += $jumlahBarang;
+            $penjualan->subtotal = $penjualan->harga_jual  * $penjualan->jumlah - ($penjualan->diskon / 100 * $penjualan->harga_jual);
+            $penjualan->save();
+    
+            return response()->json('Data berhasil disimpan', 200);
+        }
+    
+        // Jika barang belum ada, buat sebagai baris baru
+        $detail = new PenjualanDetail();
+        $detail->id_penjualan = $request->id_penjualan;
+        $detail->id_barang = $barang->id_barang;
+        $detail->harga_jual = $barang->harga_jual;
+        $detail->jumlah = $jumlahBarang;
+        $detail->diskon = $barang->diskon;
+        $detail->subtotal = $barang->harga_jual - ($barang->diskon / 100 * $barang->harga_jual);
+        $detail->status = 0;
+        $detail->save();
+    
         return response()->json('Data berhasil disimpan', 200);
     }
-
-    // Jika barang belum ada, buat sebagai baris baru
-    $detail = new PenjualanDetail();
-    $detail->id_penjualan = $request->id_penjualan;
-    $detail->id_barang = $barang->id_barang;
-    $detail->harga_jual = $barang->harga_jual;
-    $detail->jumlah = 1;
-    $detail->diskon = $barang->diskon;
-    $detail->subtotal = $barang->harga_jual - ($barang->diskon / 100 * $barang->harga_jual);
-    $detail->status =0;
-    $detail->save();
-
-    return response()->json('Data berhasil disimpan', 200);
-}
+    
 
     public function update(Request $request, $id)
     {

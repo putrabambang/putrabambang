@@ -62,7 +62,15 @@
                                 <input type="hidden" name="id_penjualan" id="id_penjualan"value="{{ $id_penjualan }}"> 
                                 <input type="hidden" name="id_barang" id="id_barang">
                                 <input type="hidden" name="status" id="status" value="1">
-                                <input onchange="tambahbarang(this.value)" type="text" class="form-control" name="kode_barang" id="kode_barang" autofocus>
+                                <input
+  onchange="tambahbarang(this.value)"
+  onkeydown="return handleScanner(event)"
+  type="text"
+  class="form-control"
+  name="kode_barang"
+  id="kode_barang"
+  autofocus
+>
                                 <span class="input-group-btn">
                                    
                                     <button onclick="tampilbarang()" class="btn btn-info btn-flat" type="button"><i class="fa fa-arrow-right"></i></button>
@@ -383,6 +391,14 @@ $('.form-penjualan').on('submit', function (e) {
     function hidebarang() {
         $('#modal-barang').modal('hide');
     }
+    function handleScanner(event) {
+  if (event.key === "Enter" && event.target.id === "kode_barang") {
+    event.preventDefault(); // Mencegah reload halaman
+    tambahbarang(event.target.value);
+    return false;
+  }
+  return true;
+}
 
     function pilihbarang(id, kode) {
         $('#id_barang').val(id);

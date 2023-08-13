@@ -64,8 +64,8 @@ class LaporanbarangController extends Controller
             return Barang::find($barang['id_barang'])->nama_barang;
         })
         ->addColumn('harga_jual', function ($barang) {
-            $harga_jual = Barang::find($barang['id_barang'])->harga_jual;
-            return 'Rp. ' . format_uang($harga_jual);
+            $harga_jual = PenjualanDetail::where('id_barang', $barang['id_barang'])->orderBy('created_at', 'desc')->first()->harga_jual;
+            return $harga_jual;
         })
         ->addColumn('jumlah', function ($barang) {
             return $barang['jumlah_penjualan'];

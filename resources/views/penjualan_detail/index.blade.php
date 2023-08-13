@@ -44,14 +44,23 @@
                  <form class="form-penjualan">
                     @csrf
                     <div class="form-group row">
-                        <label for="no_penjualan" class="col-lg-2">No Penjualam</label>
+                        <label for="no_penjualan" class="col-lg-2">No Penjualan</label>
                         <div class="col-lg-5">
                             <div class="input-group">
-                                <input type="text"class="btn btn-success" name="id_penjualan" id="id_penjualan" value="{{ $id_penjualan }}"> 
+                                <input type="text"class="btn btn-success" name="id_penjualan" id="id_penjualan" value="{{ $id_penjualan }}" readonly>
                             </div>
                         </div>
                     </div>
+
                 </form>
+                <div class="form-group row">
+                        <label for="kasir" class="col-lg-2">Kasir</label>
+                        <div class="col-lg-5">
+                            <div class="input-group">
+                            <p class="btn btn-danger">{{ auth()->user()->name }}</p>
+                            </div>
+                        </div>
+                    </div>
                     
                 <form class="form-barang">
                     @csrf

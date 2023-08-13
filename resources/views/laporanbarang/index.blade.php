@@ -68,15 +68,13 @@
                 {data: 'jumlah'},
                 {data: 'subtotal'}
             ],
-            columnDefs:
-[
-    
+            columnDefs: [
     {
-        targets: 6,
-        render: $.fn.dataTable.render.number( '.', '.',0, 'Rp. ' )
+        targets: [4, 6], // Menggunakan array untuk menentukan multiple targets
+        render: $.fn.dataTable.render.number('.', '.', 0, 'Rp. ')
     },
 ],
-           
+       
             "footerCallback": function ( row, data, start, end, display ) {
                 var api = this.api(), data;
     

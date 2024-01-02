@@ -67,6 +67,8 @@ Route::group(['middleware' => 'auth'], function () {
         Route::get('/pengeluaran/data', [PengeluaranController::class, 'data'])->name('pengeluaran.data');
         Route::resource('/pengeluaran', PengeluaranController::class);
 
+        Route::get('/transferdetail/cetak-barcode', [TransferDetailController::class, 'cetakBarcode'])->name('transferdetail.cetak_barcode');
+
         Route::get('/barang/data', [BarangController::class, 'data'])->name('barang.data');
         Route::post('/barang/cetak-barcode', [BarangController::class, 'cetakBarcode'])->name('barang.cetak_barcode');
         Route::resource('/barang', BarangController::class)->except('destroy', 'update', 'store');

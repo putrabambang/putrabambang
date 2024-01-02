@@ -6,6 +6,7 @@ use App\Models\Transfer;
 use App\Models\TransferDetail;
 use App\Models\Barang;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class TransferDetailController extends Controller
 {
@@ -94,5 +95,36 @@ class TransferDetailController extends Controller
         $detail->delete();
 
         return response(null, 204);
+    }
+
+    public function cetakBarcode(Request $request)
+    {   
+        
+    $id_transfer = $request->query('id');
+
+    // Ambil data transfer detail menggunakan model TransferDetail
+    $dataBarangTransfer = TransferDetail::where('id_transfer', $id_transfer)
+        ->with('barang:id_barang,kode_barang,nama_barang,harga_jual')
+        ->select('id_barang', \DB::raw('SUM(jumlah) as total_jumlah'))
+        ->groupBy('id_barang')
+        ->get();
+
+    $result = [];
+    $no = 1;
+
+    foreach ($dataBarangTransfer as $item) {
+        $barang = $item->barang;
+
+        if ($barang) {
+            $result[] = [
+                'kode_barang' => $barang->kode_barang,
+                'nama_barang' => $barang->nama_barang,
+                'harga_jual' => $barang->harga_jual,
+                'jumlah' => $item->total_jumlah,
+            ];
+        }
+    }
+
+    return view('Transfer_detail.barcode', compact('result'));
     }
 }

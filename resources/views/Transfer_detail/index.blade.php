@@ -144,49 +144,68 @@
         $('.form-transfer').on('submit', function (e) {
     e.preventDefault();
     var form = $(this);
-  
-
     $.ajax({
-        url: form.attr('action'),
-        type: form.attr('method'),
-        data: form.serialize(),
-        success: function (response) {
-            Swal.fire({
-                icon: 'success',
-                title: 'Transfer barang berhasil',
-                showCancelButton: true,
-                cancelButtonText: 'Dashboard',
-                confirmButtonText: 'transfer baru',
-                showCloseButton: true,
-                closeButtonAriaLabel: 'Tutup',
-                showCancelButton: true,
-                cancelButtonText: 'Dashboard'
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    window.location.href = '{{ route("transfer.baru") }}';
-                } else if (result.dismiss === Swal.DismissReason.cancel) {
-                    // Tindakan ketika tombol Transfer Baru diklik
-                    // Mengarahkan pengguna ke halaman Transfer baru
-                    window.location.href = '{{ route("dashboard") }}';
-                } else if (result.dismiss === Swal.DismissReason.close) {
-                    // Tindakan ketika tombol Tutup diklik
-                    // Mengarahkan pengguna ke halaman dashboard
-                    window.location.href = '{{ route("dashboard") }}';
-                }
-            });
-        },
-        error: function (xhr, status, error) {
-            // Penanganan kesalahan jika ada
-            Swal.fire({
-                icon: 'error',
-                title: 'Oops...',
-                text: 'Terjadi kesalahan saat menyimpan Transfer.'
-            });
-        }
-    });
-});
-    });
+    url: form.attr('action'),
+    type: form.attr('method'),
+    data: form.serialize(),
+    success: function (response) {
+        Swal.fire({
+            icon: 'success',
+            title: 'Transfer barang berhasil',
+            showCancelButton: true,
+            cancelButtonText: 'Dashboard',
+            confirmButtonText: 'Cetak barcode',
+            showCloseButton: true,
+            closeButtonAriaLabel: 'Tutup',
+        }).then((result) => {
+            if (result.isConfirmed) {
+                var idNota = form.find('input[name="id_transfer"]').val();
 
+                // Membuat URL untuk cetak barcode
+                var barcodeUrl = '{{ route("transferdetail.cetak_barcode", ["id" => ""]) }}' + idNota;
+
+                window.open(barcodeUrl, 'barcode ', 'width=800,height=600');
+
+                Swal.fire({
+                    icon: 'info',
+                    title: 'Pilih Tindakan Selanjutnya',
+                    showCancelButton: true,
+                    cancelButtonText: 'Transfer Baru',
+                    confirmButtonText: 'Menu Utama',
+                    showCloseButton: true,
+                    closeButtonAriaLabel: 'Tutup'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        // Mengarahkan pengguna ke halaman dashboard
+                        window.location.href = '{{ route("dashboard") }}';
+                    } else if (result.dismiss === Swal.DismissReason.cancel) {
+                        // Mengarahkan pengguna ke halaman transaksi baru
+                        window.location.href = '{{ route("transfer.baru") }}';
+                    }
+                });
+            } else if (result.dismiss === Swal.DismissReason.cancel) {
+                // Tindakan ketika tombol Transaksi Baru diklik
+                // Mengarahkan pengguna ke halaman transaksi baru
+                window.location.href = '{{ route("transfer.baru") }}';
+            } else if (result.dismiss === Swal.DismissReason.close) {
+                // Tindakan ketika tombol Tutup diklik
+                // Mengarahkan pengguna ke halaman dashboard
+                window.location.href = '{{ route("dashboard") }}';
+            }
+        });
+    },
+    error: function (xhr, status, error) {
+        // Penanganan kesalahan jika ada
+        Swal.fire({
+            icon: 'error',
+            title: 'Oops...',
+            text: 'Terjadi kesalahan saat menyimpan transaksi.'
+        });
+    }
+});
+
+});
+});
     function tampilbarang() {
         $('#modal-barang').modal('show');
     }

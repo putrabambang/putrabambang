@@ -86,7 +86,6 @@
                                 </span>
                                  
                             </div>
-                            <div id="reader" width="50px"></div>
                         </div>
                     </div>
                     
@@ -631,50 +630,6 @@ $.ajax({
                 return;
             })
     }
-    function onScanSuccess(decodedText, decodedResult) {
-            $('#kode_barang').val( decodedText);
-            let id = decodedText;
-            $.post('{{ route('transaksi.store') }}', $('.form-barang').serialize())
-            .done(response => {
-                Swal.fire({
-                        icon: 'success',
-                        title: 'Success',
-                        text: 'Berhasil Menambah Barang!',
-                        showConfirmButton: false,
-                        timer: 1500
-                        //footer: '<a href="">Why do I have this issue?</a>'
-                        })
-                //$('#kode_barang').focus();
-                $('#kode_barang').val("").focus().select();
-                table.ajax.reload(() => loadForm($('#diskon').val()));
-            })
-            .fail(errors => {
-                Swal.fire({ 
-                     
-                        icon: 'error',
-                        title: 'Oops...',
-                        text: 'Data barang tidak ada! scan ulang!!!',
-                        showConfirmButton: true ,
-                        timer: 1500
-                        //footer: '<a href="">Why do I have this issue?</a>'
-                        })
-                return;
-            });
-            }
-
-            function onScanFailure(error) {
-            // handle scan failure, usually better to ignore and keep scanning.
-            // for example:
-            //s console.warn(`Code scan error = ${error}`);
-            }
-
-            let html5QrcodeScanner = new Html5QrcodeScanner(
-            "reader",
-            { fps: 10, qrbox: {width: 250, height: 250} },
-            /* verbose= */ false);
-            html5QrcodeScanner.render(onScanSuccess, onScanFailure);
-               // tambahkan untuk delete cookie innerHeight terlebih dahulu
-    document.cookie = "innerHeight=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
     
     function notaKecil(url, title) {
         popupCenter(url, title, 625, 500);

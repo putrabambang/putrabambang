@@ -49,21 +49,6 @@ Route::group(['middleware' => 'auth'], function () {
         Route::post('/barang/cetak-barcode', [BarangController::class, 'cetakBarcode'])->name('barang.cetak_barcode');
         Route::post('/barang/tambah_stok', [BarangController::class, 'tambahstok'])->name('barang.tambah_stok');
 
-
-        Route::get('/transfer/data', [TransferController::class, 'data'])->name('transfer.data');
-       
-        Route::get('/transfer/baru', [TransferController::class, 'create'])->name('transfer.baru');
-        Route::resource('/transfer',TransferController::class)->except('create');
-        Route::post('/transfer/simpan', [TransferController::class, 'store'])->name('transfer.simpan');
-       
-        Route::get('/transfer_detail/{id}/data', [TransferDetailController::class, 'data'])->name('transfer_detail.data');
-        Route::resource('/transfer_detail', TransferDetailController::class)->except('create', 'show', 'edit');
-
-
-
-
-
-
         Route::resource('/barang', BarangController::class);
         Route::get('/pembelian/data', [PembelianController::class, 'data'])->name('pembelian.data');
         Route::get('/pembelian/{id}/create', [PembelianController::class, 'create'])->name('pembelian.create');
@@ -96,7 +81,14 @@ Route::group(['middleware' => 'auth'], function () {
         Route::get('/transaksi/baru', [PenjualanController::class, 'create'])->name('transaksi.baru');
         Route::post('/transaksi/simpan', [PenjualanController::class, 'store'])->name('transaksi.simpan');
         //Route::get('/transaksi/selesai', [PenjualanController::class, 'selesai'])->name('transaksi.selesai');
-        
+        Route::get('/transfer/data', [TransferController::class, 'data'])->name('transfer.data');
+       
+        Route::get('/transfer/baru', [TransferController::class, 'create'])->name('transfer.baru');
+        Route::resource('/transfer',TransferController::class)->except('create');
+        Route::post('/transfer/simpan', [TransferController::class, 'store'])->name('transfer.simpan');
+       
+        Route::get('/transfer_detail/{id}/data', [TransferDetailController::class, 'data'])->name('transfer_detail.data');
+        Route::resource('/transfer_detail', TransferDetailController::class)->except('create', 'show', 'edit');
         Route::get('/transaksi/nota-kecil', [PenjualanDetailController::class, 'notaKecil'])->name('transaksi.nota_kecil');
         Route::get('/transaksi/nota-besar', [PenjualanDetailController::class, 'notaBesar'])->name('transaksi.nota_besar');
       //  Route::get('/transaksi/nota-kecil', [PenjualanController::class, 'notaKecil'])->name('transaksi.nota_kecil');
@@ -124,7 +116,8 @@ Route::group(['middleware' => 'auth'], function () {
         Route::resource('/user', UserController::class);
         Route::get('/supplier/data', [SupplierController::class, 'data'])->name('supplier.data');
         Route::resource('/supplier', SupplierController::class);
-
+        Route::post('/transfer/konfirmasi/{id}', [TransferController::class, 'konfirmasi'])->name('transfer.konfirmasi');
+        Route::post('/transfer/batalkonfir/{id}', [TransferController::class, 'batalkonfir'])->name('transfer.batalkonfir');
         Route::get('/setting', [SettingController::class, 'index'])->name('setting.index');
         Route::get('/setting/first', [SettingController::class, 'show'])->name('setting.show');
         Route::post('/setting', [SettingController::class, 'update'])->name('setting.update');

@@ -29,14 +29,19 @@ class DashboardController extends Controller
         $tanggal_a = date('Y-m-');
         $tanggal_awal = date('Y-m-01');
         $tanggal_akhir = date('Y-m-d');
+        // Mendapatkan tahun saat ini
+        $currentYear = Carbon::now()->year;
 
         $kategori = Kategori::count();
         $barang = Barang::count();
-        $penjualan = Penjualan::count();
-        $penggilingan = Penggilingan::count();
+        $penjualan = Penjualan::whereYear('created_at', $currentYear)
+        ->count();
+        $penggilingan = Penggilingan::whereYear('created_at', $currentYear)
+        ->count();
         $member = Member::count();
         $barangterjual = PenjualanDetail::where('created_at', 'LIKE', "%$tanggal_a%")->sum('jumlah');
-        $pembelian = Pembelian::count();
+        $pembelian = Pembelian::whereYear('created_at', $currentYear)
+        ->count();
         $orderan = Penggilingan::where('status', 'LIKE', 1)->count();
         $data_tanggal = [];
         $data_pendapatan = [];
@@ -57,9 +62,7 @@ class DashboardController extends Controller
 
             $tanggal_awal = date('Y-m-d', strtotime("+1 day", strtotime($tanggal_awal)));
         }
-        // Mendapatkan tahun saat ini
-        $currentYear = Carbon::now()->year;
-
+        
         // Mendapatkan tahun sebelumnya
         $previousYear = $currentYear - 1;
 

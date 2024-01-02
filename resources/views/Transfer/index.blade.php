@@ -27,6 +27,7 @@
                         <th>Total Item</th>
                         <th>User</th>
                         <th>Role Transfer</th>
+                        <th>Status</th>
                         <th width="15%"><i class="fa fa-cog"></i></th>
                     </thead>
                 </table>
@@ -67,6 +68,7 @@
                     }
                 }
             },
+            {data: 'status'},
                 {data: 'aksi', searchable: false, sortable: false},
             ]
         });
@@ -91,7 +93,48 @@
         table1.ajax.url(url);
         table1.ajax.reload();
     }
+    function konfirmasi(url) {
+    
+    Swal.fire({
+title: 'Konfirmasi Transfer ?',
+text: "Pastikan jumlah barang Sudah sesuai!",
+icon: 'warning',
+showCancelButton: true,
+confirmButtonColor: '#3085d6',
+cancelButtonColor: '#d33',
+confirmButtonText: 'Yes!'
+    }).then((result) => {
+        if (result.isConfirmed) {
+     $.post(url, {
+            '_token': $('[name=csrf-token]').attr('content'),
+            '_method': 'post'
+        })
+    .done((response) => {
+            table.ajax.reload();
+            Swal.fire({title: 'Success!',
+                text:  'Status Berhasil Diubah.',
+                icon:     'success',
+                showConfirmButton: false,
+                timer: 1500}
+                
 
+                         )
+        })
+    .fail((errors) => {
+                Swal.fire({
+                 icon: 'error',
+                title: 'Oops...',
+                text: 'Status Gagal Diubah!',
+                showConfirmButton: false,
+                timer: 1500
+                //footer: '<a href="">Why do I have this issue?</a>'
+                })
+            });
+
+         }
+        })
+  
+}
     function deleteData(url) {
         if (confirm('Yakin ingin menghapus data terpilih?')) {
             $.post(url, {

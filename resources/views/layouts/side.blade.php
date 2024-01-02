@@ -155,6 +155,11 @@
     <i class="fa fa-money" aria-hidden="true"></i> <span>Pengeluaran</span>
   </a>
 </li>
+<li>
+        <a href="{{ route('transfer.index') }}">
+            <i class="fa fa-exchange"></i> <span>Pajang/tarik Barang</span>
+        </a>
+    </li>
 <li class="header">REPORT</li> 
 <li>
           <a href="{{route('laporanbarang.index')}}">

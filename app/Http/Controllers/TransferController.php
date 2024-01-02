@@ -42,7 +42,19 @@ class TransferController extends Controller
                 </div>
                 ';
             })
-            ->rawColumns(['aksi'])
+            ->addColumn('status', function ($transfer) {
+                $status= $transfer->status ;
+       if($status == 1){
+           $cek = '<span onclick="konfirmasi(`'.route('transfer.konfirmasi',$transfer->id_transfer).'`)" class="label label-danger "><i class="">belum di setujui</i></span>';
+
+       }else{
+
+           $cek = '<span onclick="batalkonfir(`'.route('transfer.batalkonfir',$transfer->id_transfer).'`)" class="label label-success "><i class="">sudah di setujui</i></span>' ;
+    
+       }
+                return $cek ;
+            })
+            ->rawColumns(['aksi', 'status'])
             ->make(true);
     }
 
@@ -52,6 +64,7 @@ class TransferController extends Controller
         $transfer->total_item  = 0;
         $transfer->id_user = auth()->id();
         $transfer->role = 1;
+        $transfer->status = 1;
         $transfer->save();
 
         session(['id_transfer' => $transfer->id_transfer]);
@@ -66,27 +79,7 @@ class TransferController extends Controller
         $transfer->role = $request->role;
         $transfer->update();
 
-        $detail = TransferDetail::where('id_transfer', $transfer->id_transfer)->get();
-
-        // Iterasi melalui setiap detail transfer
-        foreach ($detail as $item) {
-            // Temukan barang berdasarkan id_barang dari detail transfer
-            $barang = Barang::find($item->id_barang);
-
-            // Pastikan ada data barang dengan id_barang yang sesuai
-            if ($barang) {
-                // Jika role adalah 1, maka kurangi stok_gudang dan tambahkan stok
-                if ($transfer->role == 1) {
-                    $barang->stok_gudang -= $item->jumlah;
-                    $barang->stok += $item->jumlah;
-                } else {
-                    // Jika role adalah 0, maka tambahkan stok_gudang dan kurangi stok
-                    $barang->stok_gudang += $item->jumlah;
-                    $barang->stok -= $item->jumlah;
-                }
-                $barang->save(); // Simpan perubahan ke database
-            }
-        }
+       
     }
 
     public function show($id)
@@ -110,7 +103,42 @@ class TransferController extends Controller
             ->rawColumns(['kode_barang'])
             ->make(true);
     }
-
+    public function konfirmasi($id){
+        $transfer = transfer::find($id);
+    
+        // Periksa apakah status transfer belum 2
+        if ($transfer && $transfer->status != 2) {
+            $transfer->status = 2;
+            $transfer->update();
+            
+            $detail = TransferDetail::where('id_transfer', $transfer->id_transfer)->get();
+    
+            // Iterasi melalui setiap detail transfer
+            foreach ($detail as $item) {
+                // Temukan barang berdasarkan id_barang dari detail transfer
+                $barang = Barang::find($item->id_barang);
+    
+                // Pastikan ada data barang dengan id_barang yang sesuai
+                if ($barang) {
+                    // Jika role adalah 1, maka kurangi stok_gudang dan tambahkan stok
+                    if ($transfer->role == 1) {
+                        $barang->stok_gudang -= $item->jumlah;
+                        $barang->stok += $item->jumlah;
+                    } else {
+                        // Jika role adalah 0, maka tambahkan stok_gudang dan kurangi stok
+                        $barang->stok_gudang += $item->jumlah;
+                        $barang->stok -= $item->jumlah;
+                    }
+                    $barang->save(); // Simpan perubahan ke database
+                }
+            }
+    
+            return response()->json('Data berhasil disimpan', 200);
+        } else {
+            return response()->json('Status transfer sudah 2 atau data tidak ditemukan', 400);
+        }
+    }
+    
     public function destroy($id)
     {
         $transfer = Transfer::find($id);

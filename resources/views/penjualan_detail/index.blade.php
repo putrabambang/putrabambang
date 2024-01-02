@@ -339,12 +339,16 @@ $('.form-penjualan').on('submit', function (e) {
             }).then((result) => {
                 if (result.isConfirmed) {
                     // Buka halaman cetak nota dalam jendela pop-up
+                    var idNota = form.find('input[name="id_penjualan"]').val();
+
+                    // Membuat URL berdasarkan tipe nota dan id
                     var notaUrl = '';
                     @if ($setting->tipe_nota == 1)
-                        notaUrl = '{{ route("transaksi.nota_kecil") }}';
+                        notaUrl = '{{ route("transaksi.nota_kecil", ["id" => ""]) }}' + idNota;
                     @else
-                        notaUrl = '{{ route("transaksi.nota_besar") }}';
+                        notaUrl = '{{ route("transaksi.nota_besar", ["id" => ""]) }}' + idNota;
                     @endif
+
 
                     window.open(notaUrl, 'Nota Penjualan', 'width=800,height=600');
 

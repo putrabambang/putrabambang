@@ -90,6 +90,7 @@ Route::group(['middleware' => 'auth'], function () {
         Route::get('/transfer_detail/{id}/data', [TransferDetailController::class, 'data'])->name('transfer_detail.data');
         Route::resource('/transfer_detail', TransferDetailController::class)->except('create', 'show', 'edit');
         Route::get('/transaksi/nota-kecil', [PenjualanDetailController::class, 'notaKecil'])->name('transaksi.nota_kecil');
+
         Route::get('/transaksi/nota-besar', [PenjualanDetailController::class, 'notaBesar'])->name('transaksi.nota_besar');
       //  Route::get('/transaksi/nota-kecil', [PenjualanController::class, 'notaKecil'])->name('transaksi.nota_kecil');
      //   Route::get('/transaksi/nota-besar', [PenjualanController::class, 'notaBesar'])->name('transaksi.nota_besar');

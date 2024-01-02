@@ -197,31 +197,52 @@ class PenjualanDetailController extends Controller
         $stok = Barang::with('penjualan_detail')->get();
         return view('barang.stok', compact('stok'));
     }
-    public function notaKecil()
+    public function notaKecil(Request $request)
     {
+        // Mengambil nilai 'id' dari URL
+        $id = $request->query('id');
+    
+        // Mengambil data dari tabel Setting
         $setting = Setting::first();
-        $penjualan = Penjualan::find(session('id_penjualan'));
+    
+        // Mencari data Penjualan berdasarkan $id
+        $penjualan = Penjualan::find($id);
+    
+        // Jika Penjualan tidak ditemukan, tampilkan halaman error 404
         if (!$penjualan) {
             abort(404);
         }
+    
+        // Mengambil detail penjualan dengan barang terkait
         $detail = PenjualanDetail::with('barang')
-            ->where('id_penjualan', session('id_penjualan'))
+            ->where('id_penjualan', $id)
             ->get();
-
+    
+        // Menampilkan halaman 'penjualan_detail.nota_kecil' dengan data yang diperoleh
         return view('penjualan_detail.nota_kecil', compact('setting', 'penjualan', 'detail'));
     }
 
     public function notaBesar()
     {
         $setting = Setting::first();
-        $penjualan = Penjualan::find(session('id_penjualan'));
+        $id = $request->query('id');
+    
+        // Mengambil data dari tabel Setting
+        $setting = Setting::first();
+    
+        // Mencari data Penjualan berdasarkan $id
+        $penjualan = Penjualan::find($id);
+    
+        // Jika Penjualan tidak ditemukan, tampilkan halaman error 404
         if (!$penjualan) {
             abort(404);
         }
+    
+        // Mengambil detail penjualan dengan barang terkait
         $detail = PenjualanDetail::with('barang')
-            ->where('id_penjualan', session('id_penjualan'))
+            ->where('id_penjualan', $id)
             ->get();
-
+    
         $pdf = PDF::loadView('penjualan_detail.nota_besar', compact('setting', 'penjualan', 'detail'));
         $pdf->setPaper(0, 0, 609, 440, 'potrait');
         return $pdf->stream('Transaksi-' . date('Y-m-d-his') . '.pdf');

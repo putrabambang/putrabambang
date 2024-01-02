@@ -71,6 +71,7 @@
             processing: true,
             bSort: false,
             dom: 'Brt',
+            paginate: false,
             columns: [
                 {data: 'DT_RowIndex', searchable: false, sortable: false},
                 {data: 'kode_barang'},

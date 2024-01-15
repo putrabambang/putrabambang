@@ -151,9 +151,9 @@
     success: function (response) {
         Swal.fire({
             icon: 'success',
-            title: 'Transfer barang berhasil',
+            title: 'Transfer barang berhasil Tekan silang untuk Kembali',
             showCancelButton: true,
-            cancelButtonText: 'Dashboard',
+            cancelButtonText: 'Transfer baru',
             confirmButtonText: 'Cetak barcode',
             showCloseButton: true,
             closeButtonAriaLabel: 'Tutup',

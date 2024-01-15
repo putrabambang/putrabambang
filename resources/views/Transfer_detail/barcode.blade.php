@@ -6,6 +6,8 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>barcode</title>
 
+    <?php
+    $style = '
     <style>
         * {
             font-family: "consolas", sans-serif;
@@ -28,8 +30,17 @@
         @media print {
             @page {
                 margin: 0;
-                size: 58mm;
-            }
+                size: 58mm 
+    ';
+    ?>
+    <?php 
+    $style .= 
+        ! empty($_COOKIE['innerHeight'])
+            ? $_COOKIE['innerHeight'] .'mm; }'
+            : '}';
+    ?>
+    <?php
+    $style .= '
             html, body {
                 width: 70mm;
             }
@@ -37,13 +48,11 @@
                 display: none;
             }
         }
-
-        @media screen {
-            body {
-                height: 100vh;
-            }
-        }
     </style>
+    ';
+    ?>
+
+    {!! $style !!}
 </head>
 <body onload="window.print()">
     <button class="btn-print" style="position: absolute; right: 1rem; top: 1rem;" onclick="window.print()">Print</button>
@@ -66,20 +75,15 @@
     </table>
 
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            let body = document.body;
-            let html = document.documentElement;
-            let height = Math.max(
+        let body = document.body;
+        let html = document.documentElement;
+        let height = Math.max(
                 body.scrollHeight, body.offsetHeight,
                 html.clientHeight, html.scrollHeight, html.offsetHeight
             );
 
-            // Round to the nearest integer
-            height = Math.round(height);
-
-            // Set body height in mm
-            body.style.height = height + 'mm';
-        });
+        document.cookie = "innerHeight=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+        document.cookie = "innerHeight="+ ((height + 50) * 0.264583);
     </script>
 
 </body>

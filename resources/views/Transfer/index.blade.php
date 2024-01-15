@@ -59,7 +59,7 @@
                 {data: 'kasir'},
                 {data: 'role',
                     render: function (data) {
-                if (data == 0) {
+                if (data == 2) {
                         return '<span class="label label-danger">gudang</span>';
                     } else if (data > 0) {
                         return '<span class="label label-success">pajangan</span>';
